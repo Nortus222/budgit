@@ -25,57 +25,64 @@ class _DBscreenState extends State<DBscreen> {
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
-        body: Column(
-      children: [
-        Center(
-            child: SizedBox(
-          child: TextFormField(
-            controller: myController,
-          ),
-          width: size.width - 80,
-        )),
-        Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Row(
-            children: [
-              ElevatedButton(
-                  onPressed: () => {
-                        setState(() {
-                          list.add((double.parse(myController.text == ""
-                              ? "0"
-                              : myController.text)));
-                        }),
-                        myController.clear()
-                      },
-                  child: const Text("Add")),
-              const SizedBox(
-                width: 20,
-              ),
-              ElevatedButton(
-                  onPressed: () => {
-                        setState(() {
-                          list.clear();
-                        })
-                      },
-                  child: const Text("Clear")),
-            ],
-            mainAxisAlignment: MainAxisAlignment.center,
-          ),
-        ),
-        Expanded(
-          child: SizedBox(
+        body: SafeArea(
+      bottom: true,
+      top: true,
+      child: Column(
+        children: [
+          Center(
+              child: Container(
+            child: TextFormField(
+              controller: myController,
+            ),
             width: size.width - 80,
-            child: ListView.builder(
-                padding: const EdgeInsets.all(8),
-                itemCount: list.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Card(
-                    child: Center(child: Text('${list[index]}')),
-                  );
-                }),
+            height: 200,
+            padding: const EdgeInsets.only(top: 100),
+            // color: Colors.green,
+          )),
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Row(
+              children: [
+                ElevatedButton(
+                    onPressed: () => {
+                          setState(() {
+                            list.add((double.parse(myController.text == ""
+                                ? "0"
+                                : myController.text)));
+                          }),
+                          myController.clear()
+                        },
+                    child: const Text("Add")),
+                const SizedBox(
+                  width: 20,
+                ),
+                ElevatedButton(
+                    onPressed: () => {
+                          setState(() {
+                            list.clear();
+                          })
+                        },
+                    child: const Text("Clear")),
+              ],
+              mainAxisAlignment: MainAxisAlignment.center,
+            ),
           ),
-        ),
-      ],
+          Expanded(
+            child: SizedBox(
+              width: size.width - 80,
+              child: ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: list.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Card(
+                      child: Center(child: Text('${list[index]}')),
+                    );
+                  }),
+            ),
+          ),
+        ],
+      ),
     ));
   }
 }
