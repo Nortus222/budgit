@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:budgit/dbScreen.dart';
-import 'package:budgit/historyPage.dart';
+import 'package:budgit/screens/dbScreen.dart';
+import 'package:budgit/screens/historyPage.dart';
 
 void main() {
   runApp(const MyApp());
