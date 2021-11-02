@@ -78,7 +78,8 @@ class TransactionDatabase {
     final database = await instance.database;
 
     final result = await database.query(TransactionTable);
-
+    print("ReadALL DB\n");
+    print(result.map((json) => TransactionBudgit.fromJson(json)).toList());
     return result.map((json) => TransactionBudgit.fromJson(json)).toList();
   }
 

@@ -1,6 +1,8 @@
 // ignore_for_file: avoid_unnecessary_containers, file_names, camel_case_types
 
+import 'package:budgit/db/model/transaction.dart';
 import 'package:flutter/material.dart';
+import 'package:budgit/db/transaction_database.dart';
 
 class DBscreen extends StatefulWidget {
   const DBscreen({Key? key}) : super(key: key);
@@ -10,14 +12,23 @@ class DBscreen extends StatefulWidget {
 }
 
 class _DBscreenState extends State<DBscreen> {
-  var list = [1.0, 2]; //Get this from DB
+  final db = TransactionDatabase.init();
+
+  var list;
 
   final myController = TextEditingController();
 
   @override
   void dispose() {
     myController.dispose();
+    db.close(); //TODO
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    list = db.readAll();
+    super.initState();
   }
 
   @override
@@ -47,9 +58,21 @@ class _DBscreenState extends State<DBscreen> {
                 ElevatedButton(
                     onPressed: () => {
                           setState(() {
-                            list.add((double.parse(myController.text == ""
-                                ? "0"
-                                : myController.text)));
+                            var tmp = db.insert(TransactionBudgit(
+                                transaction_time: DateTime.now(),
+                                amount: (double.parse(myController.text == ""
+                                    ? "0"
+                                    : myController.text)),
+                                account: "Personal"));
+
+                            tmp.then((value) => {
+                                  print(
+                                      "Transaction: ${value.id}; ${value.transaction_time}; ${value.amount}; ${value.account}")
+                                });
+                            //list = db.readAll();
+                            // list.add((double.parse(myController.text == ""
+                            //     ? "0"
+                            //     : myController.text)));
                           }),
                           myController.clear()
                         },
@@ -60,7 +83,14 @@ class _DBscreenState extends State<DBscreen> {
                 ElevatedButton(
                     onPressed: () => {
                           setState(() {
-                            list.clear();
+                            for (int i = 0; i < 7; i++) {
+                              var tmp = db.delete(i);
+
+                              tmp.then((value) => print("DELETE: ${value}"));
+                            }
+
+                            // var tmp = db.delete(5);
+                            // tmp.then((value) => print("DELETE: ${value}"));
                           })
                         },
                     child: const Text("Clear")),
@@ -69,15 +99,31 @@ class _DBscreenState extends State<DBscreen> {
             ),
           ),
           Expanded(
-            child: SizedBox(
+            child: Container(
               width: size.width - 80,
-              child: ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  itemCount: list.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Card(
-                      child: Center(child: Text('${list[index]}')),
-                    );
+              child: FutureBuilder<List<TransactionBudgit>>(
+                  future: list,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                          padding: const EdgeInsets.all(8),
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Card(
+                              child: Center(
+                                  child:
+                                      Text('${snapshot.data![index].amount}')),
+                            );
+                          });
+                    } else if (snapshot.hasError) {
+                      print("Error\n\n");
+                      return Text("${snapshot.error}");
+                    } else {
+                      return Container(
+                        alignment: AlignmentDirectional.center,
+                        child: const CircularProgressIndicator(),
+                      );
+                    }
                   }),
             ),
           ),
