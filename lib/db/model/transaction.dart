@@ -52,9 +52,10 @@ class TransactionBudgit {
   static TransactionBudgit fromJson(Map<String, Object?> json) =>
       TransactionBudgit(
         id: json[TransactionName.id] as int?,
-        transaction_time:
-            DateTime.parse(json[TransactionName.transaction_time] as String),
-        amount: json[TransactionName.amount] as double,
+        transaction_time: DateTime.parse(json[TransactionName.transaction_time] as String),
+        amount: (json[TransactionName.amount] as int).toDouble()Z,
         account: json[TransactionName.account] as String,
       );
+
+
 }
