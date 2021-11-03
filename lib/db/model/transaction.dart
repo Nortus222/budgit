@@ -1,4 +1,4 @@
-final String TransactionTable = 'transaction';
+final String TransactionTable = 'Test'; //TODO: change
 
 class TransactionTypes {
   static final String id = 'INTEGER PRIMARY KEY AUTOINCREMENT';
@@ -8,10 +8,7 @@ class TransactionTypes {
 }
 
 class TransactionName {
-
-  static final List<String> values = [
-    id, transaction_time, amount, account
-  ];
+  static final List<String> values = [id, transaction_time, amount, account];
 
   static final String id = '_id';
   static final String transaction_time = 'transaction_time';
@@ -37,24 +34,27 @@ class TransactionBudgit {
     DateTime? transaction_time,
     double? amount,
     String? account,
-  }) => TransactionBudgit (
-    id: id ?? this.id,
-    transaction_time: transaction_time ?? this.transaction_time,
-    amount: amount ?? this.amount,
-    account: account ?? this.account,
-  );
+  }) =>
+      TransactionBudgit(
+        id: id ?? this.id,
+        transaction_time: transaction_time ?? this.transaction_time,
+        amount: amount ?? this.amount,
+        account: account ?? this.account,
+      );
 
   Map<String, Object?> toJson() => {
-    TransactionName.id: id,
-    TransactionName.transaction_time: transaction_time.toIso8601String(),
-    TransactionName.amount: amount,
-    TransactionName.account: account,
-  };
+        TransactionName.id: id,
+        TransactionName.transaction_time: transaction_time.toIso8601String(),
+        TransactionName.amount: amount,
+        TransactionName.account: account,
+      };
 
-  static TransactionBudgit fromJson(Map<String, Object?> json) => TransactionBudgit(
-    id: json[TransactionName.id] as int?,
-    transaction_time: DateTime.parse(json[TransactionName.transaction_time] as String),
-    amount: json[TransactionName.amount] as double,
-    account: json[TransactionName.account] as String,
-  );
+  static TransactionBudgit fromJson(Map<String, Object?> json) =>
+      TransactionBudgit(
+        id: json[TransactionName.id] as int?,
+        transaction_time:
+            DateTime.parse(json[TransactionName.transaction_time] as String),
+        amount: json[TransactionName.amount] as double,
+        account: json[TransactionName.account] as String,
+      );
 }

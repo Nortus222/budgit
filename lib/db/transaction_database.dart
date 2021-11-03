@@ -4,19 +4,19 @@ import 'package:sqflite/sqflite.dart';
 
 class TransactionDatabase {
   //global field calls constructor
-  static final TransactionDatabase instance = TransactionDatabase._init();
+  static final TransactionDatabase instance = TransactionDatabase.init();
 
   //sqflite database object
   static Database? _database;
 
   //constructor
-  TransactionDatabase._init();
+  TransactionDatabase.init();
 
   //allows for a connection to the database;
   Future<Database> get database async {
-
+    print("_Init DB\n");
     //return database if it already exists
-    if(_database != null) return _database!;
+    if (_database != null) return _database!;
 
     //create the database and return it
     _database = await _initDB('transactions.db');
@@ -31,11 +31,10 @@ class TransactionDatabase {
     final path = join(dbPath, filePath);
 
     //necessary to define the database schema
-    return await openDatabase(path, version: 1, onCreate:  _createDB);
+    return await openDatabase(path, version: 1, onCreate: _createDB);
   }
 
   Future _createDB(Database db, int version) async {
-
     //SQL Command to create the database
     await db.execute('''
       CREATE TABLE $TransactionTable (
@@ -53,7 +52,8 @@ class TransactionDatabase {
 
     //inserts values into the database as a jason, which generates a unique id,
     //could be an INSERT SQL command but that would be difficult.
-    final id = await database.insert(TransactionTable, transactionBudgit.toJson());
+    final id =
+        await database.insert(TransactionTable, transactionBudgit.toJson());
     return transactionBudgit.copy(id: id);
   }
 
@@ -61,14 +61,12 @@ class TransactionDatabase {
     //gets the database
     final database = await instance.database;
 
-    final maps = await database.query(
-      TransactionTable,
-      columns: TransactionName.values,
-      where: '${TransactionName.id} = ?',
-      whereArgs: [id]
-    );
+    final maps = await database.query(TransactionTable,
+        columns: TransactionName.values,
+        where: '${TransactionName.id} = ?',
+        whereArgs: [id]);
 
-    if(maps.isNotEmpty){
+    if (maps.isNotEmpty) {
       return TransactionBudgit.fromJson(maps.first);
     } else {
       return null;
@@ -80,7 +78,8 @@ class TransactionDatabase {
     final database = await instance.database;
 
     final result = await database.query(TransactionTable);
-
+    print("ReadALL DB\n");
+    print(result.map((json) => TransactionBudgit.fromJson(json)).toList());
     return result.map((json) => TransactionBudgit.fromJson(json)).toList();
   }
 
