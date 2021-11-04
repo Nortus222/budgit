@@ -69,7 +69,7 @@ class _DBscreenState extends State<DBscreen> {
                                   print(
                                       "Transaction: ${value.id}; ${value.transaction_time}; ${value.amount}; ${value.account}")
                                 });
-                            //list = db.readAll();
+                            list = db.readAll();
                             // list.add((double.parse(myController.text == ""
                             //     ? "0"
                             //     : myController.text)));
@@ -83,14 +83,14 @@ class _DBscreenState extends State<DBscreen> {
                 ElevatedButton(
                     onPressed: () => {
                           setState(() {
-                            for (int i = 0; i < 7; i++) {
-                              var tmp = db.delete(i);
+                            // for (int i = 0; i < 7; i++) {
+                            //   var tmp = db.delete(i);
 
-                              tmp.then((value) => print("DELETE: ${value}"));
-                            }
+                            //   tmp.then((value) => print("DELETE: ${value}"));
+                            // }
 
-                            // var tmp = db.delete(5);
-                            // tmp.then((value) => print("DELETE: ${value}"));
+                            var tmp = db.delete(1);
+                            tmp.then((value) => print("DELETE: ${value}"));
                           })
                         },
                     child: const Text("Clear")),
