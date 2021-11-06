@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:budgit/db/model/transaction.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -14,7 +16,6 @@ class TransactionDatabase {
 
   //allows for a connection to the database;
   Future<Database> get database async {
-    print("_Init DB\n");
     //return database if it already exists
     if (_database != null) return _database!;
 
@@ -77,9 +78,10 @@ class TransactionDatabase {
     //gets the database
     final database = await instance.database;
 
+    // await Future.delayed(Duration(seconds: 10));
+
     final result = await database.query(TransactionTable);
-    print("ReadALL DB\n");
-    print(result.map((json) => TransactionBudgit.fromJson(json)).toList());
+
     return result.map((json) => TransactionBudgit.fromJson(json)).toList();
   }
 

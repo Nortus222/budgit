@@ -2,12 +2,14 @@
 
 //import 'dart:js';
 
+import 'package:budgit/screens/dbScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:budgit/db/transaction_database.dart';
 import 'package:budgit/db/model/transaction.dart';
+import 'package:intl/intl.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({Key? key}) : super(key: key);
@@ -22,9 +24,19 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   void initState() {
-    print("Init\n");
     list = db.readAll();
   }
+
+  @override
+  void dispose() {
+    db.close();
+    super.dispose();
+  }
+
+  // @override
+  // void didUpdateWidget(DBscreen) {
+  //   list = db.readAll();
+  // }
 
   Future<void> _showChangeDialog(
       BuildContext context, TransactionBudgit entry) async {
@@ -42,8 +54,6 @@ class _HistoryPageState extends State<HistoryPage> {
         amount: entry.amount,
         account: entry.account);
 
-    // print(transaction.account);
-
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -52,84 +62,97 @@ class _HistoryPageState extends State<HistoryPage> {
               title: const Text("Change Transaction"),
               content: Column(
                 children: [
-                  Row(
-                    children: [
-                      const Text("Date: "),
-                      TextButton(
-                          onPressed: () {
-                            DatePicker.showDatePicker(context,
-                                showTitleActions: true,
-                                minTime: DateTime(
-                                    transaction.transaction_time.year - 2,
-                                    1,
-                                    1),
-                                maxTime: DateTime(
-                                    transaction.transaction_time.year + 2,
-                                    1,
-                                    1), onConfirm: (date) {
-                              setState1(() {
-                                transaction.transaction_time = DateTime(
-                                    date.year,
-                                    date.month,
-                                    date.day,
-                                    transaction.transaction_time.hour,
-                                    transaction.transaction_time.minute,
-                                    transaction.transaction_time.second,
-                                    transaction.transaction_time.millisecond,
-                                    transaction.transaction_time.microsecond);
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        const Text("Date: "),
+                        TextButton(
+                            onPressed: () {
+                              DatePicker.showDatePicker(context,
+                                  showTitleActions: true,
+                                  minTime: DateTime(
+                                      transaction.transaction_time.year - 2,
+                                      1,
+                                      1),
+                                  maxTime: DateTime(
+                                      transaction.transaction_time.year + 2,
+                                      1,
+                                      1), onConfirm: (date) {
+                                setState1(() {
+                                  transaction.transaction_time = DateTime(
+                                      date.year,
+                                      date.month,
+                                      date.day,
+                                      transaction.transaction_time.hour,
+                                      transaction.transaction_time.minute,
+                                      transaction.transaction_time.second,
+                                      transaction.transaction_time.millisecond,
+                                      transaction.transaction_time.microsecond);
+                                });
                               });
-                            });
-                          },
-                          child: Text(
-                              "${transaction.transaction_time.day}/${transaction.transaction_time.month}/${transaction.transaction_time.year}")),
-                    ],
+                            },
+                            child: Text(DateFormat('MM/dd/yyyy')
+                                .format(transaction.transaction_time))),
+                      ],
+                    ),
                   ),
-                  Row(
-                    children: [
-                      const Text("Time: "),
-                      TextButton(
-                          onPressed: () {
-                            DatePicker.showTime12hPicker(context,
-                                showTitleActions: true, onConfirm: (date) {
-                              setState1(() {
-                                transaction.transaction_time = DateTime(
-                                    transaction.transaction_time.year,
-                                    transaction.transaction_time.month,
-                                    transaction.transaction_time.day,
-                                    date.hour,
-                                    date.minute,
-                                    DateTime.now().second,
-                                    DateTime.now().millisecond,
-                                    DateTime.now().microsecond);
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        const Text("Time: "),
+                        TextButton(
+                            onPressed: () {
+                              DatePicker.showTime12hPicker(context,
+                                  showTitleActions: true, onConfirm: (date) {
+                                setState1(() {
+                                  transaction.transaction_time = DateTime(
+                                      transaction.transaction_time.year,
+                                      transaction.transaction_time.month,
+                                      transaction.transaction_time.day,
+                                      date.hour,
+                                      date.minute,
+                                      DateTime.now().second,
+                                      DateTime.now().millisecond,
+                                      DateTime.now().microsecond);
+                                });
                               });
-                            });
-                          },
-                          child: Text(
-                              "${transaction.transaction_time.hour}:${transaction.transaction_time.minute}"))
-                    ],
+                            },
+                            child: Text(DateFormat('kk:mm:a')
+                                .format(transaction.transaction_time))),
+                      ],
+                    ),
                   ),
-                  Row(children: [
-                    const Text("Account: "),
-                    CupertinoSegmentedControl(
-                        children: selector,
-                        groupValue: transaction.account,
-                        onValueChanged: (key) {
-                          setState1(() {
-                            transaction.account = key.toString();
-                          });
-                        })
-                  ]),
-                  Row(
-                    children: [
-                      const Text("Total: "),
-                      Container(
-                        padding: const EdgeInsetsDirectional.only(start: 15),
-                        width: MediaQuery.of(context).size.width / 2,
-                        child: TextFormField(
-                          controller: controller,
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
+                    child: Row(children: [
+                      const Text("Account: "),
+                      CupertinoSegmentedControl(
+                          children: selector,
+                          groupValue: transaction.account,
+                          onValueChanged: (key) {
+                            setState1(() {
+                              transaction.account = key.toString();
+                            });
+                          })
+                    ]),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        const Text("Total: "),
+                        Container(
+                          padding: const EdgeInsetsDirectional.only(start: 15),
+                          width: MediaQuery.of(context).size.width / 2,
+                          child: TextFormField(
+                            controller: controller,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -145,7 +168,6 @@ class _HistoryPageState extends State<HistoryPage> {
                         transaction.amount = double.parse(
                             controller.text == '' ? "0" : controller.text);
                         db.update(transaction);
-                        //now = copyNow;
                         list = db.readAll();
                       });
                       Navigator.of(context).pop();
@@ -161,53 +183,54 @@ class _HistoryPageState extends State<HistoryPage> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
-    return Container(
-      color: Colors.white,
-      child: SafeArea(
-        bottom: true,
-        top: true,
-        child: Center(
-          child: Column(
-            children: [
-              Container(
-                child: const Text(
-                  "History",
-                  style: TextStyle(
-                    color: Colors.black,
+    return Scaffold(
+      body: Container(
+        color: Colors.white,
+        child: SafeArea(
+          bottom: true,
+          top: true,
+          child: Center(
+            child: Column(
+              children: [
+                Container(
+                  child: const Text(
+                    "History",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 48,
+                    ),
                   ),
+                  padding: const EdgeInsetsDirectional.all(30),
                 ),
-                padding: const EdgeInsetsDirectional.all(30),
-              ),
-              Expanded(
-                child: Container(
-                  width: size.width - 40,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 100,
-                        width: size.width - 40,
-                        child: CupertinoSegmentedControl(children: const {
-                          "Personal": Text(
-                            "Rersonal",
-                            style: TextStyle(fontSize: 12),
-                          ),
-                          "Mael Plan":
-                              Text("Meal Plan", style: TextStyle(fontSize: 12))
-                        }, onValueChanged: (key) {}),
-                      ),
-                      Expanded(
-                        child: Material(
+                Expanded(
+                  child: SizedBox(
+                    width: size.width - 40,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 50,
+                          width: size.width - 40,
+                          child: CupertinoSegmentedControl(children: const {
+                            "Personal": Text(
+                              "Rersonal",
+                              style: TextStyle(fontSize: 12),
+                            ),
+                            "Mael Plan": Text("Meal Plan",
+                                style: TextStyle(fontSize: 12))
+                          }, onValueChanged: (key) {}),
+                        ),
+                        Expanded(
                           child: FutureBuilder<List<TransactionBudgit>>(
                               future: list,
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   return ListView.builder(
-                                      itemCount: snapshot.data!.length, //TODO
+                                      itemCount: snapshot.data!.length,
                                       itemBuilder:
                                           (BuildContext context, int index) {
                                         return Dismissible(
                                           key: ValueKey<int>(
-                                              snapshot.data![index].id!), //TODO
+                                              snapshot.data![index].id!),
                                           direction:
                                               DismissDirection.endToStart,
                                           dismissThresholds: const {
@@ -264,7 +287,10 @@ class _HistoryPageState extends State<HistoryPage> {
                                           child: Card(
                                             child: ListTile(
                                                 leading: Text(
-                                                    '${snapshot.data![index].transaction_time.hour}:${snapshot.data![index].transaction_time.minute}'),
+                                                    DateFormat('kk:mm:a')
+                                                        .format(snapshot
+                                                            .data![index]
+                                                            .transaction_time)),
                                                 title: Center(
                                                     child: Text(
                                                         "\$${snapshot.data![index].amount}")),
@@ -284,7 +310,9 @@ class _HistoryPageState extends State<HistoryPage> {
                                               (DismissDirection direction) {
                                             db.delete(
                                                 snapshot.data![index].id!);
-                                            //list = db.readAll();
+                                            list = db.readAll(); //TODO
+
+                                            setState(() {});
                                           },
                                         );
                                       });
@@ -298,12 +326,12 @@ class _HistoryPageState extends State<HistoryPage> {
                                 }
                               }),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),

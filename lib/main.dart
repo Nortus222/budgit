@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:budgit/screens/dbScreen.dart';
 import 'package:budgit/screens/historyPage.dart';
+import 'package:budgit/screens/landingPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         backgroundColor: Colors.white,
       ),
-      home: const HistoryPage(),
+      home: const LandingPage(),
     );
   }
 }
