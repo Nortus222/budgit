@@ -56,14 +56,13 @@ class TransactionBudgit {
   );
 
   static getAmount(Object? json) {
-    print(json);
     try {
       return (json as int).toDouble();
-    } catch(Exception) {
+    } catch(exception) {
       try {
         return json as double;
-      } catch (Exception) {
-        throw Exception;
+      } catch (exception) {
+        rethrow;
       }
     }
   }
