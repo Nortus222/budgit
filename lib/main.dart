@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:budgit/screens/dbScreen.dart';
 import 'package:budgit/screens/historyPage.dart';
 import 'package:budgit/screens/landingPage.dart';
+import 'package:provider/provider.dart';
+import 'package:budgit/model/appStateModel.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider<AppStateModel>(
+      create: (_) => AppStateModel()..loadTransactions(),
+      child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

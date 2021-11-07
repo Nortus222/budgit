@@ -2,6 +2,7 @@
 
 //import 'dart:js';
 
+import 'package:budgit/model/appStateModel.dart';
 import 'package:budgit/screens/dbScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:budgit/db/transaction_database.dart';
 import 'package:budgit/db/model/transaction.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({Key? key}) : super(key: key);
@@ -19,27 +21,8 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  var list;
-  final db = TransactionDatabase.init();
-
-  @override
-  void initState() {
-    list = db.readAll();
-  }
-
-  @override
-  void dispose() {
-    db.close();
-    super.dispose();
-  }
-
-  // @override
-  // void didUpdateWidget(DBscreen) {
-  //   list = db.readAll();
-  // }
-
-  Future<void> _showChangeDialog(
-      BuildContext context, TransactionBudgit entry) async {
+  Future<void> _showChangeDialog(BuildContext context, TransactionBudgit entry,
+      AppStateModel model) async {
     var controller = TextEditingController();
     controller.text = entry.amount.toString();
 
@@ -164,12 +147,9 @@ class _HistoryPageState extends State<HistoryPage> {
                     child: const Text("Cancel")),
                 TextButton(
                     onPressed: () {
-                      setState(() {
-                        transaction.amount = double.parse(
-                            controller.text == '' ? "0" : controller.text);
-                        db.update(transaction);
-                        list = db.readAll();
-                      });
+                      transaction.amount = double.parse(
+                          controller.text == '' ? "0" : controller.text);
+                      model.updateTransaction(transaction);
                       Navigator.of(context).pop();
                     },
                     child: const Text("Save")),
@@ -182,6 +162,9 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+
+    final model = Provider.of<AppStateModel>(context);
+    final list = model.getTransactions();
 
     return Scaffold(
       body: Container(
@@ -302,15 +285,14 @@ class _HistoryPageState extends State<HistoryPage> {
                                                     onPressed: () {
                                                       _showChangeDialog(
                                                           context,
-                                                          snapshot
-                                                              .data![index]);
+                                                          snapshot.data![index],
+                                                          model);
                                                     })),
                                           ),
                                           onDismissed:
                                               (DismissDirection direction) {
-                                            db.delete(
+                                            model.deleteTransaction(
                                                 snapshot.data![index].id!);
-                                            list = db.readAll(); //TODO
 
                                             setState(() {});
                                           },
