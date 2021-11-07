@@ -4,6 +4,7 @@ import 'package:budgit/screens/historyPage.dart';
 import 'package:budgit/screens/landingPage.dart';
 import 'package:provider/provider.dart';
 import 'package:budgit/model/appStateModel.dart';
+import 'package:budgit/screens/settingsPage.dart';
 
 void main() {
   runApp(ChangeNotifierProvider<AppStateModel>(
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
+      routes: {'/settings': (BuildContext context) => SettingsPage()},
       theme: ThemeData(
         primarySwatch: Colors.blue,
         backgroundColor: Colors.white,

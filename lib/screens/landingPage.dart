@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:budgit/screens/historyPage.dart';
 import 'package:budgit/screens/homePage.dart';
+import 'package:budgit/screens/settingsPage.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({Key? key}) : super(key: key);
@@ -27,9 +28,25 @@ class _LandingPageState extends State<LandingPage> {
         ],
       ),
       tabBuilder: (BuildContext context, int index) {
-        return CupertinoTabView(builder: (BuildContext context) {
-          return CupertinoPageScaffold(child: tabs[index]);
-        });
+        return CupertinoTabView(
+            onGenerateRoute: (settings) {},
+            builder: (BuildContext context) {
+              return CupertinoPageScaffold(
+                  navigationBar: CupertinoNavigationBar(
+                    //backgroundColor: Colors.white,
+                    border: Border(),
+                    trailing: TextButton(
+                        onPressed: () {
+                          Navigator.of(context, rootNavigator: true)
+                              .pushNamed('/settings');
+                        },
+                        style: ButtonStyle(
+                            foregroundColor:
+                                MaterialStateProperty.all<Color?>(Colors.grey)),
+                        child: const Icon(Icons.segment_rounded)),
+                  ),
+                  child: tabs[index]);
+            });
       },
     );
   }
