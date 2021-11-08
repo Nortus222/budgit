@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:budgit/screens/dbScreen.dart';
 import 'package:budgit/screens/historyPage.dart';
+import 'package:budgit/screens/landingPage.dart';
+import 'package:provider/provider.dart';
+import 'package:budgit/model/appStateModel.dart';
+import 'package:budgit/screens/settingsPage.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider<AppStateModel>(
+      create: (_) => AppStateModel()..init(), child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -15,11 +20,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
+      routes: {'/settings': (BuildContext context) => SettingsPage()},
       theme: ThemeData(
         primarySwatch: Colors.blue,
         backgroundColor: Colors.white,
       ),
-      home: const DBscreen(),
+      home: const LandingPage(),
     );
   }
 }

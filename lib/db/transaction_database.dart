@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:budgit/db/model/transaction.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -14,6 +16,7 @@ class TransactionDatabase {
 
   //allows for a connection to the database;
   Future<Database> get database async {
+
     print("Get DB\n");
 
     //return database if it already exists
@@ -122,9 +125,11 @@ class TransactionDatabase {
       );
     }
 
+
     print("ReadALL DB\n");
     print(maps.map((json) => TransactionBudgit.fromJson(json)).toList());
     return maps.map((json) => TransactionBudgit.fromJson(json)).toList();
+
   }
 
   Future<int> update(TransactionBudgit transactionBudgit) async {
