@@ -19,6 +19,10 @@ class AppStateModel extends foundation.ChangeNotifier {
   int? dailyPersonal;
   int? dailyMealPlan;
 
+  int dbWeeks = 1;
+
+  String dbAccount = "Personal";
+
   void init() async {
     db = TransactionDatabase.init();
     sp = await SharedPreferences.getInstance();
@@ -62,9 +66,22 @@ class AppStateModel extends foundation.ChangeNotifier {
   }
 
   void loadTransactions() {
-    list = db.readAll(null, null);
+    print("Weeks: $dbWeeks");
+    list = db.readAll(dbWeeks, dbAccount);
 
     notifyListeners();
+  }
+
+  void dbShowMore() {
+    list = db.readAll(++dbWeeks, dbAccount);
+
+    notifyListeners();
+  }
+
+  void setDbAccount(String value) {
+    dbAccount = value;
+
+    loadTransactions();
   }
 
   void updateTransaction(TransactionBudgit transaction) {

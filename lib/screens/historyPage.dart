@@ -21,6 +21,215 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
+  @override
+  Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+
+    final model = Provider.of<AppStateModel>(context);
+    final list = model.getTransactions();
+
+    return Scaffold(
+      body: Container(
+        color: Colors.white,
+        child: SafeArea(
+          bottom: true,
+          top: true,
+          child: Center(
+            child: Column(
+              children: [
+                Container(
+                  child: const Text(
+                    "History",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 48,
+                    ),
+                  ),
+                  padding: const EdgeInsetsDirectional.all(30),
+                ),
+                Expanded(
+                  child: SizedBox(
+                    width: size.width - 40,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 50,
+                          width: size.width - 40,
+                          child: CupertinoSegmentedControl(
+                              groupValue: model.dbAccount,
+                              children: const {
+                                "Personal": Text(
+                                  "Rersonal",
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                                "Meal Plan": Text("Meal Plan",
+                                    style: TextStyle(fontSize: 12))
+                              },
+                              onValueChanged: (key) {
+                                setState(() {
+                                  model.setDbAccount(key.toString());
+                                });
+                              }),
+                        ),
+                        Expanded(
+                          child: FutureBuilder<List<TransactionBudgit>>(
+                              future: list,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return CustomScrollView(
+                                    slivers: _getSlivers(
+                                        context, snapshot.data!, model),
+                                    // slivers: [
+                                    //   SliverList(
+                                    //       delegate: SliverChildBuilderDelegate(
+                                    //     (BuildContext context, int index) {
+                                    //       return _listTile(context,
+                                    //           snapshot.data![index], model);
+                                    //     },
+                                    //     childCount: snapshot.data!.length,
+                                    //   )),
+                                    //   SliverToBoxAdapter(
+                                    //     child: Card(
+                                    //       color: Colors.amberAccent,
+                                    //       child: TextButton(
+                                    //           onPressed: () {
+                                    //             model.dbShowMore();
+                                    //           },
+                                    //           child: const Text("Show More")),
+                                    //     ),
+                                    //   )
+                                    // ],
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return Text("${snapshot.error}");
+                                } else {
+                                  return Container(
+                                    alignment: AlignmentDirectional.center,
+                                    child: const CircularProgressIndicator(),
+                                  );
+                                }
+                              }),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _getSlivers(
+      BuildContext context, List<TransactionBudgit> list, AppStateModel model) {
+    var dateFirst = list.first.transaction_time;
+
+    List<Widget> sliverList = [];
+
+    sliverList.add(SliverAppBar(
+      title: Text(DateFormat('MMMMd').format(list.first.transaction_time)),
+      pinned: true,
+    ));
+
+    int daysBetween(DateTime day1, DateTime day2) {
+      day1 = DateTime(day1.year, day1.month, day1.day);
+      day2 = DateTime(day2.year, day2.month, day2.day);
+
+      return (day1.difference(day2).inDays);
+    }
+
+    list.forEach((element) {
+      if (daysBetween(dateFirst, element.transaction_time) != 0) {
+        sliverList.add(SliverAppBar(
+          title: Text(DateFormat('MMMMd').format(element.transaction_time)),
+          pinned: true,
+        ));
+        sliverList
+            .add(SliverToBoxAdapter(child: _listTile(context, element, model)));
+        dateFirst = element.transaction_time;
+      } else {
+        sliverList
+            .add(SliverToBoxAdapter(child: _listTile(context, element, model)));
+      }
+    });
+
+    sliverList.add(SliverToBoxAdapter(
+      child: Card(
+        color: Colors.amberAccent,
+        child: TextButton(
+            onPressed: () {
+              model.dbShowMore();
+            },
+            child: const Text("Show More")),
+      ),
+    ));
+    return sliverList;
+  }
+
+  Widget _listTile(
+      BuildContext context, TransactionBudgit entry, AppStateModel model) {
+    return Dismissible(
+      key: ValueKey<int>(entry.id!),
+      direction: DismissDirection.endToStart,
+      dismissThresholds: const {DismissDirection.endToStart: 0.99},
+      confirmDismiss: (DismissDirection direction) async {
+        return await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text("Confirm"),
+                content:
+                    const Text("Are you sure you want to delete this item?"),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(false);
+                      },
+                      child: const Text("No")),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(true);
+                    },
+                    child: const Text("Delete"),
+                    style: ButtonStyle(
+                        foregroundColor: MaterialStateProperty.all(Colors.red)),
+                  ),
+                ],
+              );
+            });
+      },
+      background: Container(
+        color: Colors.red,
+        child: const Icon(
+          Icons.delete,
+          size: 25,
+        ),
+        alignment: AlignmentDirectional.centerEnd,
+        padding: const EdgeInsetsDirectional.only(end: 15),
+      ),
+      child: Card(
+        child: ListTile(
+            leading: Text(DateFormat('kk:mm:a').format(entry.transaction_time)),
+            title: Center(child: Text("\$${entry.amount}")),
+            trailing: IconButton(
+                icon: const Icon(
+                  Icons.edit,
+                  size: 15,
+                ),
+                onPressed: () {
+                  _showChangeDialog(context, entry, model);
+                })),
+      ),
+      onDismissed: (DismissDirection direction) {
+        model.deleteTransaction(entry.id!);
+
+        setState(() {});
+      },
+    );
+  }
+
   Future<void> _showChangeDialog(BuildContext context, TransactionBudgit entry,
       AppStateModel model) async {
     var controller = TextEditingController();
@@ -30,8 +239,6 @@ class _HistoryPageState extends State<HistoryPage> {
       "Personal": Text("Personal"),
       "Meal Plan": Text("Meal Plan")
     };
-
-    var now = DateTime.now();
 
     TransactionBudgit transaction = TransactionBudgit(
         id: entry.id,
@@ -159,166 +366,5 @@ class _HistoryPageState extends State<HistoryPage> {
             );
           });
         });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-
-    final model = Provider.of<AppStateModel>(context);
-    final list = model.getTransactions();
-
-    return Scaffold(
-      body: Container(
-        color: Colors.white,
-        child: SafeArea(
-          bottom: true,
-          top: true,
-          child: Center(
-            child: Column(
-              children: [
-                Container(
-                  child: const Text(
-                    "History",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 48,
-                    ),
-                  ),
-                  padding: const EdgeInsetsDirectional.all(30),
-                ),
-                Expanded(
-                  child: SizedBox(
-                    width: size.width - 40,
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 50,
-                          width: size.width - 40,
-                          child: CupertinoSegmentedControl(children: const {
-                            "Personal": Text(
-                              "Rersonal",
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            "Mael Plan": Text("Meal Plan",
-                                style: TextStyle(fontSize: 12))
-                          }, onValueChanged: (key) {}),
-                        ),
-                        Expanded(
-                          child: FutureBuilder<List<TransactionBudgit>>(
-                              future: list,
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return ListView.builder(
-                                      itemCount: snapshot.data!.length,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return Dismissible(
-                                          key: ValueKey<int>(
-                                              snapshot.data![index].id!),
-                                          direction:
-                                              DismissDirection.endToStart,
-                                          dismissThresholds: const {
-                                            DismissDirection.endToStart: 0.99
-                                          },
-                                          confirmDismiss: (DismissDirection
-                                              direction) async {
-                                            return await showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return AlertDialog(
-                                                    title:
-                                                        const Text("Confirm"),
-                                                    content: const Text(
-                                                        "Are you sure you want to delete this item?"),
-                                                    actions: [
-                                                      TextButton(
-                                                          onPressed: () {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop(false);
-                                                          },
-                                                          child:
-                                                              const Text("No")),
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          Navigator.of(context)
-                                                              .pop(true);
-                                                        },
-                                                        child: const Text(
-                                                            "Delete"),
-                                                        style: ButtonStyle(
-                                                            foregroundColor:
-                                                                MaterialStateProperty
-                                                                    .all(Colors
-                                                                        .red)),
-                                                      ),
-                                                    ],
-                                                  );
-                                                });
-                                          },
-                                          background: Container(
-                                            color: Colors.red,
-                                            child: const Icon(
-                                              Icons.delete,
-                                              size: 25,
-                                            ),
-                                            alignment:
-                                                AlignmentDirectional.centerEnd,
-                                            padding: const EdgeInsetsDirectional
-                                                .only(end: 15),
-                                          ),
-                                          child: Card(
-                                            child: ListTile(
-                                                leading: Text(
-                                                    DateFormat('kk:mm:a')
-                                                        .format(snapshot
-                                                            .data![index]
-                                                            .transaction_time)),
-                                                title: Center(
-                                                    child: Text(
-                                                        "\$${snapshot.data![index].amount}")),
-                                                trailing: IconButton(
-                                                    icon: const Icon(
-                                                      Icons.edit,
-                                                      size: 15,
-                                                    ),
-                                                    onPressed: () {
-                                                      _showChangeDialog(
-                                                          context,
-                                                          snapshot.data![index],
-                                                          model);
-                                                    })),
-                                          ),
-                                          onDismissed:
-                                              (DismissDirection direction) {
-                                            model.deleteTransaction(
-                                                snapshot.data![index].id!);
-
-                                            setState(() {});
-                                          },
-                                        );
-                                      });
-                                } else if (snapshot.hasError) {
-                                  return Text("${snapshot.error}");
-                                } else {
-                                  return Container(
-                                    alignment: AlignmentDirectional.center,
-                                    child: const CircularProgressIndicator(),
-                                  );
-                                }
-                              }),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }
