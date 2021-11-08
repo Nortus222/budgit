@@ -62,7 +62,7 @@ class AppStateModel extends foundation.ChangeNotifier {
   }
 
   void loadTransactions() {
-    list = db.readAll();
+    list = db.readAll(null, null);
 
     notifyListeners();
   }

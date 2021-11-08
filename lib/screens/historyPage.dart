@@ -26,20 +26,12 @@ class _HistoryPageState extends State<HistoryPage> {
     var controller = TextEditingController();
     controller.text = entry.amount.toString();
 
-
     var selector = {
       "Personal": Text("Personal"),
       "Meal Plan": Text("Meal Plan")
     };
 
-  @override
-  void initState() {
-    print("Init\n");
-    list = db.readAll(null, null);
-  }
-
-  var now = DateTime.now();
-
+    var now = DateTime.now();
 
     TransactionBudgit transaction = TransactionBudgit(
         id: entry.id,
