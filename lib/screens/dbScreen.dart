@@ -26,11 +26,13 @@ class _DBscreenState extends State<DBscreen> {
     super.dispose();
   }
 
-  // @override
-  // void initState() {
-  //   list = db.readAll();
-  //   super.initState();
-  // }
+
+  @override
+  void initState() {
+    list = db.readAll(null, null);
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {

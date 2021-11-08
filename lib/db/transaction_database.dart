@@ -16,6 +16,9 @@ class TransactionDatabase {
 
   //allows for a connection to the database;
   Future<Database> get database async {
+
+    print("Get DB\n");
+
     //return database if it already exists
     if (_database != null) return _database!;
 
@@ -74,15 +77,59 @@ class TransactionDatabase {
     }
   }
 
-  Future<List<TransactionBudgit>> readAll() async {
+  /*
+  Returns all the transactions stored in the database sorted by most recent
+  @param weeks: if null returns all, otherwise limited to x most recent weeks
+  @param account: if null returns all, otherwise limited to transactions specified.
+   */
+  Future<List<TransactionBudgit>> readAll(int? weeks, String? account) async {
     //gets the database
     final database = await instance.database;
+    final List<Map<String, Object?>> maps;
 
-    // await Future.delayed(Duration(seconds: 10));
+    //all weeks, all accounts
+    if(weeks == null && account == null) {
+      maps = await database.query(TransactionTable,
+          columns: TransactionName.values,
+          orderBy: '${TransactionName.transaction_time} DESC'
+      );
+    //all weeks, one account
+    } else if (weeks == null){
+      maps = await database.query(TransactionTable,
+          columns: TransactionName.values,
+          where: '${TransactionName.account} = ?',
+          whereArgs: [account],
+          orderBy: '${TransactionName.transaction_time} DESC'
+      );
+    }
+    //x weeks, all accounts
+    else if (account == null){
+      DateTime cutoffDateTime = DateTime.now().subtract(Duration(days: weeks * 7));
 
-    final result = await database.query(TransactionTable);
+      maps = await database.query(TransactionTable,
+          columns: TransactionName.values,
+          where: '${TransactionName.account} > ?',
+          whereArgs: [cutoffDateTime.toIso8601String()],
+          orderBy: '${TransactionName.transaction_time} DESC'
+      );
+    }
+    //x weeks one account
+    else {
+      DateTime cutoffDateTime = DateTime.now().subtract(Duration(days: weeks * 7));
 
-    return result.map((json) => TransactionBudgit.fromJson(json)).toList();
+      maps = await database.query(TransactionTable,
+          columns: TransactionName.values,
+          where: '${TransactionName.account} > ? AND ${TransactionName.account} = ?',
+          whereArgs: [cutoffDateTime.toIso8601String(), account],
+          orderBy: '${TransactionName.transaction_time} DESC'
+      );
+    }
+
+
+    print("ReadALL DB\n");
+    print(maps.map((json) => TransactionBudgit.fromJson(json)).toList());
+    return maps.map((json) => TransactionBudgit.fromJson(json)).toList();
+
   }
 
   Future<int> update(TransactionBudgit transactionBudgit) async {
@@ -112,4 +159,6 @@ class TransactionDatabase {
     final database = await instance.database;
     database.close();
   }
+
+
 }

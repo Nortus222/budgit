@@ -34,27 +34,37 @@ class TransactionBudgit {
     DateTime? transaction_time,
     double? amount,
     String? account,
-  }) =>
-      TransactionBudgit(
-        id: id ?? this.id,
-        transaction_time: transaction_time ?? this.transaction_time,
-        amount: amount ?? this.amount,
-        account: account ?? this.account,
-      );
+  }) => TransactionBudgit(
+    id: id ?? this.id,
+    transaction_time: transaction_time ?? this.transaction_time,
+    amount: amount ?? this.amount,
+    account: account ?? this.account,
+  );
 
   Map<String, Object?> toJson() => {
-        TransactionName.id: id,
-        TransactionName.transaction_time: transaction_time.toIso8601String(),
-        TransactionName.amount: amount,
-        TransactionName.account: account,
-      };
 
-  static TransactionBudgit fromJson(Map<String, Object?> json) =>
-      TransactionBudgit(
-        id: json[TransactionName.id] as int?,
-        transaction_time:
-            DateTime.parse(json[TransactionName.transaction_time] as String),
-        amount: (json[TransactionName.amount] as int).toDouble(),
-        account: json[TransactionName.account] as String,
-      );
+    TransactionName.id: id,
+    TransactionName.transaction_time: transaction_time.toIso8601String(),
+    TransactionName.amount: amount,
+    TransactionName.account: account,
+  };
+
+  static TransactionBudgit fromJson(Map<String, Object?> json) => TransactionBudgit(
+    id: json[TransactionName.id] as int?,
+    transaction_time: DateTime.parse(json[TransactionName.transaction_time] as String),
+    amount: getAmount(json[TransactionName.amount]),
+    account: json[TransactionName.account] as String,
+  );
+
+  static getAmount(Object? json) {
+    try {
+      return (json as int).toDouble();
+    } catch(exception) {
+      try {
+        return json as double;
+      } catch (exception) {
+        rethrow;
+      }
+    }
+  }
 }
