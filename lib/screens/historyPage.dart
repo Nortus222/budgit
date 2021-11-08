@@ -22,7 +22,7 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   void initState() {
     print("Init\n");
-    list = db.readAll();
+    list = db.readAll(null, null);
   }
 
   var now = DateTime.now();

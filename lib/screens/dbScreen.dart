@@ -27,7 +27,7 @@ class _DBscreenState extends State<DBscreen> {
 
   @override
   void initState() {
-    list = db.readAll();
+    list = db.readAll(null, null);
     super.initState();
   }
 
