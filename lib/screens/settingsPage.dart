@@ -1,7 +1,11 @@
 // ignore_for_file: file_names
 
+import 'package:budgit/model/appStateModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -13,11 +17,13 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
+    final model = Provider.of<AppStateModel>(context);
+
     var size = MediaQuery.of(context).size;
 
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-          border: Border(),
+          border: const Border(),
           automaticallyImplyLeading: false,
           trailing: TextButton(
               onPressed: () {
@@ -33,47 +39,57 @@ class _SettingsPageState extends State<SettingsPage> {
                   SizedBox(
                     height: size.height / 5,
                   ),
-                  Container(
-                    child: Column(
-                      children: [
-                        const Text(
-                          "Personal Budget",
-                          style: TextStyle(fontSize: 36),
-                        ),
-                        Row(
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.all(20),
-                              child: Text("\$567.89",
-                                  style: TextStyle(fontSize: 41)),
-                            ),
-                            Padding(
+                  Column(
+                    children: [
+                      const Text(
+                        "Personal Budget",
+                        style: TextStyle(fontSize: 36),
+                      ),
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Text("\$${(model.personal ?? "Null")}",
+                                style: const TextStyle(fontSize: 41)),
+                          ),
+                          Expanded(
+                            child: Padding(
                               padding: const EdgeInsets.only(
-                                  top: 20, left: 10, bottom: 20),
+                                  top: 20, left: 10, bottom: 20, right: 10),
                               child: CupertinoButton.filled(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(27)),
+                                  padding: const EdgeInsets.all(10),
                                   child: const Text(
                                     "EDIT",
                                   ),
-                                  onPressed: () {}),
-                            )
-                          ],
-                        ),
-                        const Text(
-                          "Due",
-                          style: TextStyle(fontSize: 24),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text("16 November 2021",
-                                style: TextStyle(fontSize: 24)),
-                            TextButton(
-                                onPressed: () {},
-                                child: const Icon(Icons.calendar_today_rounded))
-                          ],
-                        )
-                      ],
-                    ),
+                                  onPressed: () async {
+                                    return await _showChangeDialog(
+                                        context, 'personal', model);
+                                  }),
+                            ),
+                          )
+                        ],
+                      ),
+                      const Text(
+                        "Due",
+                        style: TextStyle(fontSize: 24),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                              DateFormat('yMMMd')
+                                  .format(model.personalDue ?? DateTime.now()),
+                              style: const TextStyle(fontSize: 24)),
+                          TextButton(
+                              onPressed: () {
+                                _showDateTime(context, 'personalDue', model);
+                              },
+                              child: const Icon(Icons.calendar_today_rounded))
+                        ],
+                      )
+                    ],
                   ),
                   const SizedBox(
                     height: 20,
@@ -87,19 +103,27 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         Row(
                           children: [
-                            const Padding(
-                              padding: EdgeInsets.all(20),
-                              child: Text("\$1443.25",
-                                  style: TextStyle(fontSize: 41)),
-                            ),
                             Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 20, bottom: 20),
-                              child: CupertinoButton.filled(
-                                  child: const Text(
-                                    "EDIT",
-                                  ),
-                                  onPressed: () {}),
+                              padding: const EdgeInsets.all(20),
+                              child: Text("\$${(model.mealPlan ?? "Null")}",
+                                  style: const TextStyle(fontSize: 41)),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 20, bottom: 20, left: 10, right: 10),
+                                child: CupertinoButton.filled(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(27)),
+                                    padding: const EdgeInsets.all(10),
+                                    child: const Text(
+                                      "EDIT",
+                                    ),
+                                    onPressed: () async {
+                                      return await _showChangeDialog(
+                                          context, 'mealPlan', model);
+                                    }),
+                              ),
                             )
                           ],
                         ),
@@ -110,10 +134,14 @@ class _SettingsPageState extends State<SettingsPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text("11 December 2021",
-                                style: TextStyle(fontSize: 24)),
+                            Text(
+                                DateFormat('yMMMd').format(
+                                    model.mealPlanDue ?? DateTime.now()),
+                                style: const TextStyle(fontSize: 24)),
                             TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  _showDateTime(context, 'mealPlanDue', model);
+                                },
                                 child: const Icon(Icons.calendar_today_rounded))
                           ],
                         )
@@ -127,12 +155,73 @@ class _SettingsPageState extends State<SettingsPage> {
                         child: const Text(
                           "Save",
                         ),
-                        onPressed: () {}),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        }),
                   )
                 ],
               ),
             ),
           ),
         ));
+  }
+
+  Future<void> _showChangeDialog(
+      BuildContext context, String type, AppStateModel model) async {
+    var controller = TextEditingController();
+
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Change $type budget"),
+            content: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  const Text("Budget: "),
+                  Container(
+                    padding: const EdgeInsetsDirectional.only(start: 15),
+                    width: MediaQuery.of(context).size.width / 3,
+                    child: TextFormField(
+                      controller: controller,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("Cancel")),
+              TextButton(
+                  onPressed: () {
+                    model.setBudget(
+                        type,
+                        double.parse(
+                            controller.text == '' ? "0" : controller.text));
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("Save")),
+            ],
+          );
+        });
+  }
+
+  Future<DateTime?> _showDateTime(
+      BuildContext context, String type, AppStateModel model) {
+    return DatePicker.showDatePicker(
+      context,
+      showTitleActions: true,
+      minTime:
+          DateTime((model.mealPlanDue?.year ?? DateTime.now().year) - 2, 1, 1),
+      maxTime:
+          DateTime((model.mealPlanDue?.year ?? DateTime.now().year) + 2, 1, 1),
+      onConfirm: (date) {
+        model.setDueDate(type, date);
+      },
+    );
   }
 }

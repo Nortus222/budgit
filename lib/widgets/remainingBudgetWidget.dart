@@ -1,6 +1,8 @@
 // ignore_for_file: file_names
 
+import 'package:budgit/model/appStateModel.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RemainingBudget extends StatelessWidget {
   const RemainingBudget({Key? key}) : super(key: key);
@@ -9,15 +11,15 @@ class RemainingBudget extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
-    return Material(
-        child: Container(
-      child: Column(
+    return Material(child:
+        Consumer<AppStateModel>(builder: (BuildContext context, model, chid) {
+      return Column(
         children: [
           const Text(
             "Remaining Budget",
             style: TextStyle(fontSize: 30),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
@@ -30,14 +32,14 @@ class RemainingBudget extends StatelessWidget {
                     style: TextStyle(fontSize: 26),
                   ),
                   Text(
-                    "\$567.89",
-                    style: TextStyle(fontSize: 30),
+                    "\$${(model.personal ?? "Null")}",
+                    style: const TextStyle(fontSize: 30),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Text(
-                    "23 days left",
+                    "${(model.personalDue ?? DateTime.now()).difference(DateTime.now()).inDays} days left",
                     style: TextStyle(fontSize: 16),
                   ),
                 ],
@@ -52,14 +54,14 @@ class RemainingBudget extends StatelessWidget {
                     style: TextStyle(fontSize: 26),
                   ),
                   Text(
-                    "\$1445.23",
-                    style: TextStyle(fontSize: 30),
+                    "\$${(model.mealPlan ?? "Null")}",
+                    style: const TextStyle(fontSize: 30),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Text(
-                    "63 days left",
+                    "${(model.mealPlanDue ?? DateTime.now()).difference(DateTime.now()).inDays} days left",
                     style: TextStyle(fontSize: 16),
                   ),
                 ],
@@ -67,7 +69,7 @@ class RemainingBudget extends StatelessWidget {
             ],
           ),
         ],
-      ),
-    ));
+      );
+    }));
   }
 }

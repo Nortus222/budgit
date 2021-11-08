@@ -8,8 +8,7 @@ import 'package:budgit/screens/settingsPage.dart';
 
 void main() {
   runApp(ChangeNotifierProvider<AppStateModel>(
-      create: (_) => AppStateModel()..loadTransactions(),
-      child: const MyApp()));
+      create: (_) => AppStateModel()..init(), child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
