@@ -23,10 +23,16 @@ class AppStateModel extends foundation.ChangeNotifier {
 
   String dbAccount = "Personal";
 
+  DateTime? appClosed;
+
+  bool? isFirst;
+
   void init() async {
     db = TransactionDatabase.init();
     sp = await SharedPreferences.getInstance();
 
+    loadAppClosed();
+    loadIsFirst();
     loadTransactions();
     loadPreferences();
   }
@@ -63,6 +69,23 @@ class AppStateModel extends foundation.ChangeNotifier {
       mealPlanDue = value;
     }
     notifyListeners();
+  }
+
+  void setAppClosed(String key, DateTime value) {
+    sp.setString(key, value.toString());
+  }
+
+  void loadAppClosed() {
+    appClosed = DateTime.tryParse(sp.getString('appClosed') ?? "");
+  }
+
+  void loadIsFirst() {
+    isFirst = sp.getBool('isFirst') ?? true;
+  }
+
+  void setIsFirst() {
+    sp.setBool('isFirst', false);
+    isFirst = false;
   }
 
   void loadTransactions() {

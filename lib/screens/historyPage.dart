@@ -236,8 +236,8 @@ class _HistoryPageState extends State<HistoryPage> {
     controller.text = entry.amount.toString();
 
     var selector = {
-      "Personal": Text("Personal"),
-      "Meal Plan": Text("Meal Plan")
+      "Personal": const Text("Personal"),
+      "Meal Plan": const Text("Meal Plan")
     };
 
     TransactionBudgit transaction = TransactionBudgit(
