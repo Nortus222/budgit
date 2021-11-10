@@ -66,7 +66,9 @@ class _DBscreenState extends State<DBscreen> {
                 const SizedBox(
                   width: 20,
                 ),
-                ElevatedButton(onPressed: () => {}, child: const Text("Clear")),
+                ElevatedButton(
+                    onPressed: () => {model.setIsFirst(true)},
+                    child: const Text("Clear")),
               ],
               mainAxisAlignment: MainAxisAlignment.center,
             ),

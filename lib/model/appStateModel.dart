@@ -83,9 +83,9 @@ class AppStateModel extends foundation.ChangeNotifier {
     isFirst = sp.getBool('isFirst') ?? true;
   }
 
-  void setIsFirst() {
-    sp.setBool('isFirst', false);
-    isFirst = false;
+  void setIsFirst(bool value) {
+    sp.setBool('isFirst', value);
+    isFirst = value;
   }
 
   void loadTransactions() {
