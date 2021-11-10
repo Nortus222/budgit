@@ -12,28 +12,29 @@ class DailyBudget extends StatelessWidget {
     var size = MediaQuery.of(context).size;
 
     return Material(
+      color: Colors.transparent,
       child: Consumer<AppStateModel>(
           builder: (BuildContext context, model, child) {
         return Container(
             width: size.width - 40,
             child: Center(
               child: Column(mainAxisSize: MainAxisSize.min, children: [
-                const Text(
+                Text(
                   "Available Today",
-                  style: TextStyle(fontSize: 36),
+                  style: Theme.of(context).textTheme.headline1,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Column(
                       children: [
-                        const Text(
+                        Text(
                           "Personal",
-                          style: TextStyle(fontSize: 21),
+                          style: Theme.of(context).textTheme.headline4,
                         ),
                         Text(
                           "\$${(model.dailyPersonal ?? "Null")}",
-                          style: const TextStyle(fontSize: 24),
+                          style: Theme.of(context).textTheme.bodyText1,
                         ),
                       ],
                     ),
@@ -42,13 +43,13 @@ class DailyBudget extends StatelessWidget {
                     ),
                     Column(
                       children: [
-                        const Text(
+                        Text(
                           "Meal Plan",
-                          style: TextStyle(fontSize: 21),
+                          style: Theme.of(context).textTheme.headline4,
                         ),
                         Text(
                           "\$${(model.dailyMealPlan ?? "Null")}",
-                          style: const TextStyle(fontSize: 24),
+                          style: Theme.of(context).textTheme.bodyText1,
                         )
                       ],
                     ),

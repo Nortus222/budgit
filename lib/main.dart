@@ -1,3 +1,6 @@
+import 'package:budgit/model/appSystemManager.dart';
+import 'package:budgit/screens/introPage.dart';
+import 'package:budgit/theme/themeData.dart';
 import 'package:flutter/material.dart';
 import 'package:budgit/screens/dbScreen.dart';
 import 'package:budgit/screens/historyPage.dart';
@@ -17,15 +20,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      routes: {'/settings': (BuildContext context) => SettingsPage()},
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        backgroundColor: Colors.white,
+    return AppSytemManager(
+      MaterialApp(
+        debugShowCheckedModeBanner: false,
+        routes: {
+          '/settings': (BuildContext context) => const SettingsPage(),
+          '/home': (BuildContext context) => const LandingPage(),
+          '/intro': (BuildContext context) => const IntroPage(),
+        },
+        theme: BudgitTheme(),
+        home: const LandingPage(),
       ),
-      home: const LandingPage(),
     );
   }
 }

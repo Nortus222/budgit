@@ -19,19 +19,74 @@ class AppStateModel extends foundation.ChangeNotifier {
   int? dailyPersonal;
   int? dailyMealPlan;
 
+  int dbWeeks = 1;
+
+  String dbAccount = "Personal";
+
+  DateTime? appClosed;
+
+  bool? isFirst;
+  bool? isFirstToday;
+
   void init() async {
     db = TransactionDatabase.init();
     sp = await SharedPreferences.getInstance();
 
+    loadAppClosed();
+    loadIsFirst();
     loadTransactions();
     loadPreferences();
+    loadDaily();
+    //calculateNewDaily();
+  }
+
+  int daysBetween(DateTime day1, DateTime day2) {
+    day1 = DateTime(day1.year, day1.month, day1.day);
+    day2 = DateTime(day2.year, day2.month, day2.day);
+
+    return (day1.difference(day2).inDays);
+  }
+
+  void loadDaily() {
+    dailyPersonal = sp.getInt('dailyPersonal');
+    dailyMealPlan = sp.getInt('dailyMealPlan');
+
+    if (daysBetween(DateTime.now(), appClosed ?? DateTime.now()) >= 1) {
+      print("New, Day");
+
+      calculateNewDaily();
+
+      setDaily('dailyPersonal', dailyPersonal ?? 0);
+      setDaily('dailyMealPlan', dailyMealPlan ?? 0);
+    } else {
+      print("Same Day");
+    }
+  }
+
+  void setDaily(String key, int value) {
+    sp.setInt(key, value);
+    if (key == 'dailyPersonal') {
+      dailyPersonal = value;
+    } else if (key == 'dailyMealPlan') {
+      dailyMealPlan = value;
+    }
+
+    notifyListeners();
+  }
+
+  void calculateNewDaily() {
+    dailyPersonal = (personal ?? 0) ~/
+        daysBetween(personalDue ?? DateTime.now(), DateTime.now());
+
+    dailyMealPlan = (mealPlan ?? 0) ~/
+        daysBetween(mealPlanDue ?? DateTime.now(), DateTime.now());
+
+    notifyListeners();
   }
 
   void loadPreferences() {
     personal = sp.getDouble('personal');
     mealPlan = sp.getDouble('mealPlan');
-    dailyPersonal = sp.getInt('dailyPersonal');
-    dailyMealPlan = sp.getInt('dailyMealPlan');
 
     String? personalDueString = sp.getString('personalDue');
     String? mealPlanDueString = sp.getString('mealPlanDue');
@@ -61,10 +116,49 @@ class AppStateModel extends foundation.ChangeNotifier {
     notifyListeners();
   }
 
+  void setAppClosed(String key, DateTime value) {
+    sp.setString(key, value.toString());
+  }
+
+  void loadAppClosed() {
+    appClosed = DateTime.tryParse(sp.getString('appClosed') ?? "");
+  }
+
+  void loadIsFirst() {
+    isFirst = sp.getBool('isFirst') ?? true;
+  }
+
+  void setIsFirst(bool value) {
+    sp.setBool('isFirst', value);
+    isFirst = value;
+  }
+
+  void loadIsFirstToday() {
+    isFirstToday = sp.getBool('isFirstToday') ?? true;
+  }
+
+  void setIsFirstToday(bool value) {
+    sp.setBool('isFirstToday', value);
+    isFirstToday = value;
+  }
+
   void loadTransactions() {
-    list = db.readAll(null, null);
+    print("Weeks: $dbWeeks");
+    list = db.readAll(dbWeeks, dbAccount);
 
     notifyListeners();
+  }
+
+  void dbShowMore() {
+    list = db.readAll(++dbWeeks, dbAccount);
+
+    notifyListeners();
+  }
+
+  void setDbAccount(String value) {
+    dbAccount = value;
+
+    loadTransactions();
   }
 
   void updateTransaction(TransactionBudgit transaction) {
