@@ -1,5 +1,6 @@
 import 'package:budgit/model/appSystemManager.dart';
 import 'package:budgit/screens/introPage.dart';
+import 'package:budgit/theme/themeData.dart';
 import 'package:flutter/material.dart';
 import 'package:budgit/screens/dbScreen.dart';
 import 'package:budgit/screens/historyPage.dart';
@@ -22,16 +23,12 @@ class MyApp extends StatelessWidget {
     return AppSytemManager(
       MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
         routes: {
           '/settings': (BuildContext context) => const SettingsPage(),
           '/home': (BuildContext context) => const LandingPage(),
           '/intro': (BuildContext context) => const IntroPage(),
         },
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          backgroundColor: Colors.white,
-        ),
+        theme: BudgitTheme(),
         home: const LandingPage(),
       ),
     );

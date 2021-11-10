@@ -10,6 +10,7 @@ import 'package:budgit/screens/historyPage.dart';
 import 'package:budgit/screens/homePage.dart';
 import 'package:budgit/screens/settingsPage.dart';
 import 'package:provider/provider.dart';
+import 'package:budgit/theme/themeData.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({Key? key}) : super(key: key);
@@ -45,6 +46,8 @@ class _LandingPageState extends State<LandingPage> {
           BottomNavigationBarItem(icon: Icon(Icons.archive)),
           BottomNavigationBarItem(icon: Icon(Icons.dashboard_customize))
         ],
+        backgroundColor: AppColors.beige,
+        activeColor: AppColors.blue,
       ),
       tabBuilder: (BuildContext context, int index) {
         return CupertinoTabView(
@@ -52,8 +55,9 @@ class _LandingPageState extends State<LandingPage> {
             builder: (BuildContext context) {
               return CupertinoPageScaffold(
                   navigationBar: CupertinoNavigationBar(
-                    //backgroundColor: Colors.white,
-                    border: Border(),
+                    border: const Border(),
+                    transitionBetweenRoutes: false,
+                    backgroundColor: Colors.white,
                     trailing: TextButton(
                         onPressed: () {
                           Navigator.of(context, rootNavigator: true)
