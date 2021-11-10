@@ -1,9 +1,11 @@
 // ignore_for_file: file_names
 
 import 'package:budgit/model/appStateModel.dart';
+import 'package:budgit/theme/themeData.dart';
 import 'package:budgit/widgets/mealPlanSettingsWidget.dart';
 import 'package:budgit/widgets/personalSettingsWidget.dart';
 import 'package:budgit/widgets/remainingBudgetWidget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,30 +23,92 @@ class _IntroPageState extends State<IntroPage> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Text(
-                "Welcome to Budgit",
-                style: TextStyle(fontSize: 36),
+      body: Stack(
+        children: [
+          Container(
+            color: AppColors.white,
+            height: 140,
+          ),
+          Positioned(
+            top: size.height / 3.4,
+            child: ClipRRect(
+              borderRadius: BorderRadius.horizontal(
+                  left: Radius.circular(60), right: Radius.circular(60)),
+              child: Container(
+                width: size.width,
+                height: size.height / 2,
+                color: AppColors.green,
               ),
             ),
-            Text(
-              "Enter initial data here",
-              style: TextStyle(fontSize: 26),
+          ),
+          Positioned(
+            top: size.height / 1.75,
+            child: ClipRRect(
+              borderRadius: BorderRadius.horizontal(
+                  left: Radius.circular(60), right: Radius.circular(60)),
+              child: Container(
+                width: size.width,
+                height: size.height / 2 + 100,
+                color: AppColors.beige,
+              ),
             ),
-            SizedBox(height: size.height / 6),
-            PersonalSettingsWidget(),
-            MealPlanSettingsWidget(),
-            TextButton(
-                onPressed: () {
-                  model.setIsFirst(false);
-                },
-                child: Text("Save")),
-          ],
-        ),
+          ),
+          SafeArea(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: size.height / 15,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: Text(
+                    "Welcome to Budgit",
+                    style: Theme.of(context).textTheme.headline1,
+                  ),
+                ),
+                Text(
+                  "Enter initial data here",
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline2!
+                      .copyWith(fontSize: 28),
+                ),
+                SizedBox(height: size.height / 25),
+                const PersonalSettingsWidget(),
+                SizedBox(
+                  height: size.height / 30,
+                ),
+                const MealPlanSettingsWidget(),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: CupertinoButton(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(27)),
+                            padding: const EdgeInsets.all(20),
+                            color: AppColors.blue,
+                            onPressed: () {
+                              model.setIsFirst(false);
+                              Navigator.of(context)
+                                  .pushReplacementNamed('/home');
+                            },
+                            child: Text(
+                              "Save",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1!
+                                  .copyWith(color: AppColors.white),
+                            )),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

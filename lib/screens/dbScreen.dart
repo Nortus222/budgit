@@ -60,6 +60,19 @@ class _DBscreenState extends State<DBscreen> {
                                   ? "0"
                                   : myController.text)),
                               account: "Personal")),
+                          model.setBudget(
+                              'personal',
+                              (model.personal ?? 0) -
+                                  double.parse(myController.text == ""
+                                      ? "0"
+                                      : myController.text)),
+                          model.setDaily(
+                              'dailyPersonal',
+                              ((model.dailyPersonal ?? 0) -
+                                      double.parse(myController.text == ""
+                                          ? "0"
+                                          : myController.text))
+                                  .toInt()),
                           myController.clear()
                         },
                     child: const Text("Add")),

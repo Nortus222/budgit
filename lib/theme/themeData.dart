@@ -44,10 +44,29 @@ ThemeData BudgitTheme() {
     );
   }
 
+  ButtonThemeData _buttonTheme(ButtonThemeData base) {
+    return base.copyWith(
+      buttonColor: AppColors.blue,
+    );
+  }
+
+  AppBarTheme _appBarTheme(AppBarTheme base) {
+    return base.copyWith(
+        color: AppColors.beige,
+        titleTextStyle: const TextStyle(
+            fontSize: 16,
+            fontFamily: 'Roboto',
+            color: Colors.black,
+            fontWeight: FontWeight.w400),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)));
+  }
+
   return base.copyWith(
-    textTheme: _textTheme(base.textTheme),
-    cardTheme: _cardTheme(base.cardTheme),
-  );
+      //primaryColor: AppColors.blue,
+      textTheme: _textTheme(base.textTheme),
+      cardTheme: _cardTheme(base.cardTheme),
+      buttonTheme: _buttonTheme(base.buttonTheme),
+      appBarTheme: _appBarTheme(base.appBarTheme));
 }
 
 class AppColors {

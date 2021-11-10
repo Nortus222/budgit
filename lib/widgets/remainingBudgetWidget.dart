@@ -12,6 +12,13 @@ class RemainingBudget extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
+    int daysBetween(DateTime day1, DateTime day2) {
+      day1 = DateTime(day1.year, day1.month, day1.day);
+      day2 = DateTime(day2.year, day2.month, day2.day);
+
+      return (day1.difference(day2).inDays);
+    }
+
     return Material(
         color: Colors.transparent,
         child: Consumer<AppStateModel>(
@@ -51,7 +58,7 @@ class RemainingBudget extends StatelessWidget {
                         height: 10,
                       ),
                       Text(
-                        "${(model.personalDue ?? DateTime.now()).difference(DateTime.now()).inDays} days left",
+                        "${daysBetween((model.personalDue ?? DateTime.now()), DateTime.now())} days left",
                         style: Theme.of(context)
                             .textTheme
                             .bodyText2!
@@ -82,7 +89,7 @@ class RemainingBudget extends StatelessWidget {
                         height: 10,
                       ),
                       Text(
-                        "${(model.mealPlanDue ?? DateTime.now()).difference(DateTime.now()).inDays} days left",
+                        "${daysBetween((model.mealPlanDue ?? DateTime.now()), DateTime.now())} days left",
                         style: Theme.of(context)
                             .textTheme
                             .bodyText2!

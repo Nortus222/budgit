@@ -26,6 +26,13 @@ class _AppSytemManagerState extends State<AppSytemManager>
     super.dispose();
   }
 
+  int daysBetween(DateTime day1, DateTime day2) {
+    day1 = DateTime(day1.year, day1.month, day1.day);
+    day2 = DateTime(day2.year, day2.month, day2.day);
+
+    return (day1.difference(day2).inDays);
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     final model = Provider.of<AppStateModel>(context, listen: false);
@@ -38,6 +45,15 @@ class _AppSytemManagerState extends State<AppSytemManager>
       case AppLifecycleState.detached:
         model.setAppClosed('appClosed', DateTime.now());
         print('detached: ${DateTime.now()}');
+        break;
+      case AppLifecycleState.resumed: //TODO
+        print("Resumed");
+        if (daysBetween(DateTime.now(), model.appClosed ?? DateTime.now()) >=
+            1) {
+          print("New, Day");
+        } else {
+          print("Same Day");
+        }
         break;
       default:
     }

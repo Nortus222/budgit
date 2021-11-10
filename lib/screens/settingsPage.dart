@@ -1,6 +1,9 @@
 // ignore_for_file: file_names
 
 import 'package:budgit/model/appStateModel.dart';
+import 'package:budgit/theme/themeData.dart';
+import 'package:budgit/widgets/mealPlanSettingsWidget.dart';
+import 'package:budgit/widgets/personalSettingsWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -24,145 +27,97 @@ class _SettingsPageState extends State<SettingsPage> {
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           border: const Border(),
+          backgroundColor: AppColors.white,
           automaticallyImplyLeading: false,
           trailing: TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Icon(Icons.segment_rounded)),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Icon(Icons.segment_rounded),
+            style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all(AppColors.blue)),
+          ),
         ),
-        child: SafeArea(
-          child: Center(
-            child: Material(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: size.height / 5,
-                  ),
-                  Column(
+        child: Stack(
+          children: [
+            Container(
+              color: AppColors.white,
+              height: 200,
+            ),
+            Positioned(
+              top: size.height / 5.1,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.horizontal(
+                    left: Radius.circular(60), right: Radius.circular(60)),
+                child: Container(
+                  width: size.width,
+                  height: size.height / 2,
+                  color: AppColors.green,
+                ),
+              ),
+            ),
+            Positioned(
+              top: size.height / 2.15,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.horizontal(
+                    left: Radius.circular(60), right: Radius.circular(60)),
+                child: Container(
+                  width: size.width,
+                  height: size.height / 2 + 100,
+                  color: AppColors.beige,
+                ),
+              ),
+            ),
+            SafeArea(
+              child: Center(
+                child: Material(
+                  color: Colors.transparent,
+                  child: Column(
                     children: [
-                      const Text(
-                        "Personal Budget",
-                        style: TextStyle(fontSize: 36),
+                      Container(
+                        height: size.height / 5,
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Welcome Back",
+                          style: Theme.of(context).textTheme.headline1,
+                        ),
                       ),
-                      Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: Text("\$${(model.personal ?? "Null")}",
-                                style: const TextStyle(fontSize: 41)),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 20, left: 10, bottom: 20, right: 10),
-                              child: CupertinoButton.filled(
+                      const PersonalSettingsWidget(),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const MealPlanSettingsWidget(),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(top: 20, left: 20, right: 20),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: CupertinoButton(
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(27)),
-                                  padding: const EdgeInsets.all(10),
-                                  child: const Text(
-                                    "EDIT",
+                                  padding: const EdgeInsets.all(20),
+                                  color: AppColors.blue,
+                                  child: Text(
+                                    "Save",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .copyWith(color: AppColors.white),
                                   ),
-                                  onPressed: () async {
-                                    return await showChangeDialog(
-                                        context, 'personal', model);
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
                                   }),
                             ),
-                          )
-                        ],
-                      ),
-                      const Text(
-                        "Due",
-                        style: TextStyle(fontSize: 24),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                              DateFormat('yMMMd')
-                                  .format(model.personalDue ?? DateTime.now()),
-                              style: const TextStyle(fontSize: 24)),
-                          TextButton(
-                              onPressed: () {
-                                showDateTime(context, 'personalDue', model);
-                              },
-                              child: const Icon(Icons.calendar_today_rounded))
-                        ],
+                          ],
+                        ),
                       )
                     ],
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    child: Column(
-                      children: [
-                        const Text(
-                          "Meal Plan",
-                          style: TextStyle(fontSize: 36),
-                        ),
-                        Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(20),
-                              child: Text("\$${(model.mealPlan ?? "Null")}",
-                                  style: const TextStyle(fontSize: 41)),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 20, bottom: 20, left: 10, right: 10),
-                                child: CupertinoButton.filled(
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(27)),
-                                    padding: const EdgeInsets.all(10),
-                                    child: const Text(
-                                      "EDIT",
-                                    ),
-                                    onPressed: () async {
-                                      return await showChangeDialog(
-                                          context, 'mealPlan', model);
-                                    }),
-                              ),
-                            )
-                          ],
-                        ),
-                        const Text(
-                          "Due",
-                          style: TextStyle(fontSize: 24),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                                DateFormat('yMMMd').format(
-                                    model.mealPlanDue ?? DateTime.now()),
-                                style: const TextStyle(fontSize: 24)),
-                            TextButton(
-                                onPressed: () {
-                                  showDateTime(context, 'mealPlanDue', model);
-                                },
-                                child: const Icon(Icons.calendar_today_rounded))
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 20, left: 20, right: 20),
-                    child: CupertinoButton.filled(
-                        child: const Text(
-                          "Save",
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        }),
-                  )
-                ],
+                ),
               ),
             ),
-          ),
+          ],
         ));
   }
 }

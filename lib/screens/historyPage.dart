@@ -5,6 +5,7 @@
 import 'package:budgit/model/appStateModel.dart';
 import 'package:budgit/screens/dbScreen.dart';
 import 'package:budgit/theme/themeData.dart';
+import 'package:budgit/widgets/persistanceHeaderWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -97,32 +98,37 @@ class _HistoryPageState extends State<HistoryPage> {
                           Expanded(
                             child: FutureBuilder<List<TransactionBudgit>>(
                                 future: list,
+                                initialData: null,
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
-                                    return CustomScrollView(
-                                      slivers: _getSlivers(
-                                          context, snapshot.data!, model),
-                                      // slivers: [
-                                      //   SliverList(
-                                      //       delegate: SliverChildBuilderDelegate(
-                                      //     (BuildContext context, int index) {
-                                      //       return _listTile(context,
-                                      //           snapshot.data![index], model);
-                                      //     },
-                                      //     childCount: snapshot.data!.length,
-                                      //   )),
-                                      //   SliverToBoxAdapter(
-                                      //     child: Card(
-                                      //       color: Colors.amberAccent,
-                                      //       child: TextButton(
-                                      //           onPressed: () {
-                                      //             model.dbShowMore();
-                                      //           },
-                                      //           child: const Text("Show More")),
-                                      //     ),
-                                      //   )
-                                      // ],
-                                    );
+                                    if (snapshot.data!.isEmpty) {
+                                      return showEmptyList(context);
+                                    } else {
+                                      return CustomScrollView(
+                                        slivers: _getSlivers(
+                                            context, snapshot.data!, model),
+                                        // slivers: [
+                                        //   SliverList(
+                                        //       delegate: SliverChildBuilderDelegate(
+                                        //     (BuildContext context, int index) {
+                                        //       return _listTile(context,
+                                        //           snapshot.data![index], model);
+                                        //     },
+                                        //     childCount: snapshot.data!.length,
+                                        //   )),
+                                        //   SliverToBoxAdapter(
+                                        //     child: Card(
+                                        //       color: Colors.amberAccent,
+                                        //       child: TextButton(
+                                        //           onPressed: () {
+                                        //             model.dbShowMore();
+                                        //           },
+                                        //           child: const Text("Show More")),
+                                        //     ),
+                                        //   )
+                                        // ],
+                                      );
+                                    }
                                   } else if (snapshot.hasError) {
                                     return Text("${snapshot.error}");
                                   } else {
@@ -152,10 +158,9 @@ class _HistoryPageState extends State<HistoryPage> {
 
     List<Widget> sliverList = [];
 
-    sliverList.add(SliverAppBar(
-      title: Text(DateFormat('MMMMd').format(list.first.transaction_time)),
-      pinned: true,
-    ));
+    var text;
+
+    final size = MediaQuery.of(context).size;
 
     int daysBetween(DateTime day1, DateTime day2) {
       day1 = DateTime(day1.year, day1.month, day1.day);
@@ -164,12 +169,27 @@ class _HistoryPageState extends State<HistoryPage> {
       return (day1.difference(day2).inDays);
     }
 
+    if (daysBetween(DateTime.now(), dateFirst) == 0) {
+      text = const Text("Today");
+    } else if (daysBetween(DateTime.now(), dateFirst) == 1) {
+      text = const Text("Yesterday");
+    } else {
+      text = Text(DateFormat('MMMMd').format(list.first.transaction_time));
+    }
+
+    sliverList.add(CustomHeader(AppColors.orange, text));
+
     list.forEach((element) {
+      if (daysBetween(DateTime.now(), element.transaction_time) == 0) {
+        text = const Text("Today");
+      } else if (daysBetween(DateTime.now(), element.transaction_time) == 1) {
+        text = const Text("Yesterday");
+      } else {
+        text = Text(DateFormat('MMMMd').format(element.transaction_time));
+      }
+
       if (daysBetween(dateFirst, element.transaction_time) != 0) {
-        sliverList.add(SliverAppBar(
-          title: Text(DateFormat('MMMMd').format(element.transaction_time)),
-          pinned: true,
-        ));
+        sliverList.add(CustomHeader(AppColors.orange, text));
         sliverList
             .add(SliverToBoxAdapter(child: _listTile(context, element, model)));
         dateFirst = element.transaction_time;
@@ -245,11 +265,15 @@ class _HistoryPageState extends State<HistoryPage> {
           child: ListTile(
               leading:
                   Text(DateFormat('kk:mm:a').format(entry.transaction_time)),
-              title: Center(child: Text("\$${entry.amount}")),
+              title: Center(
+                  child: Text(
+                "\$${entry.amount}",
+                style: Theme.of(context).textTheme.bodyText2,
+              )),
               trailing: IconButton(
                   icon: const Icon(
                     Icons.edit,
-                    size: 15,
+                    size: 20,
                   ),
                   onPressed: () {
                     _showChangeDialog(context, entry, model);
@@ -261,6 +285,19 @@ class _HistoryPageState extends State<HistoryPage> {
 
         setState(() {});
       },
+    );
+  }
+
+  Widget showEmptyList(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      child: Text(
+        "No Transactions yet",
+        style: Theme.of(context)
+            .textTheme
+            .headline2!
+            .copyWith(color: Colors.greenAccent),
+      ),
     );
   }
 
