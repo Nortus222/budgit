@@ -18,11 +18,11 @@ class TransactionName {
 
 class TransactionBudgit {
   final int? id;
-  final DateTime transaction_time;
-  final double amount;
-  final String account;
+  DateTime transaction_time;
+  double amount;
+  String account;
 
-  const TransactionBudgit({
+  TransactionBudgit({
     this.id,
     required this.transaction_time,
     required this.amount,
@@ -66,8 +66,4 @@ class TransactionBudgit {
       }
     }
   }
-
-
-
-
 }
