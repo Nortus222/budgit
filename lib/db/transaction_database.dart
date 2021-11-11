@@ -157,5 +157,4 @@ class TransactionDatabase {
     database.close();
   }
 
-
 }
