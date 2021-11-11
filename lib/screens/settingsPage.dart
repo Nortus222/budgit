@@ -158,6 +158,7 @@ Future<void> showChangeDialog(
                       type,
                       double.parse(
                           controller.text == '' ? "0" : controller.text));
+                  model.calculateNewDailyBudget();
                   Navigator.of(context).pop();
                 },
                 child: const Text("Save")),

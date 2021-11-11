@@ -91,6 +91,7 @@ class _IntroPageState extends State<IntroPage> {
                             color: AppColors.blue,
                             onPressed: () {
                               model.setIsFirst(false);
+                              model.calculateNewDailyBudget();
                               Navigator.of(context)
                                   .pushReplacementNamed('/home');
                             },

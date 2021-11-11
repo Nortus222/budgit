@@ -14,6 +14,7 @@ import 'package:budgit/db/transaction_database.dart';
 import 'package:budgit/db/model/transaction.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:cupertino_tabbar/cupertino_tabbar.dart' as tabbar;
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({Key? key}) : super(key: key);
@@ -23,6 +24,11 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
+  List<String> listBudget = ['personal', 'mealPlan'];
+
+  int barValue = 0;
+  int barGetter() => barValue;
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -40,7 +46,7 @@ class _HistoryPageState extends State<HistoryPage> {
           Positioned(
             top: 115,
             child: ClipRRect(
-              borderRadius: BorderRadius.horizontal(
+              borderRadius: const BorderRadius.horizontal(
                   left: Radius.circular(60), right: Radius.circular(60)),
               child: Container(
                 width: size.width,
@@ -70,30 +76,26 @@ class _HistoryPageState extends State<HistoryPage> {
                       width: size.width - 40,
                       child: Column(
                         children: [
-                          SizedBox(
-                            height: 50,
-                            width: size.width - 40,
-                            child: CupertinoSegmentedControl(
-                                selectedColor: AppColors.white,
-                                unselectedColor: AppColors.beige,
-                                borderColor: AppColors.green,
-                                pressedColor: AppColors.beige,
-                                groupValue: model.dbAccount,
-                                children: {
-                                  "Personal": Text(
-                                    "Rersonal",
-                                    style:
-                                        Theme.of(context).textTheme.bodyText2,
-                                  ),
-                                  "Meal Plan": Text("Meal Plan",
-                                      style:
-                                          Theme.of(context).textTheme.bodyText2)
-                                },
-                                onValueChanged: (key) {
-                                  setState(() {
-                                    model.setDbAccount(key.toString());
-                                  });
-                                }),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 12, bottom: 10),
+                            child: tabbar.CupertinoTabBar(
+                              AppColors.beige,
+                              AppColors.white,
+                              const [
+                                Center(child: Text("Personal")),
+                                Center(child: Text("Meal Plan"))
+                              ],
+                              barGetter,
+                              (index) {
+                                setState(() {
+                                  barValue = index;
+                                });
+                                model.setDbAccount(listBudget[barValue]);
+                              },
+                              allowExpand: true,
+                              useSeparators: true,
+                              useShadow: false,
+                            ),
                           ),
                           Expanded(
                             child: FutureBuilder<List<TransactionBudgit>>(
@@ -107,26 +109,6 @@ class _HistoryPageState extends State<HistoryPage> {
                                       return CustomScrollView(
                                         slivers: _getSlivers(
                                             context, snapshot.data!, model),
-                                        // slivers: [
-                                        //   SliverList(
-                                        //       delegate: SliverChildBuilderDelegate(
-                                        //     (BuildContext context, int index) {
-                                        //       return _listTile(context,
-                                        //           snapshot.data![index], model);
-                                        //     },
-                                        //     childCount: snapshot.data!.length,
-                                        //   )),
-                                        //   SliverToBoxAdapter(
-                                        //     child: Card(
-                                        //       color: Colors.amberAccent,
-                                        //       child: TextButton(
-                                        //           onPressed: () {
-                                        //             model.dbShowMore();
-                                        //           },
-                                        //           child: const Text("Show More")),
-                                        //     ),
-                                        //   )
-                                        // ],
                                       );
                                     }
                                   } else if (snapshot.hasError) {

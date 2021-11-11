@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:budgit/model/appStateModel.dart';
+import 'package:budgit/screens/addtransactionPage.dart';
 import 'package:budgit/screens/dbScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,12 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
-  List<Widget> tabs = [HomePage(), HistoryPage(), DBscreen()];
+  List<Widget> tabs = [
+    HomePage(),
+    HistoryPage(),
+    AddTransactionPage(),
+    DBscreen(),
+  ];
 
   int daysBetween(DateTime day1, DateTime day2) {
     day1 = DateTime(day1.year, day1.month, day1.day);
@@ -35,17 +41,9 @@ class _LandingPageState extends State<LandingPage> {
 
     Timer(Duration(seconds: 2), () {
       final model = Provider.of<AppStateModel>(context, listen: false);
-      print("IsFirst: ${model.isFirst}");
       if (model.isFirst == true) {
         Navigator.of(context, rootNavigator: true)
             .pushReplacementNamed('/intro');
-      } else {
-        if (daysBetween(DateTime.now(), model.appClosed ?? DateTime.now()) >=
-            1) {
-          print("New, Day");
-        } else {
-          print("Same Day");
-        }
       }
     });
   }
@@ -57,7 +55,8 @@ class _LandingPageState extends State<LandingPage> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home)),
           BottomNavigationBarItem(icon: Icon(Icons.archive)),
-          BottomNavigationBarItem(icon: Icon(Icons.dashboard_customize))
+          BottomNavigationBarItem(icon: Icon(Icons.add)),
+          BottomNavigationBarItem(icon: Icon(Icons.dashboard_customize)),
         ],
         backgroundColor: AppColors.beige,
         activeColor: AppColors.blue,
