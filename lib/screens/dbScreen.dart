@@ -14,9 +14,9 @@ class DBscreen extends StatefulWidget {
 }
 
 class _DBscreenState extends State<DBscreen> {
-  // final db = TransactionDatabase.init();
+  final db = TransactionDatabase.init();
 
-  // var list;
+  var list;
 
   final myController = TextEditingController();
 
