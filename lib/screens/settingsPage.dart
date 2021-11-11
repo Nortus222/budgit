@@ -25,6 +25,7 @@ class _SettingsPageState extends State<SettingsPage> {
     var size = MediaQuery.of(context).size;
 
     return CupertinoPageScaffold(
+        resizeToAvoidBottomInset: false,
         navigationBar: CupertinoNavigationBar(
           border: const Border(),
           backgroundColor: AppColors.white,
@@ -82,7 +83,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           style: Theme.of(context).textTheme.headline1,
                         ),
                       ),
-                      const PersonalSettingsWidget(),
+                      PersonalSettingsWidget(),
                       const SizedBox(
                         height: 20,
                       ),
@@ -125,6 +126,14 @@ class _SettingsPageState extends State<SettingsPage> {
 Future<void> showChangeDialog(
     BuildContext context, String type, AppStateModel model) async {
   var controller = TextEditingController();
+
+  if (type == 'personal') {
+    controller.text =
+        (model.personal == null ? "" : model.personal!.toStringAsFixed(3));
+  } else if (type == 'mealPlan') {
+    controller.text =
+        (model.mealPlan == null ? "" : model.mealPlan!.toStringAsFixed(3));
+  }
 
   return showDialog(
       context: context,

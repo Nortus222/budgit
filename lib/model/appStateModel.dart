@@ -4,6 +4,7 @@ import 'package:budgit/db/model/transaction.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:budgit/db/transaction_database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:budgit/utilites/daysBetween.dart';
 
 class AppStateModel extends foundation.ChangeNotifier {
   late TransactionDatabase db;
@@ -40,13 +41,6 @@ class AppStateModel extends foundation.ChangeNotifier {
     loadTransactions();
     loadPreferences();
     loadDaily();
-  }
-
-  int daysBetween(DateTime day1, DateTime day2) {
-    day1 = DateTime(day1.year, day1.month, day1.day);
-    day2 = DateTime(day2.year, day2.month, day2.day);
-
-    return (day1.difference(day2).inDays);
   }
 
   void loadDailyBudget() {

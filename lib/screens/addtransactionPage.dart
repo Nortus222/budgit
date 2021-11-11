@@ -192,10 +192,14 @@ Widget moreBanner(BuildContext context, AppStateModel model) {
   return Container(
     width: MediaQuery.of(context).size.width - 80,
     height: 35,
-    color: Colors.white70,
+    alignment: Alignment.center,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(15),
+      color: Colors.white70,
+    ),
     child: Text(
       "New Daily Balance: \$15",
-      style: TextStyle(fontSize: 18, color: Colors.red),
+      style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.red),
     ),
   );
 }

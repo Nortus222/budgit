@@ -9,7 +9,9 @@ import 'package:provider/provider.dart';
 import 'package:budgit/screens/settingsPage.dart';
 
 class PersonalSettingsWidget extends StatelessWidget {
-  const PersonalSettingsWidget({Key? key}) : super(key: key);
+  PersonalSettingsWidget({Key? key}) : super(key: key);
+
+  var format = NumberFormat.decimalPattern("en_US");
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class PersonalSettingsWidget extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(20),
                   child: Text(
-                    "\$${(model.personal ?? "Null")}",
+                    "\$${format.format(model.personal ?? 0)}",
                     style: Theme.of(context)
                         .textTheme
                         .headline1!

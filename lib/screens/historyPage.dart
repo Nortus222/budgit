@@ -14,6 +14,7 @@ import 'package:budgit/db/transaction_database.dart';
 import 'package:budgit/db/model/transaction.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:budgit/utilites/daysBetween.dart';
 import 'package:cupertino_tabbar/cupertino_tabbar.dart' as tabbar;
 
 class HistoryPage extends StatefulWidget {
@@ -144,13 +145,6 @@ class _HistoryPageState extends State<HistoryPage> {
 
     final size = MediaQuery.of(context).size;
 
-    int daysBetween(DateTime day1, DateTime day2) {
-      day1 = DateTime(day1.year, day1.month, day1.day);
-      day2 = DateTime(day2.year, day2.month, day2.day);
-
-      return (day1.difference(day2).inDays);
-    }
-
     if (daysBetween(DateTime.now(), dateFirst) == 0) {
       text = const Text("Today");
     } else if (daysBetween(DateTime.now(), dateFirst) == 1) {
@@ -202,6 +196,8 @@ class _HistoryPageState extends State<HistoryPage> {
 
   Widget _listTile(
       BuildContext context, TransactionBudgit entry, AppStateModel model) {
+    var myLocale = Localizations.localeOf(context);
+
     return Dismissible(
       key: ValueKey<int>(entry.id!),
       direction: DismissDirection.endToStart,
@@ -288,10 +284,8 @@ class _HistoryPageState extends State<HistoryPage> {
     var controller = TextEditingController();
     controller.text = entry.amount.toString();
 
-    var selector = {
-      "Personal": const Text("Personal"),
-      "Meal Plan": const Text("Meal Plan")
-    };
+    int newBarValue = entry.account == 'personal' ? 0 : 1;
+    newBarGetter() => newBarValue;
 
     TransactionBudgit transaction = TransactionBudgit(
         id: entry.id,
@@ -306,6 +300,7 @@ class _HistoryPageState extends State<HistoryPage> {
             return AlertDialog(
               title: const Text("Change Transaction"),
               content: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -374,14 +369,27 @@ class _HistoryPageState extends State<HistoryPage> {
                         const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
                     child: Row(children: [
                       const Text("Account: "),
-                      CupertinoSegmentedControl(
-                          children: selector,
-                          groupValue: transaction.account,
-                          onValueChanged: (key) {
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 2 - 10,
+                        child: tabbar.CupertinoTabBar(
+                          AppColors.beige,
+                          AppColors.white,
+                          const [
+                            Center(child: Text("Personal")),
+                            Center(child: Text("Meal Plan"))
+                          ],
+                          newBarGetter,
+                          (index) {
                             setState1(() {
-                              transaction.account = key.toString();
+                              newBarValue = index;
                             });
-                          })
+                            transaction.account = listBudget[newBarValue];
+                          },
+                          allowExpand: true,
+                          useSeparators: true,
+                          useShadow: false,
+                        ),
+                      ),
                     ]),
                   ),
                   Padding(

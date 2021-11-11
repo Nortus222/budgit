@@ -74,7 +74,7 @@ class _IntroPageState extends State<IntroPage> {
                       .copyWith(fontSize: 28),
                 ),
                 SizedBox(height: size.height / 25),
-                const PersonalSettingsWidget(),
+                PersonalSettingsWidget(),
                 SizedBox(
                   height: size.height / 30,
                 ),

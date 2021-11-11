@@ -13,6 +13,7 @@ class MealPlanSettingsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var format = NumberFormat.decimalPattern("en_US");
     return Material(
         color: Colors.transparent,
         child: Consumer<AppStateModel>(
@@ -27,7 +28,7 @@ class MealPlanSettingsWidget extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(20),
-                    child: Text("\$${(model.mealPlan ?? "Null")}",
+                    child: Text("\$${format.format(model.mealPlan ?? 0)}",
                         style: Theme.of(context).textTheme.headline1),
                   ),
                   Expanded(
