@@ -26,6 +26,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   int barGetter() => barValue;
 
   bool showMoreBanner = false;
+  double controllerNumber = 0;
 
   @override
   void initState() {
@@ -46,15 +47,24 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
 
       final model = Provider.of<AppStateModel>(context, listen: false);
 
-      if (tmp > (model.dailyPersonal ?? 0)) {
+      if (tmp >
+          (barValue == 0
+              ? (model.dailyPersonal ?? 0)
+              : (model.dailyMealPlan ?? 0))) {
         setState(() {
           showMoreBanner = true;
+          controllerNumber = tmp;
         });
       } else {
         setState(() {
           showMoreBanner = false;
+          controllerNumber = tmp;
         });
       }
+    } else {
+      setState(() {
+        showMoreBanner = false;
+      });
     }
   }
 
@@ -101,10 +111,15 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
               children: [
                 const DailyBudget(),
                 SizedBox(
-                  height: size.height / 10,
+                  height: size.height / 18,
                 ),
                 Visibility(
-                    child: moreBanner(context, model), visible: showMoreBanner),
+                    maintainSize: true,
+                    maintainAnimation: true,
+                    maintainState: true,
+                    child: moreBanner(
+                        context, model, listBudget, barValue, controllerNumber),
+                    visible: showMoreBanner),
                 SizedBox(
                   width: size.width - 80,
                   child: TextFormField(
@@ -119,7 +134,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 27, left: 25, right: 25),
+                  padding: const EdgeInsets.only(top: 30, left: 25, right: 25),
                   child: tabbar.CupertinoTabBar(
                     AppColors.beige,
                     AppColors.white,
@@ -131,6 +146,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                     (index) {
                       setState(() {
                         barValue = index;
+                        _controllerListener();
                       });
                     },
                     allowExpand: true,
@@ -188,7 +204,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   }
 }
 
-Widget moreBanner(BuildContext context, AppStateModel model) {
+Widget moreBanner(BuildContext context, AppStateModel model, List<String> list,
+    int index, double value) {
   return Container(
     width: MediaQuery.of(context).size.width - 80,
     height: 35,
@@ -198,7 +215,7 @@ Widget moreBanner(BuildContext context, AppStateModel model) {
       color: Colors.white70,
     ),
     child: Text(
-      "New Daily Balance: \$15",
+      "New Daily Balance: \$${model.predictNewDailyBudget(list[index], value)}",
       style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.red),
     ),
   );

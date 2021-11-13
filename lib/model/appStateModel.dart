@@ -92,14 +92,26 @@ class AppStateModel extends foundation.ChangeNotifier {
     if (key == 'dailyPersonal') {
       tmp = (dailyPersonal ?? 0) - value;
 
-      dailyPersonal = tmp;
+      if (tmp >= 0) {
+        dailyPersonal = tmp;
+      } else {
+        dailyPersonal = 0;
+      }
     } else if (key == 'dailyMealPlan') {
       tmp = (dailyMealPlan ?? 0) - value;
 
-      dailyMealPlan = tmp;
+      if (tmp >= 0) {
+        dailyMealPlan = tmp;
+      } else {
+        dailyMealPlan = 0;
+      }
     }
 
-    setDaily(key, tmp);
+    if (tmp >= 0) {
+      setDaily(key, tmp);
+    } else {
+      setDaily(key, 0);
+    }
   }
 
   void calculateNewDailyBudget() {
@@ -115,6 +127,19 @@ class AppStateModel extends foundation.ChangeNotifier {
 
     setDaily('dailyPersonal', dailyPersonalBudget ?? 0);
     setDaily('dailyMealPlan', dailyMealPlanBudget ?? 0);
+  }
+
+  int predictNewDailyBudget(String key, double value) {
+    int newBudget = 0;
+    if (key == 'personal') {
+      newBudget = ((personal ?? 0) - value) ~/
+          daysBetween(personalDue ?? DateTime.now(), DateTime.now());
+    } else if (key == 'mealPlan') {
+      newBudget = ((mealPlan ?? 0) - value) ~/
+          daysBetween(mealPlanDue ?? DateTime.now(), DateTime.now());
+    }
+
+    return newBudget < 0 ? 0 : newBudget;
   }
 
   void loadPreferences() {
