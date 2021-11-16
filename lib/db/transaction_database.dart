@@ -16,7 +16,6 @@ class TransactionDatabase {
 
   //allows for a connection to the database;
   Future<Database> get database async {
-    print("Get DB\n");
 
     //return database if it already exists
     if (_database != null) return _database!;
@@ -87,45 +86,45 @@ class TransactionDatabase {
     final List<Map<String, Object?>> maps;
 
     //all weeks, all accounts
-    if(weeks == null && account == null) {
+    if (weeks == null && account == null) {
       maps = await database.query(TransactionTable,
           columns: TransactionName.values,
-          orderBy: '${TransactionName.transaction_time} DESC'
-      );
-    //all weeks, one account
-    } else if (weeks == null){
+          orderBy: '${TransactionName.transaction_time} DESC');
+      //all weeks, one account
+    } else if (weeks == null) {
       maps = await database.query(TransactionTable,
           columns: TransactionName.values,
           where: '${TransactionName.account} = ?',
           whereArgs: [account],
-          orderBy: '${TransactionName.transaction_time} DESC'
-      );
+          orderBy: '${TransactionName.transaction_time} DESC');
     }
     //x weeks, all accounts
-    else if (account == null){
-      DateTime cutoffDateTime = DateTime.now().subtract(Duration(days: weeks * 7));
+    else if (account == null) {
+      DateTime cutoffDateTime =
+          DateTime.now().subtract(Duration(days: weeks * 7));
 
       maps = await database.query(TransactionTable,
           columns: TransactionName.values,
           where: '${TransactionName.transaction_time} > ?',
           whereArgs: [cutoffDateTime.toIso8601String()],
-          orderBy: '${TransactionName.transaction_time} DESC'
-      );
+          orderBy: '${TransactionName.transaction_time} DESC');
     }
     //x weeks one account
     else {
-      DateTime cutoffDateTime = DateTime.now().subtract(Duration(days: weeks * 7));
+      DateTime cutoffDateTime =
+          DateTime.now().subtract(Duration(days: weeks * 7));
 
       maps = await database.query(TransactionTable,
           columns: TransactionName.values,
+
+
           where: '${TransactionName.transaction_time} > ? AND ${TransactionName.account} = ?',
+
           whereArgs: [cutoffDateTime.toIso8601String(), account],
-          orderBy: '${TransactionName.transaction_time} DESC'
-      );
+          orderBy: '${TransactionName.transaction_time} DESC');
     }
 
-    print("ReadALL DB\n");
-    print(maps.map((json) => TransactionBudgit.fromJson(json)).toList());
+
     return maps.map((json) => TransactionBudgit.fromJson(json)).toList();
   }
 

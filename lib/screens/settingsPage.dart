@@ -25,6 +25,7 @@ class _SettingsPageState extends State<SettingsPage> {
     var size = MediaQuery.of(context).size;
 
     return CupertinoPageScaffold(
+        resizeToAvoidBottomInset: false,
         navigationBar: CupertinoNavigationBar(
           border: const Border(),
           backgroundColor: AppColors.white,
@@ -82,7 +83,9 @@ class _SettingsPageState extends State<SettingsPage> {
                           style: Theme.of(context).textTheme.headline1,
                         ),
                       ),
-                      const PersonalSettingsWidget(),
+
+                      PersonalSettingsWidget(),
+
                       const SizedBox(
                         height: 20,
                       ),
@@ -122,9 +125,21 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 }
 
+
 Future<void> showChangeDialog(
     BuildContext context, String type, AppStateModel model) async {
   var controller = TextEditingController();
+
+  if (type == 'personal') {
+    controller.text = ((model.personal == null || model.personal! < 0)
+        ? ""
+        : model.personal!.toStringAsFixed(3));
+  } else if (type == 'mealPlan') {
+    controller.text = ((model.mealPlan == null || model.mealPlan! < 0)
+        ? ""
+        : model.mealPlan!.toStringAsFixed(3));
+  }
+
 
   return showDialog(
       context: context,
@@ -141,7 +156,9 @@ Future<void> showChangeDialog(
                   width: MediaQuery.of(context).size.width / 3,
                   child: TextFormField(
                     controller: controller,
+
                     validator: validateDecimal
+
                   ),
                 ),
               ],
@@ -159,6 +176,9 @@ Future<void> showChangeDialog(
                       type,
                       double.parse(
                           controller.text == '' ? "0" : controller.text));
+
+                  model.calculateNewDailyBudget();
+
                   Navigator.of(context).pop();
                 },
                 child: const Text("Save")),
@@ -166,6 +186,7 @@ Future<void> showChangeDialog(
         );
       });
 }
+
 
 String? validateDecimal(String? input){
 
@@ -186,13 +207,15 @@ String? validateDecimal(String? input){
   return null;
 }
 
+
 Future<DateTime?> showDateTime(
     BuildContext context, String type, AppStateModel model) {
   return DatePicker.showDatePicker(
     context,
     showTitleActions: true,
-    minTime:
-        DateTime((model.mealPlanDue?.year ?? DateTime.now().year) - 2, 1, 1),
+
+    minTime: DateTime.now(),
+
     maxTime:
         DateTime((model.mealPlanDue?.year ?? DateTime.now().year) + 2, 1, 1),
     onConfirm: (date) {

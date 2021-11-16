@@ -14,6 +14,8 @@ import 'package:budgit/db/transaction_database.dart';
 import 'package:budgit/db/model/transaction.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:budgit/utilites/daysBetween.dart';
+import 'package:cupertino_tabbar/cupertino_tabbar.dart' as tabbar;
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({Key? key}) : super(key: key);
@@ -23,6 +25,12 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
+
+  List<String> listBudget = ['personal', 'mealPlan'];
+
+  int barValue = 0;
+  int barGetter() => barValue;
+
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +49,9 @@ class _HistoryPageState extends State<HistoryPage> {
           Positioned(
             top: 115,
             child: ClipRRect(
-              borderRadius: BorderRadius.horizontal(
+
+              borderRadius: const BorderRadius.horizontal(
+
                   left: Radius.circular(60), right: Radius.circular(60)),
               child: Container(
                 width: size.width,
@@ -71,30 +81,28 @@ class _HistoryPageState extends State<HistoryPage> {
                       width: size.width - 40,
                       child: Column(
                         children: [
-                          SizedBox(
-                            height: 50,
-                            width: size.width - 40,
-                            child: CupertinoSegmentedControl(
-                                selectedColor: AppColors.white,
-                                unselectedColor: AppColors.beige,
-                                borderColor: AppColors.green,
-                                pressedColor: AppColors.beige,
-                                groupValue: model.dbAccount,
-                                children: {
-                                  "Personal": Text(
-                                    "Rersonal",
-                                    style:
-                                        Theme.of(context).textTheme.bodyText2,
-                                  ),
-                                  "Meal Plan": Text("Meal Plan",
-                                      style:
-                                          Theme.of(context).textTheme.bodyText2)
-                                },
-                                onValueChanged: (key) {
-                                  setState(() {
-                                    model.setDbAccount(key.toString());
-                                  });
-                                }),
+
+                          Padding(
+                            padding: const EdgeInsets.only(top: 12, bottom: 10),
+                            child: tabbar.CupertinoTabBar(
+                              AppColors.beige,
+                              AppColors.white,
+                              const [
+                                Center(child: Text("Personal")),
+                                Center(child: Text("Meal Plan"))
+                              ],
+                              barGetter,
+                              (index) {
+                                setState(() {
+                                  barValue = index;
+                                });
+                                model.setDbAccount(listBudget[barValue]);
+                              },
+                              allowExpand: true,
+                              useSeparators: true,
+                              useShadow: false,
+                            ),
+
                           ),
                           Expanded(
                             child: FutureBuilder<List<TransactionBudgit>>(
@@ -108,26 +116,7 @@ class _HistoryPageState extends State<HistoryPage> {
                                       return CustomScrollView(
                                         slivers: _getSlivers(
                                             context, snapshot.data!, model),
-                                        // slivers: [
-                                        //   SliverList(
-                                        //       delegate: SliverChildBuilderDelegate(
-                                        //     (BuildContext context, int index) {
-                                        //       return _listTile(context,
-                                        //           snapshot.data![index], model);
-                                        //     },
-                                        //     childCount: snapshot.data!.length,
-                                        //   )),
-                                        //   SliverToBoxAdapter(
-                                        //     child: Card(
-                                        //       color: Colors.amberAccent,
-                                        //       child: TextButton(
-                                        //           onPressed: () {
-                                        //             model.dbShowMore();
-                                        //           },
-                                        //           child: const Text("Show More")),
-                                        //     ),
-                                        //   )
-                                        // ],
+
                                       );
                                     }
                                   } else if (snapshot.hasError) {
@@ -163,12 +152,6 @@ class _HistoryPageState extends State<HistoryPage> {
 
     final size = MediaQuery.of(context).size;
 
-    int daysBetween(DateTime day1, DateTime day2) {
-      day1 = DateTime(day1.year, day1.month, day1.day);
-      day2 = DateTime(day2.year, day2.month, day2.day);
-
-      return (day1.difference(day2).inDays);
-    }
 
     if (daysBetween(DateTime.now(), dateFirst) == 0) {
       text = const Text("Today");
@@ -221,6 +204,9 @@ class _HistoryPageState extends State<HistoryPage> {
 
   Widget _listTile(
       BuildContext context, TransactionBudgit entry, AppStateModel model) {
+
+    var myLocale = Localizations.localeOf(context);
+
     return Dismissible(
       key: ValueKey<int>(entry.id!),
       direction: DismissDirection.endToStart,
@@ -307,10 +293,10 @@ class _HistoryPageState extends State<HistoryPage> {
     var controller = TextEditingController();
     controller.text = entry.amount.toString();
 
-    var selector = {
-      "Personal": const Text("Personal"),
-      "Meal Plan": const Text("Meal Plan")
-    };
+
+    int newBarValue = entry.account == 'personal' ? 0 : 1;
+    newBarGetter() => newBarValue;
+
 
     TransactionBudgit transaction = TransactionBudgit(
         id: entry.id,
@@ -325,6 +311,7 @@ class _HistoryPageState extends State<HistoryPage> {
             return AlertDialog(
               title: const Text("Change Transaction"),
               content: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -393,14 +380,27 @@ class _HistoryPageState extends State<HistoryPage> {
                         const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
                     child: Row(children: [
                       const Text("Account: "),
-                      CupertinoSegmentedControl(
-                          children: selector,
-                          groupValue: transaction.account,
-                          onValueChanged: (key) {
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 2 - 15,
+                        child: tabbar.CupertinoTabBar(
+                          AppColors.beige,
+                          AppColors.white,
+                          const [
+                            Center(child: Text("Personal")),
+                            Center(child: Text("Meal Plan"))
+                          ],
+                          newBarGetter,
+                          (index) {
                             setState1(() {
-                              transaction.account = key.toString();
+                              newBarValue = index;
                             });
-                          })
+                            transaction.account = listBudget[newBarValue];
+                          },
+                          allowExpand: true,
+                          useSeparators: true,
+                          useShadow: false,
+                        ),
+                      ),
                     ]),
                   ),
                   Padding(

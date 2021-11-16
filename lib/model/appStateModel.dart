@@ -4,6 +4,7 @@ import 'package:budgit/db/model/transaction.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:budgit/db/transaction_database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:budgit/utilites/daysBetween.dart';
 
 class AppStateModel extends foundation.ChangeNotifier {
   late TransactionDatabase db;
@@ -19,9 +20,14 @@ class AppStateModel extends foundation.ChangeNotifier {
   int? dailyPersonal;
   int? dailyMealPlan;
 
+
+  int? dailyPersonalBudget;
+  int? dailyMealPlanBudget;
+
   int dbWeeks = 1;
 
-  String dbAccount = "Personal";
+  String dbAccount = 'personal';
+
 
   DateTime? appClosed;
 
@@ -37,29 +43,37 @@ class AppStateModel extends foundation.ChangeNotifier {
     loadTransactions();
     loadPreferences();
     loadDaily();
-    //calculateNewDaily();
+
   }
 
-  int daysBetween(DateTime day1, DateTime day2) {
-    day1 = DateTime(day1.year, day1.month, day1.day);
-    day2 = DateTime(day2.year, day2.month, day2.day);
+  void loadDailyBudget() {
+    dailyPersonalBudget = sp.getInt('dailyPersonalBudget') ?? 0;
+    dailyMealPlanBudget = sp.getInt('dailyMealPlanBudget') ?? 0;
+  }
 
-    return (day1.difference(day2).inDays);
+  void setDailyBudget(String key, int value) {
+    sp.setInt(key, value);
+    if (key == 'dailyPersonalBudget') {
+      dailyPersonalBudget = value;
+    } else if (key == 'dailyMealPlanBudget') {
+      dailyMealPlanBudget = value;
+    }
   }
 
   void loadDaily() {
-    dailyPersonal = sp.getInt('dailyPersonal');
-    dailyMealPlan = sp.getInt('dailyMealPlan');
-
     if (daysBetween(DateTime.now(), appClosed ?? DateTime.now()) >= 1) {
       print("New, Day");
 
-      calculateNewDaily();
+      loadDailyBudget();
 
-      setDaily('dailyPersonal', dailyPersonal ?? 0);
-      setDaily('dailyMealPlan', dailyMealPlan ?? 0);
+      setDaily('dailyPersonal', dailyPersonalBudget ?? 0);
+      setDaily('dailyMealPlan', dailyMealPlanBudget ?? 0);
     } else {
       print("Same Day");
+
+      dailyPersonal = sp.getInt('dailyPersonal');
+      dailyMealPlan = sp.getInt('dailyMealPlan');
+
     }
   }
 
@@ -71,17 +85,85 @@ class AppStateModel extends foundation.ChangeNotifier {
       dailyMealPlan = value;
     }
 
+
+    //TODO check if too much
+
     notifyListeners();
   }
 
-  void calculateNewDaily() {
-    dailyPersonal = (personal ?? 0) ~/
-        daysBetween(personalDue ?? DateTime.now(), DateTime.now());
+  void decreaseDaily(String key, int value) {
+    int tmp = 0;
 
-    dailyMealPlan = (mealPlan ?? 0) ~/
-        daysBetween(mealPlanDue ?? DateTime.now(), DateTime.now());
+    if (key == 'dailyPersonal') {
+      tmp = (dailyPersonal ?? 0) - value;
 
-    notifyListeners();
+      if (tmp >= 0) {
+        dailyPersonal = tmp;
+      } else {
+        dailyPersonal = 0;
+      }
+    } else if (key == 'dailyMealPlan') {
+      tmp = (dailyMealPlan ?? 0) - value;
+
+      if (tmp >= 0) {
+        dailyMealPlan = tmp;
+      } else {
+        dailyMealPlan = 0;
+      }
+    }
+
+    if (tmp >= 0) {
+      setDaily(key, tmp);
+    } else {
+      setDaily(key, 0);
+    }
+  }
+
+  void calculateNewDailyBudget() {
+    int dayBetween = 1;
+    print("Calculate new daily\n\n");
+    if ((personal ?? -1) > 0) {
+      dayBetween = daysBetween(personalDue ?? DateTime.now(), DateTime.now());
+      dayBetween = (dayBetween == 0 ? 1 : dayBetween);
+
+      dailyPersonalBudget = (personal ?? 0) ~/ dayBetween;
+    } else {
+      dailyPersonalBudget = 0;
+    }
+
+    if ((mealPlan ?? -1) > 0) {
+      dayBetween = daysBetween(mealPlanDue ?? DateTime.now(), DateTime.now());
+      dayBetween = (dayBetween == 0 ? 1 : dayBetween);
+
+      dailyMealPlanBudget = (mealPlan ?? 0) ~/ dayBetween;
+    } else {
+      dailyMealPlanBudget = 0;
+    }
+
+    setDailyBudget('dailyPersonalBudget', dailyPersonalBudget ?? 0);
+    setDailyBudget('dailyMealPlanBudget', dailyMealPlanBudget ?? 0);
+
+    setDaily('dailyPersonal', dailyPersonalBudget ?? 0);
+    setDaily('dailyMealPlan', dailyMealPlanBudget ?? 0);
+  }
+
+  int predictNewDailyBudget(String key, double value) {
+    int dayBetween = 1;
+    int newBudget = 0;
+    if (key == 'personal') {
+      dayBetween = daysBetween(personalDue ?? DateTime.now(), DateTime.now());
+      dayBetween = (dayBetween == 0 ? 1 : dayBetween);
+
+      newBudget = ((personal ?? 0) - value) ~/ dayBetween;
+    } else if (key == 'mealPlan') {
+      dayBetween = daysBetween(mealPlanDue ?? DateTime.now(), DateTime.now());
+      dayBetween = (dayBetween == 0 ? 1 : dayBetween);
+
+      newBudget = ((mealPlan ?? 0) - value) ~/ dayBetween;
+    }
+
+    return newBudget < 0 ? 0 : newBudget;
+
   }
 
   void loadPreferences() {
@@ -105,6 +187,25 @@ class AppStateModel extends foundation.ChangeNotifier {
     notifyListeners();
   }
 
+  void decreaseBudget(String key, double value) {
+    double tmp = 0;
+
+    if (key == 'personal') {
+      tmp = (personal ?? 0) - value;
+
+      personal = tmp;
+    } else if (key == 'mealPlan') {
+      tmp = (mealPlan ?? 0) - value;
+
+      mealPlan = tmp;
+    }
+    if (tmp < 0) {
+      setBudget(key, -1);
+    } else {
+      setBudget(key, tmp);
+    }
+  }
+
   void setDueDate(String key, DateTime value) {
     sp.setString(key, value.toString());
 
@@ -113,6 +214,7 @@ class AppStateModel extends foundation.ChangeNotifier {
     } else if (key == 'mealPlanDue') {
       mealPlanDue = value;
     }
+    calculateNewDailyBudget();
     notifyListeners();
   }
 
@@ -143,7 +245,9 @@ class AppStateModel extends foundation.ChangeNotifier {
   }
 
   void loadTransactions() {
+
     print("Weeks: $dbWeeks");
+
     list = db.readAll(dbWeeks, dbAccount);
 
     notifyListeners();

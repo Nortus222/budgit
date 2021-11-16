@@ -74,7 +74,9 @@ class _IntroPageState extends State<IntroPage> {
                       .copyWith(fontSize: 28),
                 ),
                 SizedBox(height: size.height / 25),
-                const PersonalSettingsWidget(),
+
+                PersonalSettingsWidget(),
+
                 SizedBox(
                   height: size.height / 30,
                 ),
@@ -91,6 +93,9 @@ class _IntroPageState extends State<IntroPage> {
                             color: AppColors.blue,
                             onPressed: () {
                               model.setIsFirst(false);
+
+                              model.calculateNewDailyBudget();
+
                               Navigator.of(context)
                                   .pushReplacementNamed('/home');
                             },
