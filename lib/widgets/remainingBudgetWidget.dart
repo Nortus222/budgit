@@ -45,11 +45,13 @@ class RemainingBudget extends StatelessWidget {
                             .copyWith(color: AppColors.white),
                       ),
                       Text(
-                        "\$${format.format(model.personal ?? 0)}",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline2!
-                            .copyWith(color: AppColors.white),
+                        (model.personal ?? -1) > 0
+                            ? "\$${format.format(model.personal ?? 0)}"
+                            : "Spent",
+                        style: Theme.of(context).textTheme.headline2!.copyWith(
+                            color: (model.personal ?? -1) > 0
+                                ? AppColors.white
+                                : Colors.red),
                       ),
                       const SizedBox(
                         height: 10,
@@ -76,11 +78,13 @@ class RemainingBudget extends StatelessWidget {
                             .copyWith(color: AppColors.white),
                       ),
                       Text(
-                        "\$${format.format(model.mealPlan ?? 0)}",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline2!
-                            .copyWith(color: AppColors.white),
+                        (model.mealPlan ?? -1) > 0
+                            ? "\$${format.format(model.mealPlan ?? 0)}"
+                            : "Spent",
+                        style: Theme.of(context).textTheme.headline2!.copyWith(
+                            color: (model.mealPlan ?? -1) > 0
+                                ? AppColors.white
+                                : Colors.red),
                       ),
                       const SizedBox(
                         height: 10,

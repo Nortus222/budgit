@@ -28,8 +28,14 @@ class MealPlanSettingsWidget extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(20),
-                    child: Text("\$${format.format(model.mealPlan ?? 0)}",
-                        style: Theme.of(context).textTheme.headline1),
+                    child: Text(
+                        (model.mealPlan ?? -1) > 0
+                            ? "\$${format.format(model.mealPlan ?? 0)}"
+                            : "Spent",
+                        style: Theme.of(context).textTheme.headline1!.copyWith(
+                            color: (model.mealPlan ?? -1) > 0
+                                ? Colors.black
+                                : Colors.red)),
                   ),
                   Expanded(
                     child: Padding(

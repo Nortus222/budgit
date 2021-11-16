@@ -370,7 +370,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     child: Row(children: [
                       const Text("Account: "),
                       SizedBox(
-                        width: MediaQuery.of(context).size.width / 2 - 10,
+                        width: MediaQuery.of(context).size.width / 2 - 15,
                         child: tabbar.CupertinoTabBar(
                           AppColors.beige,
                           AppColors.white,

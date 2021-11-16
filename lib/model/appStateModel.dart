@@ -115,12 +115,25 @@ class AppStateModel extends foundation.ChangeNotifier {
   }
 
   void calculateNewDailyBudget() {
+    int dayBetween = 1;
     print("Calculate new daily\n\n");
-    dailyPersonalBudget = (personal ?? 0) ~/
-        daysBetween(personalDue ?? DateTime.now(), DateTime.now());
+    if ((personal ?? -1) > 0) {
+      dayBetween = daysBetween(personalDue ?? DateTime.now(), DateTime.now());
+      dayBetween = (dayBetween == 0 ? 1 : dayBetween);
 
-    dailyMealPlanBudget = (mealPlan ?? 0) ~/
-        daysBetween(mealPlanDue ?? DateTime.now(), DateTime.now());
+      dailyPersonalBudget = (personal ?? 0) ~/ dayBetween;
+    } else {
+      dailyPersonalBudget = 0;
+    }
+
+    if ((mealPlan ?? -1) > 0) {
+      dayBetween = daysBetween(mealPlanDue ?? DateTime.now(), DateTime.now());
+      dayBetween = (dayBetween == 0 ? 1 : dayBetween);
+
+      dailyMealPlanBudget = (mealPlan ?? 0) ~/ dayBetween;
+    } else {
+      dailyMealPlanBudget = 0;
+    }
 
     setDailyBudget('dailyPersonalBudget', dailyPersonalBudget ?? 0);
     setDailyBudget('dailyMealPlanBudget', dailyMealPlanBudget ?? 0);
@@ -130,13 +143,18 @@ class AppStateModel extends foundation.ChangeNotifier {
   }
 
   int predictNewDailyBudget(String key, double value) {
+    int dayBetween = 1;
     int newBudget = 0;
     if (key == 'personal') {
-      newBudget = ((personal ?? 0) - value) ~/
-          daysBetween(personalDue ?? DateTime.now(), DateTime.now());
+      dayBetween = daysBetween(personalDue ?? DateTime.now(), DateTime.now());
+      dayBetween = (dayBetween == 0 ? 1 : dayBetween);
+
+      newBudget = ((personal ?? 0) - value) ~/ dayBetween;
     } else if (key == 'mealPlan') {
-      newBudget = ((mealPlan ?? 0) - value) ~/
-          daysBetween(mealPlanDue ?? DateTime.now(), DateTime.now());
+      dayBetween = daysBetween(mealPlanDue ?? DateTime.now(), DateTime.now());
+      dayBetween = (dayBetween == 0 ? 1 : dayBetween);
+
+      newBudget = ((mealPlan ?? 0) - value) ~/ dayBetween;
     }
 
     return newBudget < 0 ? 0 : newBudget;
@@ -175,8 +193,11 @@ class AppStateModel extends foundation.ChangeNotifier {
 
       mealPlan = tmp;
     }
-
-    setBudget(key, tmp);
+    if (tmp < 0) {
+      setBudget(key, -1);
+    } else {
+      setBudget(key, tmp);
+    }
   }
 
   void setDueDate(String key, DateTime value) {
@@ -187,6 +208,7 @@ class AppStateModel extends foundation.ChangeNotifier {
     } else if (key == 'mealPlanDue') {
       mealPlanDue = value;
     }
+    calculateNewDailyBudget();
     notifyListeners();
   }
 

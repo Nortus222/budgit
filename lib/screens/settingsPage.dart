@@ -128,11 +128,13 @@ Future<void> showChangeDialog(
   var controller = TextEditingController();
 
   if (type == 'personal') {
-    controller.text =
-        (model.personal == null ? "" : model.personal!.toStringAsFixed(3));
+    controller.text = ((model.personal == null || model.personal! < 0)
+        ? ""
+        : model.personal!.toStringAsFixed(3));
   } else if (type == 'mealPlan') {
-    controller.text =
-        (model.mealPlan == null ? "" : model.mealPlan!.toStringAsFixed(3));
+    controller.text = ((model.mealPlan == null || model.mealPlan! < 0)
+        ? ""
+        : model.mealPlan!.toStringAsFixed(3));
   }
 
   return showDialog(
@@ -181,8 +183,7 @@ Future<DateTime?> showDateTime(
   return DatePicker.showDatePicker(
     context,
     showTitleActions: true,
-    minTime:
-        DateTime((model.mealPlanDue?.year ?? DateTime.now().year) - 2, 1, 1),
+    minTime: DateTime.now(),
     maxTime:
         DateTime((model.mealPlanDue?.year ?? DateTime.now().year) + 2, 1, 1),
     onConfirm: (date) {

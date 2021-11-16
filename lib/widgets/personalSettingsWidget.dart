@@ -33,11 +33,13 @@ class PersonalSettingsWidget extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(20),
                   child: Text(
-                    "\$${format.format(model.personal ?? 0)}",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline1!
-                        .copyWith(color: AppColors.white),
+                    (model.personal ?? -1) > 0
+                        ? "\$${format.format(model.personal ?? 0)}"
+                        : "Spent",
+                    style: Theme.of(context).textTheme.headline1!.copyWith(
+                        color: (model.personal ?? -1) > 0
+                            ? AppColors.white
+                            : Colors.red),
                   ),
                 ),
                 Expanded(
