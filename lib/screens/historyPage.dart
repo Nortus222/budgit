@@ -25,10 +25,12 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
+
   List<String> listBudget = ['personal', 'mealPlan'];
 
   int barValue = 0;
   int barGetter() => barValue;
+
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +49,9 @@ class _HistoryPageState extends State<HistoryPage> {
           Positioned(
             top: 115,
             child: ClipRRect(
+
               borderRadius: const BorderRadius.horizontal(
+
                   left: Radius.circular(60), right: Radius.circular(60)),
               child: Container(
                 width: size.width,
@@ -77,6 +81,7 @@ class _HistoryPageState extends State<HistoryPage> {
                       width: size.width - 40,
                       child: Column(
                         children: [
+
                           Padding(
                             padding: const EdgeInsets.only(top: 12, bottom: 10),
                             child: tabbar.CupertinoTabBar(
@@ -97,6 +102,7 @@ class _HistoryPageState extends State<HistoryPage> {
                               useSeparators: true,
                               useShadow: false,
                             ),
+
                           ),
                           Expanded(
                             child: FutureBuilder<List<TransactionBudgit>>(
@@ -110,6 +116,7 @@ class _HistoryPageState extends State<HistoryPage> {
                                       return CustomScrollView(
                                         slivers: _getSlivers(
                                             context, snapshot.data!, model),
+
                                       );
                                     }
                                   } else if (snapshot.hasError) {
@@ -144,6 +151,7 @@ class _HistoryPageState extends State<HistoryPage> {
     var text;
 
     final size = MediaQuery.of(context).size;
+
 
     if (daysBetween(DateTime.now(), dateFirst) == 0) {
       text = const Text("Today");
@@ -196,6 +204,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
   Widget _listTile(
       BuildContext context, TransactionBudgit entry, AppStateModel model) {
+
     var myLocale = Localizations.localeOf(context);
 
     return Dismissible(
@@ -284,8 +293,10 @@ class _HistoryPageState extends State<HistoryPage> {
     var controller = TextEditingController();
     controller.text = entry.amount.toString();
 
+
     int newBarValue = entry.account == 'personal' ? 0 : 1;
     newBarGetter() => newBarValue;
+
 
     TransactionBudgit transaction = TransactionBudgit(
         id: entry.id,

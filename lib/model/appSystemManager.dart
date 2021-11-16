@@ -3,7 +3,9 @@
 import 'package:budgit/model/appStateModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'package:budgit/utilites/daysBetween.dart';
+
 
 class AppSytemManager extends StatefulWidget {
   final Widget child;
@@ -26,6 +28,7 @@ class _AppSytemManagerState extends State<AppSytemManager>
     WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
+
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {

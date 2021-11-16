@@ -9,9 +9,11 @@ import 'package:provider/provider.dart';
 import 'package:budgit/screens/settingsPage.dart';
 
 class PersonalSettingsWidget extends StatelessWidget {
+
   PersonalSettingsWidget({Key? key}) : super(key: key);
 
   var format = NumberFormat.decimalPattern("en_US");
+
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +35,7 @@ class PersonalSettingsWidget extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(20),
                   child: Text(
+
                     (model.personal ?? -1) > 0
                         ? "\$${format.format(model.personal ?? 0)}"
                         : "Spent",
@@ -40,6 +43,7 @@ class PersonalSettingsWidget extends StatelessWidget {
                         color: (model.personal ?? -1) > 0
                             ? AppColors.white
                             : Colors.red),
+
                   ),
                 ),
                 Expanded(

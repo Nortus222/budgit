@@ -16,6 +16,7 @@ class RemainingBudget extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
+
     return Material(
         color: Colors.transparent,
         child: Consumer<AppStateModel>(
@@ -45,6 +46,7 @@ class RemainingBudget extends StatelessWidget {
                             .copyWith(color: AppColors.white),
                       ),
                       Text(
+
                         (model.personal ?? -1) > 0
                             ? "\$${format.format(model.personal ?? 0)}"
                             : "Spent",
@@ -52,6 +54,7 @@ class RemainingBudget extends StatelessWidget {
                             color: (model.personal ?? -1) > 0
                                 ? AppColors.white
                                 : Colors.red),
+
                       ),
                       const SizedBox(
                         height: 10,
@@ -78,6 +81,7 @@ class RemainingBudget extends StatelessWidget {
                             .copyWith(color: AppColors.white),
                       ),
                       Text(
+
                         (model.mealPlan ?? -1) > 0
                             ? "\$${format.format(model.mealPlan ?? 0)}"
                             : "Spent",
@@ -85,6 +89,7 @@ class RemainingBudget extends StatelessWidget {
                             color: (model.mealPlan ?? -1) > 0
                                 ? AppColors.white
                                 : Colors.red),
+
                       ),
                       const SizedBox(
                         height: 10,

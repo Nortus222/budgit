@@ -42,7 +42,6 @@ class TransactionBudgit {
   );
 
   Map<String, Object?> toJson() => {
-
     TransactionName.id: id,
     TransactionName.transaction_time: transaction_time.toIso8601String(),
     TransactionName.amount: amount,

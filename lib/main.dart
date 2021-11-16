@@ -21,10 +21,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppSytemManager(
       MaterialApp(
+
         locale: const Locale("en", "US"),
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
         ],
+
         debugShowCheckedModeBanner: false,
         routes: {
           '/settings': (BuildContext context) => const SettingsPage(),

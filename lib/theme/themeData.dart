@@ -75,6 +75,8 @@ class AppColors {
   static const white = Color(0xffffffff);
   static const beige = Color(0xffece4da);
   static const blue = Color(0xff5971F0);
+
   static const yellow = Color(0xffFFB200);
   static const redChart = Color(0xffFD4E3F);
+
 }

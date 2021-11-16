@@ -83,7 +83,9 @@ class _SettingsPageState extends State<SettingsPage> {
                           style: Theme.of(context).textTheme.headline1,
                         ),
                       ),
+
                       PersonalSettingsWidget(),
+
                       const SizedBox(
                         height: 20,
                       ),
@@ -123,6 +125,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 }
 
+
 Future<void> showChangeDialog(
     BuildContext context, String type, AppStateModel model) async {
   var controller = TextEditingController();
@@ -136,6 +139,7 @@ Future<void> showChangeDialog(
         ? ""
         : model.mealPlan!.toStringAsFixed(3));
   }
+
 
   return showDialog(
       context: context,
@@ -152,6 +156,9 @@ Future<void> showChangeDialog(
                   width: MediaQuery.of(context).size.width / 3,
                   child: TextFormField(
                     controller: controller,
+
+                    validator: validateDecimal
+
                   ),
                 ),
               ],
@@ -169,7 +176,9 @@ Future<void> showChangeDialog(
                       type,
                       double.parse(
                           controller.text == '' ? "0" : controller.text));
+
                   model.calculateNewDailyBudget();
+
                   Navigator.of(context).pop();
                 },
                 child: const Text("Save")),
@@ -178,12 +187,35 @@ Future<void> showChangeDialog(
       });
 }
 
+
+String? validateDecimal(String? input){
+
+  print("Validating");
+
+  if(input == null) return "Input cannot be null";
+
+  double? value = double.tryParse(input);
+  if(value == null) return "Input must be a valid number";
+
+  if(input.contains(".")){
+    int afterDecimal = int.parse(input.substring(input.indexOf(".") + 1));
+    if(afterDecimal > 100) return "Input must be 2 decimal places at most";
+  }
+
+  if(value > 100000) return "Input cannot be more then \$100000";
+
+  return null;
+}
+
+
 Future<DateTime?> showDateTime(
     BuildContext context, String type, AppStateModel model) {
   return DatePicker.showDatePicker(
     context,
     showTitleActions: true,
+
     minTime: DateTime.now(),
+
     maxTime:
         DateTime((model.mealPlanDue?.year ?? DateTime.now().year) + 2, 1, 1),
     onConfirm: (date) {
