@@ -1,3 +1,4 @@
+import 'package:budgit/db/model/transaction.dart';
 import 'package:budgit/model/appSystemManager.dart';
 import 'package:budgit/screens/introPage.dart';
 import 'package:budgit/theme/themeData.dart';
@@ -9,8 +10,18 @@ import 'package:budgit/screens/settingsPage.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider<AppStateModel>(
-      create: (_) => AppStateModel()..init(), child: const MyApp()));
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider<AppStateModel>(
+        create: (_) => AppStateModel()..init(),
+      ),
+      FutureProvider(create: (_) {}, initialData: const [])
+    ],
+    child: const MyApp(),
+  ));
+
+  // runApp(ChangeNotifierProvider<AppStateModel>(
+  //     create: (_) => AppStateModel()..init(), child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -21,12 +32,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppSytemManager(
       MaterialApp(
-
         locale: const Locale("en", "US"),
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
         ],
-
         debugShowCheckedModeBanner: false,
         routes: {
           '/settings': (BuildContext context) => const SettingsPage(),

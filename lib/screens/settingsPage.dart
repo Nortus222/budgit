@@ -2,6 +2,7 @@
 
 import 'package:budgit/model/appStateModel.dart';
 import 'package:budgit/theme/themeData.dart';
+import 'package:budgit/utilites/inputValidator.dart';
 import 'package:budgit/widgets/mealPlanSettingsWidget.dart';
 import 'package:budgit/widgets/personalSettingsWidget.dart';
 import 'package:flutter/cupertino.dart';
@@ -46,7 +47,7 @@ class _SettingsPageState extends State<SettingsPage> {
               height: 200,
             ),
             Positioned(
-              top: size.height / 5.1,
+              top: size.height / 6,
               child: ClipRRect(
                 borderRadius: const BorderRadius.horizontal(
                     left: Radius.circular(60), right: Radius.circular(60)),
@@ -58,7 +59,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             Positioned(
-              top: size.height / 2.15,
+              top: size.height / 2.25,
               child: ClipRRect(
                 borderRadius: const BorderRadius.horizontal(
                     left: Radius.circular(60), right: Radius.circular(60)),
@@ -76,16 +77,14 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: Column(
                     children: [
                       Container(
-                        height: size.height / 5,
+                        height: size.height / 6,
                         alignment: Alignment.center,
                         child: Text(
                           "Welcome Back",
                           style: Theme.of(context).textTheme.headline1,
                         ),
                       ),
-
                       PersonalSettingsWidget(),
-
                       const SizedBox(
                         height: 20,
                       ),
@@ -125,9 +124,9 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 }
 
-
 Future<void> showChangeDialog(
     BuildContext context, String type, AppStateModel model) async {
+  var _key = GlobalKey<FormFieldState>();
   var controller = TextEditingController();
 
   if (type == 'personal') {
@@ -140,25 +139,25 @@ Future<void> showChangeDialog(
         : model.mealPlan!.toStringAsFixed(3));
   }
 
-
   return showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Change $type budget"),
           content: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(left: 8),
             child: Row(
               children: [
                 const Text("Budget: "),
                 Container(
-                  padding: const EdgeInsetsDirectional.only(start: 15),
-                  width: MediaQuery.of(context).size.width / 3,
+                  padding: const EdgeInsetsDirectional.only(start: 5),
+                  width: MediaQuery.of(context).size.width / 2.3,
                   child: TextFormField(
+                    keyboardType:
+                        const TextInputType.numberWithOptions(decimal: true),
+                    key: _key,
                     controller: controller,
-
-                    validator: validateDecimal
-
+                    validator: validateDecimal,
                   ),
                 ),
               ],
@@ -172,14 +171,16 @@ Future<void> showChangeDialog(
                 child: const Text("Cancel")),
             TextButton(
                 onPressed: () {
-                  model.setBudget(
-                      type,
-                      double.parse(
-                          controller.text == '' ? "0" : controller.text));
+                  if (_key.currentState!.validate()) {
+                    model.setBudget(
+                        type,
+                        double.parse(
+                            controller.text == '' ? "0" : controller.text));
 
-                  model.calculateNewDailyBudget();
+                    model.calculateNewDailyBudget();
 
-                  Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  }
                 },
                 child: const Text("Save")),
           ],
@@ -187,35 +188,12 @@ Future<void> showChangeDialog(
       });
 }
 
-
-String? validateDecimal(String? input){
-
-  print("Validating");
-
-  if(input == null) return "Input cannot be null";
-
-  double? value = double.tryParse(input);
-  if(value == null) return "Input must be a valid number";
-
-  if(input.contains(".")){
-    int afterDecimal = int.parse(input.substring(input.indexOf(".") + 1));
-    if(afterDecimal > 100) return "Input must be 2 decimal places at most";
-  }
-
-  if(value > 100000) return "Input cannot be more then \$100000";
-
-  return null;
-}
-
-
 Future<DateTime?> showDateTime(
     BuildContext context, String type, AppStateModel model) {
   return DatePicker.showDatePicker(
     context,
     showTitleActions: true,
-
     minTime: DateTime.now(),
-
     maxTime:
         DateTime((model.mealPlanDue?.year ?? DateTime.now().year) + 2, 1, 1),
     onConfirm: (date) {

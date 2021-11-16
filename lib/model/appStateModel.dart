@@ -9,7 +9,7 @@ import 'package:budgit/utilites/daysBetween.dart';
 class AppStateModel extends foundation.ChangeNotifier {
   late TransactionDatabase db;
 
-  late Future<List<TransactionBudgit>> list;
+  Future<List<TransactionBudgit>> list = Future.value([]);
 
   late SharedPreferences sp;
 
@@ -20,14 +20,12 @@ class AppStateModel extends foundation.ChangeNotifier {
   int? dailyPersonal;
   int? dailyMealPlan;
 
-
   int? dailyPersonalBudget;
   int? dailyMealPlanBudget;
 
   int dbWeeks = 1;
 
   String dbAccount = 'personal';
-
 
   DateTime? appClosed;
 
@@ -43,7 +41,6 @@ class AppStateModel extends foundation.ChangeNotifier {
     loadTransactions();
     loadPreferences();
     loadDaily();
-
   }
 
   void loadDailyBudget() {
@@ -73,7 +70,6 @@ class AppStateModel extends foundation.ChangeNotifier {
 
       dailyPersonal = sp.getInt('dailyPersonal');
       dailyMealPlan = sp.getInt('dailyMealPlan');
-
     }
   }
 
@@ -84,9 +80,6 @@ class AppStateModel extends foundation.ChangeNotifier {
     } else if (key == 'dailyMealPlan') {
       dailyMealPlan = value;
     }
-
-
-    //TODO check if too much
 
     notifyListeners();
   }
@@ -163,7 +156,6 @@ class AppStateModel extends foundation.ChangeNotifier {
     }
 
     return newBudget < 0 ? 0 : newBudget;
-
   }
 
   void loadPreferences() {
@@ -245,9 +237,6 @@ class AppStateModel extends foundation.ChangeNotifier {
   }
 
   void loadTransactions() {
-
-    print("Weeks: $dbWeeks");
-
     list = db.readAll(dbWeeks, dbAccount);
 
     notifyListeners();

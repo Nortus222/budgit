@@ -4,7 +4,6 @@ import 'dart:async';
 
 import 'package:budgit/model/appStateModel.dart';
 import 'package:budgit/screens/addtransactionPage.dart';
-import 'package:budgit/screens/dbScreen.dart';
 import 'package:budgit/utilites/daysBetween.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

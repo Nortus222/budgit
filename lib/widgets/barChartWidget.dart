@@ -28,7 +28,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
       child: Card(
         color: AppColors.white,
         child: Padding(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: FutureBuilder<List<TransactionBudgit>>(
                 future: model.list,
                 builder: (BuildContext context, snapshot) {
@@ -43,7 +43,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
                             .copyWith(color: Colors.grey),
                       ));
                     } else {
-                      return BarChart(mainBarData(snapshot.data!));
+                      return BarChart(mainBarData(snapshot.data ?? []));
                     }
                   } else {
                     return const Center(child: CircularProgressIndicator());

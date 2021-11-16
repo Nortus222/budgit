@@ -2,15 +2,16 @@
 
 //import 'dart:js';
 
+import 'dart:async';
+
 import 'package:budgit/model/appStateModel.dart';
-import 'package:budgit/screens/dbScreen.dart';
 import 'package:budgit/theme/themeData.dart';
+import 'package:budgit/utilites/inputValidator.dart';
 import 'package:budgit/widgets/persistanceHeaderWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:budgit/db/transaction_database.dart';
 import 'package:budgit/db/model/transaction.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -25,12 +26,10 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-
   List<String> listBudget = ['personal', 'mealPlan'];
 
   int barValue = 0;
   int barGetter() => barValue;
-
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +48,7 @@ class _HistoryPageState extends State<HistoryPage> {
           Positioned(
             top: 115,
             child: ClipRRect(
-
               borderRadius: const BorderRadius.horizontal(
-
                   left: Radius.circular(60), right: Radius.circular(60)),
               child: Container(
                 width: size.width,
@@ -81,7 +78,6 @@ class _HistoryPageState extends State<HistoryPage> {
                       width: size.width - 40,
                       child: Column(
                         children: [
-
                           Padding(
                             padding: const EdgeInsets.only(top: 12, bottom: 10),
                             child: tabbar.CupertinoTabBar(
@@ -101,8 +97,8 @@ class _HistoryPageState extends State<HistoryPage> {
                               allowExpand: true,
                               useSeparators: true,
                               useShadow: false,
+                              borderRadius: BorderRadius.circular(18),
                             ),
-
                           ),
                           Expanded(
                             child: FutureBuilder<List<TransactionBudgit>>(
@@ -116,7 +112,6 @@ class _HistoryPageState extends State<HistoryPage> {
                                       return CustomScrollView(
                                         slivers: _getSlivers(
                                             context, snapshot.data!, model),
-
                                       );
                                     }
                                   } else if (snapshot.hasError) {
@@ -150,9 +145,6 @@ class _HistoryPageState extends State<HistoryPage> {
 
     var text;
 
-    final size = MediaQuery.of(context).size;
-
-
     if (daysBetween(DateTime.now(), dateFirst) == 0) {
       text = const Text("Today");
     } else if (daysBetween(DateTime.now(), dateFirst) == 1) {
@@ -174,12 +166,12 @@ class _HistoryPageState extends State<HistoryPage> {
 
       if (daysBetween(dateFirst, element.transaction_time) != 0) {
         sliverList.add(CustomHeader(AppColors.orange, text));
-        sliverList
-            .add(SliverToBoxAdapter(child: _listTile(context, element, model)));
+        sliverList.add(SliverToBoxAdapter(
+            child: _listTile(context, element, model, list)));
         dateFirst = element.transaction_time;
       } else {
-        sliverList
-            .add(SliverToBoxAdapter(child: _listTile(context, element, model)));
+        sliverList.add(SliverToBoxAdapter(
+            child: _listTile(context, element, model, list)));
       }
     });
 
@@ -202,11 +194,8 @@ class _HistoryPageState extends State<HistoryPage> {
     return sliverList;
   }
 
-  Widget _listTile(
-      BuildContext context, TransactionBudgit entry, AppStateModel model) {
-
-    var myLocale = Localizations.localeOf(context);
-
+  Widget _listTile(BuildContext context, TransactionBudgit entry,
+      AppStateModel model, List<TransactionBudgit> list) {
     return Dismissible(
       key: ValueKey<int>(entry.id!),
       direction: DismissDirection.endToStart,
@@ -251,7 +240,7 @@ class _HistoryPageState extends State<HistoryPage> {
           height: 60,
           child: ListTile(
               leading:
-                  Text(DateFormat('kk:mm:a').format(entry.transaction_time)),
+                  Text(DateFormat('h:mm a').format(entry.transaction_time)),
               title: Center(
                   child: Text(
                 "\$${entry.amount}",
@@ -267,10 +256,9 @@ class _HistoryPageState extends State<HistoryPage> {
                   })),
         ),
       ),
-      onDismissed: (DismissDirection direction) {
+      onDismissed: (DismissDirection direction) async {
+        list.remove(entry);
         model.deleteTransaction(entry.id!);
-
-        setState(() {});
       },
     );
   }
@@ -293,10 +281,10 @@ class _HistoryPageState extends State<HistoryPage> {
     var controller = TextEditingController();
     controller.text = entry.amount.toString();
 
+    var _key = GlobalKey<FormFieldState>();
 
     int newBarValue = entry.account == 'personal' ? 0 : 1;
     newBarGetter() => newBarValue;
-
 
     TransactionBudgit transaction = TransactionBudgit(
         id: entry.id,
@@ -309,6 +297,7 @@ class _HistoryPageState extends State<HistoryPage> {
         builder: (BuildContext context) {
           return StatefulBuilder(builder: (context, setState1) {
             return AlertDialog(
+              scrollable: true,
               title: const Text("Change Transaction"),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -370,7 +359,7 @@ class _HistoryPageState extends State<HistoryPage> {
                                 });
                               });
                             },
-                            child: Text(DateFormat('kk:mm:a')
+                            child: Text(DateFormat('h:mm a')
                                 .format(transaction.transaction_time))),
                       ],
                     ),
@@ -381,7 +370,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     child: Row(children: [
                       const Text("Account: "),
                       SizedBox(
-                        width: MediaQuery.of(context).size.width / 2 - 15,
+                        width: MediaQuery.of(context).size.width / 2 - 20.5,
                         child: tabbar.CupertinoTabBar(
                           AppColors.beige,
                           AppColors.white,
@@ -410,9 +399,13 @@ class _HistoryPageState extends State<HistoryPage> {
                         const Text("Total: "),
                         Container(
                           padding: const EdgeInsetsDirectional.only(start: 15),
-                          width: MediaQuery.of(context).size.width / 2,
+                          width: MediaQuery.of(context).size.width / 2 - 5,
                           child: TextFormField(
+                            keyboardType: const TextInputType.numberWithOptions(
+                                decimal: true),
+                            key: _key,
                             controller: controller,
+                            validator: validateDecimal,
                           ),
                         ),
                       ],
@@ -428,10 +421,28 @@ class _HistoryPageState extends State<HistoryPage> {
                     child: const Text("Cancel")),
                 TextButton(
                     onPressed: () {
-                      transaction.amount = double.parse(
-                          controller.text == '' ? "0" : controller.text);
-                      model.updateTransaction(transaction);
-                      Navigator.of(context).pop();
+                      if (_key.currentState!.validate()) {
+                        transaction.amount = double.parse(
+                            controller.text == '' ? "0" : controller.text);
+
+                        double diff = transaction.amount - entry.amount;
+
+                        if (entry.amount != transaction.amount) {
+                          model.decreaseBudget(transaction.account, diff);
+                        }
+
+                        if (entry.transaction_time !=
+                            transaction.transaction_time) {
+                          if (daysBetween(
+                                  DateTime.now(), entry.transaction_time) ==
+                              0) {
+                            model.decreaseDaily(
+                                transaction.account, -diff.toInt());
+                          }
+                        }
+                        model.updateTransaction(transaction);
+                        Navigator.of(context).pop();
+                      }
                     },
                     child: const Text("Save")),
               ],
