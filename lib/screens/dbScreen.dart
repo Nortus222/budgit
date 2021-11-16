@@ -14,9 +14,9 @@ class DBscreen extends StatefulWidget {
 }
 
 class _DBscreenState extends State<DBscreen> {
-  // final db = TransactionDatabase.init();
+  final db = TransactionDatabase.init();
 
-  // var list;
+  var list;
 
   final myController = TextEditingController();
 
@@ -27,6 +27,12 @@ class _DBscreenState extends State<DBscreen> {
   }
 
   @override
+  void initState() {
+    list = db.readAll(null, null);
+    super.initState();
+  }
+
+
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     final model = Provider.of<AppStateModel>(context);

@@ -16,7 +16,6 @@ class TransactionDatabase {
 
   //allows for a connection to the database;
   Future<Database> get database async {
-
     print("Get DB\n");
 
     //return database if it already exists
@@ -108,7 +107,7 @@ class TransactionDatabase {
 
       maps = await database.query(TransactionTable,
           columns: TransactionName.values,
-          where: '${TransactionName.account} > ?',
+          where: '${TransactionName.transaction_time} > ?',
           whereArgs: [cutoffDateTime.toIso8601String()],
           orderBy: '${TransactionName.transaction_time} DESC'
       );
@@ -119,17 +118,15 @@ class TransactionDatabase {
 
       maps = await database.query(TransactionTable,
           columns: TransactionName.values,
-          where: '${TransactionName.account} > ? AND ${TransactionName.account} = ?',
+          where: '${TransactionName.transaction_time} > ? AND ${TransactionName.account} = ?',
           whereArgs: [cutoffDateTime.toIso8601String(), account],
           orderBy: '${TransactionName.transaction_time} DESC'
       );
     }
 
-
     print("ReadALL DB\n");
     print(maps.map((json) => TransactionBudgit.fromJson(json)).toList());
     return maps.map((json) => TransactionBudgit.fromJson(json)).toList();
-
   }
 
   Future<int> update(TransactionBudgit transactionBudgit) async {
@@ -159,6 +156,5 @@ class TransactionDatabase {
     final database = await instance.database;
     database.close();
   }
-
 
 }
