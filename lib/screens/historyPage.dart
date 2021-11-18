@@ -258,6 +258,14 @@ class _HistoryPageState extends State<HistoryPage> {
       ),
       onDismissed: (DismissDirection direction) async {
         list.remove(entry);
+        if (daysBetween(DateTime.now(), entry.transaction_time) < 8) {
+          model.decreaseBudget(entry.account, -entry.amount);
+          if (daysBetween(DateTime.now(), entry.transaction_time) == 0) {
+            model.decreaseDaily(
+                entry.account == 'personal' ? 'dailyPersonal' : 'dailyMealPlan',
+                -(entry.amount.toInt()));
+          }
+        }
         model.deleteTransaction(entry.id!);
       },
     );
@@ -425,21 +433,38 @@ class _HistoryPageState extends State<HistoryPage> {
                         transaction.amount = double.parse(
                             controller.text == '' ? "0" : controller.text);
 
-                        double diff = transaction.amount - entry.amount;
+                        //double diff = transaction.amount - entry.amount;
 
-                        if (entry.amount != transaction.amount) {
-                          model.decreaseBudget(transaction.account, diff);
+                        if (daysBetween(
+                                DateTime.now(), entry.transaction_time) ==
+                            0) {
+                          print("Today");
+                          model.decreaseBudget(entry.account, -entry.amount);
+                          model.decreaseDaily(
+                              entry.account == 'personal'
+                                  ? 'dailyPersonal'
+                                  : 'dailyMealPlan',
+                              -entry.amount.toInt());
+
+                          model.decreaseBudget(
+                              transaction.account, transaction.amount);
+                        } else {
+                          model.decreaseBudget(entry.account, -entry.amount);
+
+                          model.decreaseBudget(
+                              transaction.account, transaction.amount);
                         }
 
-                        if (entry.transaction_time !=
-                            transaction.transaction_time) {
-                          if (daysBetween(
-                                  DateTime.now(), entry.transaction_time) ==
-                              0) {
-                            model.decreaseDaily(
-                                transaction.account, -diff.toInt());
-                          }
+                        if (daysBetween(
+                                DateTime.now(), transaction.transaction_time) ==
+                            0) {
+                          model.decreaseDaily(
+                              transaction.account == 'personal'
+                                  ? 'dailyPersonal'
+                                  : 'dailyMealPlan',
+                              transaction.amount.toInt());
                         }
+
                         model.updateTransaction(transaction);
                         Navigator.of(context).pop();
                       }

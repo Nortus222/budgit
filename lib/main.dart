@@ -1,5 +1,6 @@
 import 'package:budgit/db/model/transaction.dart';
 import 'package:budgit/model/appSystemManager.dart';
+import 'package:budgit/screens/congratulationsPage.dart';
 import 'package:budgit/screens/introPage.dart';
 import 'package:budgit/theme/themeData.dart';
 import 'package:flutter/material.dart';
@@ -30,21 +31,20 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return AppSytemManager(
-      MaterialApp(
-        locale: const Locale("en", "US"),
-        localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-        ],
-        debugShowCheckedModeBanner: false,
-        routes: {
-          '/settings': (BuildContext context) => const SettingsPage(),
-          '/home': (BuildContext context) => const LandingPage(),
-          '/intro': (BuildContext context) => const IntroPage(),
-        },
-        theme: BudgitTheme(),
-        home: const LandingPage(),
-      ),
+    return MaterialApp(
+      locale: const Locale("en", "US"),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+      ],
+      debugShowCheckedModeBanner: false,
+      routes: {
+        '/settings': (BuildContext context) => const SettingsPage(),
+        '/home': (BuildContext context) => const LandingPage(),
+        '/intro': (BuildContext context) => const IntroPage(),
+        '/congrats': (BuildContext context) => const CongratulationsPage(),
+      },
+      theme: BudgitTheme(),
+      home: AppSytemManager(const LandingPage()),
     );
   }
 }

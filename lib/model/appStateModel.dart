@@ -40,6 +40,7 @@ class AppStateModel extends foundation.ChangeNotifier {
     loadIsFirst();
     loadTransactions();
     loadPreferences();
+    loadDailyBudget();
     loadDaily();
   }
 
@@ -58,18 +59,14 @@ class AppStateModel extends foundation.ChangeNotifier {
   }
 
   void loadDaily() {
+    dailyPersonal = sp.getInt('dailyPersonal');
+    dailyMealPlan = sp.getInt('dailyMealPlan');
+
     if (daysBetween(DateTime.now(), appClosed ?? DateTime.now()) >= 1) {
       print("New, Day");
 
-      loadDailyBudget();
-
       setDaily('dailyPersonal', dailyPersonalBudget ?? 0);
       setDaily('dailyMealPlan', dailyMealPlanBudget ?? 0);
-    } else {
-      print("Same Day");
-
-      dailyPersonal = sp.getInt('dailyPersonal');
-      dailyMealPlan = sp.getInt('dailyMealPlan');
     }
   }
 
@@ -91,7 +88,11 @@ class AppStateModel extends foundation.ChangeNotifier {
       tmp = (dailyPersonal ?? 0) - value;
 
       if (tmp >= 0) {
-        dailyPersonal = tmp;
+        if (tmp > (dailyPersonalBudget ?? 1)) {
+          dailyPersonal = (dailyPersonalBudget ?? tmp);
+        } else {
+          dailyPersonal = tmp;
+        }
       } else {
         dailyPersonal = 0;
       }
@@ -99,14 +100,22 @@ class AppStateModel extends foundation.ChangeNotifier {
       tmp = (dailyMealPlan ?? 0) - value;
 
       if (tmp >= 0) {
-        dailyMealPlan = tmp;
+        if (tmp > (dailyMealPlanBudget ?? 1)) {
+          dailyMealPlan = (dailyMealPlanBudget ?? tmp);
+        } else {
+          dailyMealPlan = tmp;
+        }
       } else {
         dailyMealPlan = 0;
       }
     }
 
     if (tmp >= 0) {
-      setDaily(key, tmp);
+      setDaily(
+          key,
+          (key == 'dailyPersonal'
+              ? (dailyPersonal ?? tmp)
+              : (dailyMealPlan ?? tmp)));
     } else {
       setDaily(key, 0);
     }
@@ -212,6 +221,11 @@ class AppStateModel extends foundation.ChangeNotifier {
 
   void setAppClosed(String key, DateTime value) {
     sp.setString(key, value.toString());
+  }
+
+  DateTime? getAppClosed() {
+    appClosed = DateTime.tryParse(sp.getString('appClosed') ?? "");
+    return appClosed;
   }
 
   void loadAppClosed() {

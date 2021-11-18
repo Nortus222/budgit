@@ -27,6 +27,12 @@ class _LandingPageState extends State<LandingPage> {
     HistoryPage(),
   ];
 
+  void congratsScreen() {
+    print("New, Day");
+    Navigator.of(context, rootNavigator: true)
+        .pushReplacementNamed('/congrats');
+  }
+
   @override
   void initState() {
     super.initState();
@@ -38,9 +44,11 @@ class _LandingPageState extends State<LandingPage> {
         Navigator.of(context, rootNavigator: true)
             .pushReplacementNamed('/intro');
       } else {
-        if (daysBetween(DateTime.now(), model.appClosed ?? DateTime.now()) >=
-            1) {
-          print("New, Day");
+        if (daysBetween(DateTime.now(), model.appClosed ?? DateTime.now()) >
+            0) {
+          print("New Day (Landing)");
+          //Navigator.of(context, rootNavigator: true)
+          //.pushReplacementNamed('/congrats');
         } else {
           print("Same Day");
         }
