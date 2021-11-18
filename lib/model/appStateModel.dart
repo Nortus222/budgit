@@ -9,7 +9,7 @@ import 'package:budgit/utilites/daysBetween.dart';
 class AppStateModel extends foundation.ChangeNotifier {
   late TransactionDatabase db;
 
-  late Future<List<TransactionBudgit>> list;
+  Future<List<TransactionBudgit>> list = Future.value([]);
 
   late SharedPreferences sp;
 
@@ -20,14 +20,12 @@ class AppStateModel extends foundation.ChangeNotifier {
   int? dailyPersonal;
   int? dailyMealPlan;
 
-
   int? dailyPersonalBudget;
   int? dailyMealPlanBudget;
 
   int dbWeeks = 1;
 
   String dbAccount = 'personal';
-
 
   DateTime? appClosed;
 
@@ -42,8 +40,8 @@ class AppStateModel extends foundation.ChangeNotifier {
     loadIsFirst();
     loadTransactions();
     loadPreferences();
+    loadDailyBudget();
     loadDaily();
-
   }
 
   void loadDailyBudget() {
@@ -61,19 +59,14 @@ class AppStateModel extends foundation.ChangeNotifier {
   }
 
   void loadDaily() {
+    dailyPersonal = sp.getInt('dailyPersonal');
+    dailyMealPlan = sp.getInt('dailyMealPlan');
+
     if (daysBetween(DateTime.now(), appClosed ?? DateTime.now()) >= 1) {
       print("New, Day");
 
-      loadDailyBudget();
-
       setDaily('dailyPersonal', dailyPersonalBudget ?? 0);
       setDaily('dailyMealPlan', dailyMealPlanBudget ?? 0);
-    } else {
-      print("Same Day");
-
-      dailyPersonal = sp.getInt('dailyPersonal');
-      dailyMealPlan = sp.getInt('dailyMealPlan');
-
     }
   }
 
@@ -85,9 +78,6 @@ class AppStateModel extends foundation.ChangeNotifier {
       dailyMealPlan = value;
     }
 
-
-    //TODO check if too much
-
     notifyListeners();
   }
 
@@ -98,7 +88,11 @@ class AppStateModel extends foundation.ChangeNotifier {
       tmp = (dailyPersonal ?? 0) - value;
 
       if (tmp >= 0) {
-        dailyPersonal = tmp;
+        if (tmp > (dailyPersonalBudget ?? 1)) {
+          dailyPersonal = (dailyPersonalBudget ?? tmp);
+        } else {
+          dailyPersonal = tmp;
+        }
       } else {
         dailyPersonal = 0;
       }
@@ -106,14 +100,22 @@ class AppStateModel extends foundation.ChangeNotifier {
       tmp = (dailyMealPlan ?? 0) - value;
 
       if (tmp >= 0) {
-        dailyMealPlan = tmp;
+        if (tmp > (dailyMealPlanBudget ?? 1)) {
+          dailyMealPlan = (dailyMealPlanBudget ?? tmp);
+        } else {
+          dailyMealPlan = tmp;
+        }
       } else {
         dailyMealPlan = 0;
       }
     }
 
     if (tmp >= 0) {
-      setDaily(key, tmp);
+      setDaily(
+          key,
+          (key == 'dailyPersonal'
+              ? (dailyPersonal ?? tmp)
+              : (dailyMealPlan ?? tmp)));
     } else {
       setDaily(key, 0);
     }
@@ -163,7 +165,6 @@ class AppStateModel extends foundation.ChangeNotifier {
     }
 
     return newBudget < 0 ? 0 : newBudget;
-
   }
 
   void loadPreferences() {
@@ -222,6 +223,11 @@ class AppStateModel extends foundation.ChangeNotifier {
     sp.setString(key, value.toString());
   }
 
+  DateTime? getAppClosed() {
+    appClosed = DateTime.tryParse(sp.getString('appClosed') ?? "");
+    return appClosed;
+  }
+
   void loadAppClosed() {
     appClosed = DateTime.tryParse(sp.getString('appClosed') ?? "");
   }
@@ -245,9 +251,6 @@ class AppStateModel extends foundation.ChangeNotifier {
   }
 
   void loadTransactions() {
-
-    print("Weeks: $dbWeeks");
-
     list = db.readAll(dbWeeks, dbAccount);
 
     notifyListeners();

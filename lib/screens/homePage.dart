@@ -25,7 +25,7 @@ class HomePage extends StatelessWidget {
         Positioned(
           top: 140,
           child: ClipRRect(
-            borderRadius: BorderRadius.horizontal(
+            borderRadius: const BorderRadius.horizontal(
                 left: Radius.circular(60), right: Radius.circular(60)),
             child: Container(
               width: size.width,
@@ -37,7 +37,7 @@ class HomePage extends StatelessWidget {
         Positioned(
           top: 140 * 2 + 50,
           child: ClipRRect(
-            borderRadius: BorderRadius.horizontal(
+            borderRadius: const BorderRadius.horizontal(
                 left: Radius.circular(60), right: Radius.circular(60)),
             child: Container(
               width: size.width,
@@ -49,20 +49,18 @@ class HomePage extends StatelessWidget {
         Center(
             child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
-            DailyBudget(),
-            SizedBox(
+            const DailyBudget(),
+            const SizedBox(
               height: 30,
             ),
-
             RemainingBudget(),
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
-            BarChartWidget()
-
+            const BarChartWidget()
           ],
         )),
       ],

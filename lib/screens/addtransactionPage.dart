@@ -6,6 +6,7 @@ import 'package:budgit/theme/themeData.dart';
 import 'package:budgit/widgets/dailyBudgetWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:cupertino_tabbar/cupertino_tabbar.dart' as tabbar;
 
@@ -82,7 +83,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
             height: 140,
           ),
           Positioned(
-            top: 140,
+            top: 120,
             child: ClipRRect(
               borderRadius: const BorderRadius.horizontal(
                   left: Radius.circular(60), right: Radius.circular(60)),
@@ -94,13 +95,13 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
             ),
           ),
           Positioned(
-            top: 140 * 2,
+            top: 140 * 2 - 27,
             child: ClipRRect(
               borderRadius: const BorderRadius.horizontal(
                   left: Radius.circular(60), right: Radius.circular(60)),
               child: Container(
                 width: size.width,
-                height: size.height / 2 + 100,
+                height: size.height / 2 + 150,
                 color: AppColors.orange,
               ),
             ),
@@ -111,7 +112,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
               children: [
                 const DailyBudget(),
                 SizedBox(
-                  height: size.height / 18,
+                  height: size.height / 27,
                 ),
                 Visibility(
                     maintainSize: true,
@@ -152,6 +153,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                     allowExpand: true,
                     useSeparators: true,
                     useShadow: false,
+                    borderRadius: BorderRadius.circular(15),
                   ),
                 ),
                 Container(
@@ -334,7 +336,7 @@ Widget keyboardButton(
     child: Container(
       margin: const EdgeInsets.all(5),
       alignment: Alignment.center,
-      width: 110,
+      width: 108,
       height: 50,
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -348,7 +350,9 @@ Widget keyboardButton(
             controller.text = "\$";
           }
           if (text.data != "." || !controller.text.contains(".")) {
-            controller.text = "${controller.text}${text.data}";
+            if (controller.text.length < 8) {
+              controller.text = "${controller.text}${text.data}";
+            }
           }
         }
       } else {
