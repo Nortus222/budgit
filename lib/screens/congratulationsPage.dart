@@ -25,6 +25,12 @@ class _CongratulationsPageState extends State<CongratulationsPage> {
   }
 
   @override
+  void dispose() {
+    _confettiController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final model = Provider.of<AppStateModel>(context);

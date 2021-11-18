@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
         '/congrats': (BuildContext context) => const CongratulationsPage(),
       },
       theme: BudgitTheme(),
-      home: AppSytemManager(const LandingPage()),
+      home: const AppSytemManager(LandingPage()),
     );
   }
 }
