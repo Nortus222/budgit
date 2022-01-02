@@ -85,7 +85,9 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
             height: 16.5 * heightMultiplier,
           ),
           Positioned(
+
             top: 14 * heightMultiplier,
+
             child: ClipRRect(
               borderRadius: const BorderRadius.horizontal(
                   left: Radius.circular(60), right: Radius.circular(60)),
@@ -97,13 +99,17 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
             ),
           ),
           Positioned(
+
             top: 30.5 * heightMultiplier,
+
             child: ClipRRect(
               borderRadius: const BorderRadius.horizontal(
                   left: Radius.circular(60), right: Radius.circular(60)),
               child: Container(
                 width: size.width,
+
                 height: size.height / 1.5,
+
                 color: AppColors.orange,
               ),
             ),
@@ -114,7 +120,9 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
               children: [
                 const DailyBudget(),
                 SizedBox(
+
                   height: 3 * heightMultiplier,
+
                 ),
                 Visibility(
                     maintainSize: true,
@@ -341,8 +349,10 @@ Widget keyboardButton(
     child: Container(
       margin: const EdgeInsets.all(5),
       alignment: Alignment.center,
+
       width: 28.2 * SizeConfig.widthMultiplier!,
       height: 5.9 * SizeConfig.heightMultiplier!,
+
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
           color: AppColors.beige, borderRadius: BorderRadius.circular(20)),

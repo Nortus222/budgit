@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:budgit/model/appStateModel.dart';
+import 'package:budgit/screens/landingPage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

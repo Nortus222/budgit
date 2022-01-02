@@ -51,6 +51,7 @@ class HomePage extends StatelessWidget {
         Center(
             child: Column(
           children: [
+
             SizedBox(
               height: 1.5 * heightMultiplier,
             ),
@@ -61,6 +62,7 @@ class HomePage extends StatelessWidget {
             RemainingBudget(),
             SizedBox(
               height: 6 * heightMultiplier,
+
             ),
             const BarChartWidget()
           ],

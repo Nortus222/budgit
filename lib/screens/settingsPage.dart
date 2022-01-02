@@ -49,7 +49,9 @@ class _SettingsPageState extends State<SettingsPage> {
               height: 23 * heightMultiplier,
             ),
             Positioned(
+
               top: 16.5 * heightMultiplier,
+
               child: ClipRRect(
                 borderRadius: const BorderRadius.horizontal(
                     left: Radius.circular(60), right: Radius.circular(60)),
@@ -61,7 +63,9 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             Positioned(
+
               top: 44 * heightMultiplier,
+
               child: ClipRRect(
                 borderRadius: const BorderRadius.horizontal(
                     left: Radius.circular(60), right: Radius.circular(60)),
@@ -79,7 +83,9 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: Column(
                     children: [
                       Container(
+
                         height: 16.5 * heightMultiplier,
+
                         alignment: Alignment.center,
                         child: Text(
                           "Welcome Back",
@@ -87,8 +93,10 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                       ),
                       PersonalSettingsWidget(),
+
                       SizedBox(
                         height: 2.5 * heightMultiplier,
+
                       ),
                       const MealPlanSettingsWidget(),
                       Padding(
