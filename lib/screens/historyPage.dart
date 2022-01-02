@@ -1,12 +1,11 @@
 // ignore_for_file: file_names
 
-//import 'dart:js';
-
 import 'dart:async';
 
 import 'package:budgit/model/appStateModel.dart';
 import 'package:budgit/theme/themeData.dart';
 import 'package:budgit/utilites/inputValidator.dart';
+import 'package:budgit/utilites/screenConfig.dart';
 import 'package:budgit/widgets/persistanceHeaderWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +33,7 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    final heightMultiplier = SizeConfig.heightMultiplier!;
 
     final model = Provider.of<AppStateModel>(context);
     final list = model.getTransactions();
@@ -43,10 +43,10 @@ class _HistoryPageState extends State<HistoryPage> {
         children: [
           Container(
             color: AppColors.white,
-            height: 140,
+            height: 16.5 * heightMultiplier,
           ),
           Positioned(
-            top: 115,
+            top: 13.5 * heightMultiplier,
             child: ClipRRect(
               borderRadius: const BorderRadius.horizontal(
                   left: Radius.circular(60), right: Radius.circular(60)),
@@ -64,22 +64,22 @@ class _HistoryPageState extends State<HistoryPage> {
               child: Column(
                 children: [
                   Container(
-                    child: Text(
-                      "History",
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline1!
-                          .copyWith(fontSize: 48, fontWeight: FontWeight.bold),
-                    ),
-                    padding: const EdgeInsetsDirectional.all(30),
-                  ),
+                      child: Text(
+                        "History",
+                        style: Theme.of(context).textTheme.headline1!.copyWith(
+                            fontSize: 48, fontWeight: FontWeight.bold),
+                      ),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 3.5 * heightMultiplier, horizontal: 30)),
                   Expanded(
                     child: SizedBox(
                       width: size.width - 40,
                       child: Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(top: 12, bottom: 10),
+                            padding: EdgeInsets.only(
+                                top: 1.4 * heightMultiplier,
+                                bottom: 1.18 * heightMultiplier),
                             child: tabbar.CupertinoTabBar(
                               AppColors.beige,
                               AppColors.white,

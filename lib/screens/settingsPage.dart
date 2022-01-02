@@ -3,6 +3,7 @@
 import 'package:budgit/model/appStateModel.dart';
 import 'package:budgit/theme/themeData.dart';
 import 'package:budgit/utilites/inputValidator.dart';
+import 'package:budgit/utilites/screenConfig.dart';
 import 'package:budgit/widgets/mealPlanSettingsWidget.dart';
 import 'package:budgit/widgets/personalSettingsWidget.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,6 +25,7 @@ class _SettingsPageState extends State<SettingsPage> {
     final model = Provider.of<AppStateModel>(context);
 
     var size = MediaQuery.of(context).size;
+    final heightMultiplier = SizeConfig.heightMultiplier!;
 
     return CupertinoPageScaffold(
         resizeToAvoidBottomInset: false,
@@ -44,10 +46,10 @@ class _SettingsPageState extends State<SettingsPage> {
           children: [
             Container(
               color: AppColors.white,
-              height: 200,
+              height: 23 * heightMultiplier,
             ),
             Positioned(
-              top: size.height / 6,
+              top: 16.5 * heightMultiplier,
               child: ClipRRect(
                 borderRadius: const BorderRadius.horizontal(
                     left: Radius.circular(60), right: Radius.circular(60)),
@@ -59,13 +61,13 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             Positioned(
-              top: size.height / 2.25,
+              top: 44 * heightMultiplier,
               child: ClipRRect(
                 borderRadius: const BorderRadius.horizontal(
                     left: Radius.circular(60), right: Radius.circular(60)),
                 child: Container(
                   width: size.width,
-                  height: size.height / 2 + 100,
+                  height: size.height / 1.5,
                   color: AppColors.beige,
                 ),
               ),
@@ -77,7 +79,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: Column(
                     children: [
                       Container(
-                        height: size.height / 6,
+                        height: 16.5 * heightMultiplier,
                         alignment: Alignment.center,
                         child: Text(
                           "Welcome Back",
@@ -85,13 +87,13 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                       ),
                       PersonalSettingsWidget(),
-                      const SizedBox(
-                        height: 20,
+                      SizedBox(
+                        height: 2.5 * heightMultiplier,
                       ),
                       const MealPlanSettingsWidget(),
                       Padding(
-                        padding:
-                            const EdgeInsets.only(top: 20, left: 20, right: 20),
+                        padding: EdgeInsets.only(
+                            top: 2 * heightMultiplier, left: 20, right: 20),
                         child: Row(
                           children: [
                             Expanded(

@@ -4,6 +4,7 @@ import 'package:budgit/db/model/transaction.dart';
 import 'package:budgit/model/appStateModel.dart';
 import 'package:budgit/theme/themeData.dart';
 import 'package:budgit/utilites/daysBetween.dart';
+import 'package:budgit/utilites/screenConfig.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
@@ -22,9 +23,11 @@ class _BarChartWidgetState extends State<BarChartWidget> {
   @override
   Widget build(BuildContext context) {
     final model = Provider.of<AppStateModel>(context);
+    final heightMultiplier = SizeConfig.heightMultiplier!;
+
     return Container(
       width: MediaQuery.of(context).size.width - 40,
-      height: 250,
+      height: 35 * heightMultiplier,
       child: Card(
         color: AppColors.white,
         child: Padding(
