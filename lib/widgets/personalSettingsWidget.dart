@@ -2,6 +2,7 @@
 
 import 'package:budgit/model/appStateModel.dart';
 import 'package:budgit/theme/themeData.dart';
+import 'package:budgit/utilites/screenConfig.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -9,14 +10,14 @@ import 'package:provider/provider.dart';
 import 'package:budgit/screens/settingsPage.dart';
 
 class PersonalSettingsWidget extends StatelessWidget {
-
   PersonalSettingsWidget({Key? key}) : super(key: key);
 
   var format = NumberFormat.decimalPattern("en_US");
 
-
   @override
   Widget build(BuildContext context) {
+    final heightMultiplier = SizeConfig.heightMultiplier!;
+
     return Material(
       color: Colors.transparent,
       child: Consumer<AppStateModel>(
@@ -33,9 +34,9 @@ class PersonalSettingsWidget extends StatelessWidget {
             Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(20),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 3 * heightMultiplier),
                   child: Text(
-
                     (model.personal ?? -1) > 0
                         ? "\$${format.format(model.personal ?? 0)}"
                         : "Spent",
@@ -43,13 +44,15 @@ class PersonalSettingsWidget extends StatelessWidget {
                         color: (model.personal ?? -1) > 0
                             ? AppColors.white
                             : Colors.red),
-
                   ),
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(
-                        top: 20, left: 10, bottom: 20, right: 10),
+                    padding: EdgeInsets.only(
+                        top: 2.5 * heightMultiplier,
+                        left: 10,
+                        bottom: 15,
+                        right: 10),
                     child: CupertinoButton(
                         borderRadius:
                             const BorderRadius.all(Radius.circular(27)),

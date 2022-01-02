@@ -3,6 +3,7 @@
 import 'package:budgit/db/model/transaction.dart';
 import 'package:budgit/model/appStateModel.dart';
 import 'package:budgit/theme/themeData.dart';
+import 'package:budgit/utilites/screenConfig.dart';
 import 'package:budgit/widgets/dailyBudgetWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -72,6 +73,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    final heightMultiplier = SizeConfig.heightMultiplier!;
 
     final model = Provider.of<AppStateModel>(context);
 
@@ -80,10 +82,12 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
         children: [
           Container(
             color: AppColors.white,
-            height: 140,
+            height: 16.5 * heightMultiplier,
           ),
           Positioned(
-            top: 120,
+
+            top: 14 * heightMultiplier,
+
             child: ClipRRect(
               borderRadius: const BorderRadius.horizontal(
                   left: Radius.circular(60), right: Radius.circular(60)),
@@ -95,13 +99,17 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
             ),
           ),
           Positioned(
-            top: 140 * 2 - 27,
+
+            top: 30.5 * heightMultiplier,
+
             child: ClipRRect(
               borderRadius: const BorderRadius.horizontal(
                   left: Radius.circular(60), right: Radius.circular(60)),
               child: Container(
                 width: size.width,
-                height: size.height / 2 + 150,
+
+                height: size.height / 1.5,
+
                 color: AppColors.orange,
               ),
             ),
@@ -112,7 +120,9 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
               children: [
                 const DailyBudget(),
                 SizedBox(
-                  height: size.height / 27,
+
+                  height: 3 * heightMultiplier,
+
                 ),
                 Visibility(
                     maintainSize: true,
@@ -126,16 +136,16 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                   child: TextFormField(
                     enabled: false,
                     keyboardType: TextInputType.none,
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline1!
-                        .copyWith(color: AppColors.white, fontSize: 48),
+                    style: Theme.of(context).textTheme.headline1!.copyWith(
+                        color: AppColors.white,
+                        fontSize: 5.5 * SizeConfig.textMultiplier!),
                     textAlign: TextAlign.end,
                     controller: controller,
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 30, left: 25, right: 25),
+                  padding: EdgeInsets.only(
+                      top: 3.5 * heightMultiplier, left: 25, right: 25),
                   child: tabbar.CupertinoTabBar(
                     AppColors.beige,
                     AppColors.white,
@@ -157,7 +167,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.all(10),
+                  padding: EdgeInsets.symmetric(
+                      vertical: 1.1 * heightMultiplier, horizontal: 10),
                   child: keyboard(context, controller),
                 ),
                 Padding(
@@ -210,7 +221,7 @@ Widget moreBanner(BuildContext context, AppStateModel model, List<String> list,
     int index, double value) {
   return Container(
     width: MediaQuery.of(context).size.width - 80,
-    height: 35,
+    height: 4 * SizeConfig.heightMultiplier!,
     alignment: Alignment.center,
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(15),
@@ -218,13 +229,15 @@ Widget moreBanner(BuildContext context, AppStateModel model, List<String> list,
     ),
     child: Text(
       "New Daily Balance: \$${model.predictNewDailyBudget(list[index], value)}",
-      style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.red),
+      style: Theme.of(context).textTheme.bodyText1!.copyWith(
+          color: Colors.red, fontSize: 2.8 * SizeConfig.textMultiplier!),
     ),
   );
 }
 
 Widget keyboard(BuildContext context, TextEditingController controller) {
   return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
     children: [
       Row(
         children: [
@@ -336,8 +349,10 @@ Widget keyboardButton(
     child: Container(
       margin: const EdgeInsets.all(5),
       alignment: Alignment.center,
-      width: 108,
-      height: 50,
+
+      width: 28.2 * SizeConfig.widthMultiplier!,
+      height: 5.9 * SizeConfig.heightMultiplier!,
+
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
           color: AppColors.beige, borderRadius: BorderRadius.circular(20)),

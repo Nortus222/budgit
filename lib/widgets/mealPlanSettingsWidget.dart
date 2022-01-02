@@ -3,6 +3,7 @@
 import 'package:budgit/model/appStateModel.dart';
 import 'package:budgit/screens/settingsPage.dart';
 import 'package:budgit/theme/themeData.dart';
+import 'package:budgit/utilites/screenConfig.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -13,8 +14,8 @@ class MealPlanSettingsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     var format = NumberFormat.decimalPattern("en_US");
+    final heightMultiplier = SizeConfig.heightMultiplier!;
 
     return Material(
         color: Colors.transparent,
@@ -30,7 +31,6 @@ class MealPlanSettingsWidget extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(20),
-
                     child: Text(
                         (model.mealPlan ?? -1) > 0
                             ? "\$${format.format(model.mealPlan ?? 0)}"
@@ -39,12 +39,14 @@ class MealPlanSettingsWidget extends StatelessWidget {
                             color: (model.mealPlan ?? -1) > 0
                                 ? Colors.black
                                 : Colors.red)),
-
                   ),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.only(
-                          top: 20, bottom: 20, left: 10, right: 10),
+                      padding: EdgeInsets.only(
+                          top: (2 * heightMultiplier),
+                          bottom: 20,
+                          left: 10,
+                          right: 10),
                       child: CupertinoButton(
                           borderRadius:
                               const BorderRadius.all(Radius.circular(27)),

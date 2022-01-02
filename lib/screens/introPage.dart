@@ -2,6 +2,7 @@
 
 import 'package:budgit/model/appStateModel.dart';
 import 'package:budgit/theme/themeData.dart';
+import 'package:budgit/utilites/screenConfig.dart';
 import 'package:budgit/widgets/mealPlanSettingsWidget.dart';
 import 'package:budgit/widgets/personalSettingsWidget.dart';
 import 'package:budgit/widgets/remainingBudgetWidget.dart';
@@ -21,18 +22,19 @@ class _IntroPageState extends State<IntroPage> {
   Widget build(BuildContext context) {
     final model = Provider.of<AppStateModel>(context);
     final size = MediaQuery.of(context).size;
+    final heightMultiplier = SizeConfig.heightMultiplier!;
 
     return Scaffold(
       body: Stack(
         children: [
           Container(
             color: AppColors.white,
-            height: 140,
+            height: 70 * heightMultiplier,
           ),
           Positioned(
-            top: size.height / 3.4,
+            top: 22 * heightMultiplier,
             child: ClipRRect(
-              borderRadius: BorderRadius.horizontal(
+              borderRadius: const BorderRadius.horizontal(
                   left: Radius.circular(60), right: Radius.circular(60)),
               child: Container(
                 width: size.width,
@@ -42,13 +44,13 @@ class _IntroPageState extends State<IntroPage> {
             ),
           ),
           Positioned(
-            top: size.height / 1.75,
+            top: 50 * heightMultiplier,
             child: ClipRRect(
-              borderRadius: BorderRadius.horizontal(
+              borderRadius: const BorderRadius.horizontal(
                   left: Radius.circular(60), right: Radius.circular(60)),
               child: Container(
                 width: size.width,
-                height: size.height / 2 + 100,
+                height: size.height / 1.5,
                 color: AppColors.beige,
               ),
             ),
@@ -56,33 +58,27 @@ class _IntroPageState extends State<IntroPage> {
           SafeArea(
             child: Column(
               children: [
-                SizedBox(
-                  height: size.height / 15,
-                ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  padding: EdgeInsets.only(top: 5 * heightMultiplier),
                   child: Text(
                     "Welcome to Budgit",
                     style: Theme.of(context).textTheme.headline1,
                   ),
                 ),
-                Text(
-                  "Enter initial data here",
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline2!
-                      .copyWith(fontSize: 28),
+                Padding(
+                  padding: EdgeInsets.only(top: 1.5 * heightMultiplier),
+                  child: Text("Enter initial data here",
+                      style: Theme.of(context).textTheme.headline2),
                 ),
-                SizedBox(height: size.height / 25),
-
+                SizedBox(height: 1.5 * heightMultiplier),
                 PersonalSettingsWidget(),
-
                 SizedBox(
-                  height: size.height / 30,
+                  height: 0.5 * heightMultiplier,
                 ),
                 const MealPlanSettingsWidget(),
                 Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+                  padding: EdgeInsets.only(
+                      top: (4 * heightMultiplier), left: 20, right: 20),
                   child: Row(
                     children: [
                       Expanded(
