@@ -25,7 +25,7 @@ class HomePage extends StatelessWidget {
           height: 16.5 * heightMultiplier,
         ),
         Positioned(
-          top: 16.5 * heightMultiplier,
+          top: 15.5 * heightMultiplier,
           child: ClipRRect(
             borderRadius: const BorderRadius.horizontal(
                 left: Radius.circular(60), right: Radius.circular(60)),
@@ -51,7 +51,6 @@ class HomePage extends StatelessWidget {
         Center(
             child: Column(
           children: [
-
             SizedBox(
               height: 1.5 * heightMultiplier,
             ),
@@ -62,7 +61,6 @@ class HomePage extends StatelessWidget {
             RemainingBudget(),
             SizedBox(
               height: 6 * heightMultiplier,
-
             ),
             const BarChartWidget()
           ],
