@@ -62,7 +62,7 @@ class HomePage extends StatelessWidget {
             SizedBox(
               height: 6 * heightMultiplier,
             ),
-            const BarChartWidget()
+            const BarChartWidget(),
           ],
         )),
       ],

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.budgit">
+    package="com.flutter.budgit">
    <application
-        android:label="budgit"
+        android:label="Budgit"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
