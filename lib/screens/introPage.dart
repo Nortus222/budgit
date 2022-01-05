@@ -25,6 +25,7 @@ class _IntroPageState extends State<IntroPage> {
     final heightMultiplier = SizeConfig.heightMultiplier!;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           Container(
