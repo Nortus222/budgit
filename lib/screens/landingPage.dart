@@ -47,10 +47,12 @@ class _LandingPageState extends State<LandingPage> {
         if (daysBetween(DateTime.now(), model.appClosed ?? DateTime.now()) >
             0) {
           print("New Day (Landing)");
-          //Navigator.of(context, rootNavigator: true)
-          //.pushReplacementNamed('/congrats');
+          Navigator.of(context, rootNavigator: true)
+          .pushReplacementNamed('/congrats');
         } else {
           print("Same Day");
+          Navigator.of(context, rootNavigator: true)
+          .pushReplacementNamed('/congrats');
         }
       }
     });
