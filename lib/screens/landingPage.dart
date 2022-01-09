@@ -48,11 +48,11 @@ class _LandingPageState extends State<LandingPage> {
             0) {
           print("New Day (Landing)");
           Navigator.of(context, rootNavigator: true)
-          .pushReplacementNamed('/congrats');
+              .pushReplacementNamed('/congrats');
         } else {
           print("Same Day");
-          Navigator.of(context, rootNavigator: true)
-          .pushReplacementNamed('/congrats');
+          // Navigator.of(context, rootNavigator: true)
+          //     .pushReplacementNamed('/congrats');
         }
       }
     });
