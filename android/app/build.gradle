@@ -58,18 +58,41 @@ android {
     }
 
     signingConfigs {
-        release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-            storePassword keystoreProperties['storePassword']
+        file(rootProject.file('key.properties')).with { propFile ->
+        if (propFile.canRead()) {
+            release {
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+            }
         }
+        else {
+            print('not signed')
+        }
+    }
    }
 
    buildTypes {
        release {
-           signingConfig signingConfigs.release
-       }
+        file(rootProject.file('key.properties')).with { propFile ->
+            if (propFile.canRead()) {
+                // because we can read the keystore
+                // we are building locally
+                // so sign locally
+                // otherwise build an unsigned apk for later signing by the CI/CD provider
+                signingConfig signingConfigs.release
+            }
+        }
+
+        applicationVariants.all { variant ->
+            variant.outputs.all { output ->q
+                output.outputFileName = "app-release.apk"
+            }
+        }
+        
+    }
+
    }
 }
 

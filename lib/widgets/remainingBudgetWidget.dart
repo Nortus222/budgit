@@ -3,17 +3,17 @@
 import 'package:budgit/model/appStateModel.dart';
 import 'package:budgit/theme/themeData.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:budgit/utilites/daysBetween.dart';
+import 'package:budgit/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class RemainingBudget extends StatelessWidget {
-  RemainingBudget({Key? key}) : super(key: key);
-
-  var format = NumberFormat.decimalPattern("en_US");
+  const RemainingBudget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var format = NumberFormat.decimalPattern(context.locale.languageCode);
     var size = MediaQuery.of(context).size;
 
     return Material(
@@ -23,7 +23,7 @@ class RemainingBudget extends StatelessWidget {
           return Column(
             children: [
               Text(
-                "Remaining Budget",
+                LocaleKeys.remaining_budget.tr(),
                 style: Theme.of(context)
                     .textTheme
                     .headline2!
@@ -38,7 +38,7 @@ class RemainingBudget extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        "Personal",
+                        LocaleKeys.personal.tr(),
                         style: Theme.of(context)
                             .textTheme
                             .headline3!
@@ -47,7 +47,7 @@ class RemainingBudget extends StatelessWidget {
                       Text(
                         (model.personal ?? -1) > 0
                             ? "\$${format.format(model.personal ?? 0)}"
-                            : "Spent",
+                            : LocaleKeys.spent.tr(),
                         style: Theme.of(context).textTheme.headline2!.copyWith(
                             color: (model.personal ?? -1) > 0
                                 ? AppColors.white
@@ -60,8 +60,8 @@ class RemainingBudget extends StatelessWidget {
                         daysBetween((model.personalDue ?? DateTime.now()),
                                     DateTime.now()) <
                                 0
-                            ? "Expired"
-                            : "${daysBetween((model.personalDue ?? DateTime.now()), DateTime.now())} days left",
+                            ? LocaleKeys.expired.tr()
+                            : "${daysBetween((model.personalDue ?? DateTime.now()), DateTime.now())} days left", //TODO
                         style: Theme.of(context).textTheme.bodyText2!.copyWith(
                             color: daysBetween(
                                         (model.personalDue ?? DateTime.now()),
@@ -87,7 +87,7 @@ class RemainingBudget extends StatelessWidget {
                       Text(
                         (model.mealPlan ?? -1) > 0
                             ? "\$${format.format(model.mealPlan ?? 0)}"
-                            : "Spent",
+                            : LocaleKeys.spent.tr(),
                         style: Theme.of(context).textTheme.headline2!.copyWith(
                             color: (model.mealPlan ?? -1) > 0
                                 ? AppColors.white
@@ -100,8 +100,8 @@ class RemainingBudget extends StatelessWidget {
                         daysBetween((model.mealPlanDue ?? DateTime.now()),
                                     DateTime.now()) <
                                 0
-                            ? "Expired"
-                            : "${daysBetween((model.mealPlanDue ?? DateTime.now()), DateTime.now())} days left",
+                            ? LocaleKeys.expired.tr()
+                            : "${daysBetween((model.mealPlanDue ?? DateTime.now()), DateTime.now())} days left", //TODO
                         style: Theme.of(context).textTheme.bodyText2!.copyWith(
                             color: daysBetween(
                                         (model.mealPlanDue ?? DateTime.now()),
