@@ -1,6 +1,8 @@
 // ignore_for_file: file_names
 
 import 'package:budgit/model/appStateModel.dart';
+import 'package:budgit/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,12 +17,12 @@ class DailyBudget extends StatelessWidget {
       color: Colors.transparent,
       child: Consumer<AppStateModel>(
           builder: (BuildContext context, model, child) {
-        return Container(
+        return SizedBox(
             width: size.width - 40,
             child: Center(
               child: Column(mainAxisSize: MainAxisSize.min, children: [
                 Text(
-                  "Available Today",
+                  LocaleKeys.available_today.tr(),
                   style: Theme.of(context).textTheme.headline1,
                 ),
                 Row(
@@ -29,7 +31,7 @@ class DailyBudget extends StatelessWidget {
                     Column(
                       children: [
                         Text(
-                          "Personal",
+                          LocaleKeys.personal.tr(),
                           style: Theme.of(context).textTheme.headline4,
                         ),
                         Text(

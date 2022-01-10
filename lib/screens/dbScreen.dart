@@ -32,7 +32,6 @@ class _DBscreenState extends State<DBscreen> {
     super.initState();
   }
 
-
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     final model = Provider.of<AppStateModel>(context);

@@ -6,12 +6,11 @@ import 'package:budgit/theme/themeData.dart';
 import 'package:budgit/utilites/inputValidator.dart';
 import 'package:budgit/utilites/screenConfig.dart';
 import 'package:budgit/widgets/persistanceHeaderWidget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:budgit/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:budgit/db/model/transaction.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:budgit/utilites/daysBetween.dart';
 import 'package:cupertino_tabbar/cupertino_tabbar.dart' as tabbar;
@@ -64,7 +63,7 @@ class _HistoryPageState extends State<HistoryPage> {
                 children: [
                   Container(
                       child: Text(
-                        "History",
+                        LocaleKeys.histotry.tr(),
                         style: Theme.of(context).textTheme.headline1!.copyWith(
                             fontSize: 48, fontWeight: FontWeight.bold),
                       ),
@@ -82,9 +81,9 @@ class _HistoryPageState extends State<HistoryPage> {
                             child: tabbar.CupertinoTabBar(
                               AppColors.beige,
                               AppColors.white,
-                              const [
-                                Center(child: Text("Personal")),
-                                Center(child: Text("Meal Plan"))
+                              [
+                                Center(child: Text(LocaleKeys.personal.tr())),
+                                const Center(child: Text("Meal Plan"))
                               ],
                               barGetter,
                               (index) {
@@ -142,23 +141,23 @@ class _HistoryPageState extends State<HistoryPage> {
 
     List<Widget> sliverList = [];
 
-    var text;
+    Text text;
 
     if (daysBetween(DateTime.now(), dateFirst) == 0) {
-      text = const Text("Today");
+      text = Text(LocaleKeys.today.tr());
     } else if (daysBetween(DateTime.now(), dateFirst) == 1) {
-      text = const Text("Yesterday");
+      text = Text(LocaleKeys.yesterday.tr());
     } else {
       text = Text(DateFormat('MMMMd').format(list.first.transaction_time));
     }
 
     sliverList.add(CustomHeader(AppColors.orange, text));
 
-    list.forEach((element) {
+    for (var element in list) {
       if (daysBetween(DateTime.now(), element.transaction_time) == 0) {
-        text = const Text("Today");
+        text = Text(LocaleKeys.today.tr());
       } else if (daysBetween(DateTime.now(), element.transaction_time) == 1) {
-        text = const Text("Yesterday");
+        text = Text(LocaleKeys.yesterday.tr());
       } else {
         text = Text(DateFormat('MMMMd').format(element.transaction_time));
       }
@@ -172,7 +171,7 @@ class _HistoryPageState extends State<HistoryPage> {
         sliverList.add(SliverToBoxAdapter(
             child: _listTile(context, element, model, list)));
       }
-    });
+    }
 
     sliverList.add(SliverToBoxAdapter(
       child: Card(
@@ -182,7 +181,7 @@ class _HistoryPageState extends State<HistoryPage> {
               model.dbShowMore();
             },
             child: Text(
-              "Show More",
+              LocaleKeys.show_more.tr(),
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
@@ -204,20 +203,19 @@ class _HistoryPageState extends State<HistoryPage> {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: const Text("Confirm"),
-                content:
-                    const Text("Are you sure you want to delete this item?"),
+                title: Text(LocaleKeys.confirm.tr()),
+                content: Text(LocaleKeys.you_sure.tr()),
                 actions: [
                   TextButton(
                       onPressed: () {
                         Navigator.of(context).pop(false);
                       },
-                      child: const Text("No")),
+                      child: Text(LocaleKeys.no.tr())),
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop(true);
                     },
-                    child: const Text("Delete"),
+                    child: Text(LocaleKeys.delete.tr()),
                     style: ButtonStyle(
                         foregroundColor: MaterialStateProperty.all(Colors.red)),
                   ),
@@ -238,8 +236,7 @@ class _HistoryPageState extends State<HistoryPage> {
         child: SizedBox(
           height: 60,
           child: ListTile(
-              leading:
-                  Text(DateFormat('h:mm a').format(entry.transaction_time)),
+              leading: Text(DateFormat.jm().format(entry.transaction_time)),
               title: Center(
                   child: Text(
                 "\$${entry.amount}",
@@ -274,7 +271,7 @@ class _HistoryPageState extends State<HistoryPage> {
     return Container(
       alignment: Alignment.center,
       child: Text(
-        "No Transactions yet",
+        LocaleKeys.no_transactions_yet.tr(),
         style: Theme.of(context)
             .textTheme
             .headline2!
@@ -305,7 +302,7 @@ class _HistoryPageState extends State<HistoryPage> {
           return StatefulBuilder(builder: (context, setState1) {
             return AlertDialog(
               scrollable: true,
-              title: const Text("Change Transaction"),
+              title: Text(LocaleKeys.change_transaction.tr()),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -313,11 +310,14 @@ class _HistoryPageState extends State<HistoryPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       children: [
-                        const Text("Date: "),
+                        Text(LocaleKeys.date.tr() + ": "),
                         TextButton(
                             onPressed: () {
                               DatePicker.showDatePicker(context,
                                   showTitleActions: true,
+                                  locale: LocaleType.values.firstWhere((element) =>
+                                      element.toString() ==
+                                      "LocaleType.${context.locale.languageCode}"),
                                   minTime: DateTime(
                                       transaction.transaction_time.year - 2,
                                       1,
@@ -339,7 +339,7 @@ class _HistoryPageState extends State<HistoryPage> {
                                 });
                               });
                             },
-                            child: Text(DateFormat('MM/dd/yyyy')
+                            child: Text(DateFormat.yMd()
                                 .format(transaction.transaction_time))),
                       ],
                     ),
@@ -348,25 +348,50 @@ class _HistoryPageState extends State<HistoryPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       children: [
-                        const Text("Time: "),
+                        Text(LocaleKeys.time.tr() + ": "),
                         TextButton(
                             onPressed: () {
-                              DatePicker.showTime12hPicker(context,
-                                  showTitleActions: true, onConfirm: (date) {
-                                setState1(() {
-                                  transaction.transaction_time = DateTime(
-                                      transaction.transaction_time.year,
-                                      transaction.transaction_time.month,
-                                      transaction.transaction_time.day,
-                                      date.hour,
-                                      date.minute,
-                                      DateTime.now().second,
-                                      DateTime.now().millisecond,
-                                      DateTime.now().microsecond);
+                              if (context.locale == const Locale('en')) {
+                                DatePicker.showTime12hPicker(context,
+                                    locale: LocaleType.values.firstWhere(
+                                        (element) =>
+                                            element.toString() ==
+                                            "LocaleType.${context.locale.languageCode}"),
+                                    showTitleActions: true, onConfirm: (date) {
+                                  setState1(() {
+                                    transaction.transaction_time = DateTime(
+                                        transaction.transaction_time.year,
+                                        transaction.transaction_time.month,
+                                        transaction.transaction_time.day,
+                                        date.hour,
+                                        date.minute,
+                                        DateTime.now().second,
+                                        DateTime.now().millisecond,
+                                        DateTime.now().microsecond);
+                                  });
                                 });
-                              });
+                              } else {
+                                DatePicker.showTimePicker(context,
+                                    locale: LocaleType.values.firstWhere(
+                                        (element) =>
+                                            element.toString() ==
+                                            "LocaleType.${context.locale.languageCode}"),
+                                    showTitleActions: true, onConfirm: (date) {
+                                  setState1(() {
+                                    transaction.transaction_time = DateTime(
+                                        transaction.transaction_time.year,
+                                        transaction.transaction_time.month,
+                                        transaction.transaction_time.day,
+                                        date.hour,
+                                        date.minute,
+                                        DateTime.now().second,
+                                        DateTime.now().millisecond,
+                                        DateTime.now().microsecond);
+                                  });
+                                });
+                              }
                             },
-                            child: Text(DateFormat('h:mm a')
+                            child: Text(DateFormat.jm()
                                 .format(transaction.transaction_time))),
                       ],
                     ),
@@ -375,15 +400,15 @@ class _HistoryPageState extends State<HistoryPage> {
                     padding:
                         const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
                     child: Row(children: [
-                      const Text("Account: "),
+                      Text(LocaleKeys.account.tr() + ": "),
                       SizedBox(
                         width: MediaQuery.of(context).size.width / 2 - 20.5,
                         child: tabbar.CupertinoTabBar(
                           AppColors.beige,
                           AppColors.white,
-                          const [
-                            Center(child: Text("Personal")),
-                            Center(child: Text("Meal Plan"))
+                          [
+                            Center(child: Text(LocaleKeys.personal.tr())),
+                            const Center(child: Text("Meal Plan"))
                           ],
                           newBarGetter,
                           (index) {
@@ -403,10 +428,10 @@ class _HistoryPageState extends State<HistoryPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       children: [
-                        const Text("Total: "),
+                        Text(LocaleKeys.total.tr() + ": "),
                         Container(
                           padding: const EdgeInsetsDirectional.only(start: 15),
-                          width: MediaQuery.of(context).size.width / 2 - 5,
+                          width: MediaQuery.of(context).size.width / 2 - 15,
                           child: TextFormField(
                             keyboardType: const TextInputType.numberWithOptions(
                                 decimal: true),
@@ -425,7 +450,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: const Text("Cancel")),
+                    child: Text(LocaleKeys.cancel.tr())),
                 TextButton(
                     onPressed: () {
                       if (_key.currentState!.validate()) {
@@ -468,7 +493,7 @@ class _HistoryPageState extends State<HistoryPage> {
                         Navigator.of(context).pop();
                       }
                     },
-                    child: const Text("Save")),
+                    child: Text(LocaleKeys.save.tr())),
               ],
             );
           });

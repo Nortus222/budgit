@@ -3,11 +3,11 @@
 import 'package:budgit/db/model/transaction.dart';
 import 'package:budgit/model/appStateModel.dart';
 import 'package:budgit/theme/themeData.dart';
-import 'package:budgit/utilites/daysBetween.dart';
+import 'package:budgit/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:budgit/utilites/screenConfig.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class BarChartWidget extends StatefulWidget {
@@ -39,7 +39,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
                     if (snapshot.data!.isEmpty) {
                       return Center(
                           child: Text(
-                        "No transactions yet",
+                        LocaleKeys.no_transactions_yet.tr(),
                         style: Theme.of(context)
                             .textTheme
                             .headline2!
@@ -87,8 +87,6 @@ class _BarChartWidgetState extends State<BarChartWidget> {
 
     int count = 7;
     double sumPerDay = 0;
-
-    TransactionBudgit first = list.first;
 
     for (int i = 0; i < 7; i++) {
       sumPerDay = 0;
