@@ -2,9 +2,7 @@
 
 import 'package:budgit/theme/themeData.dart';
 import 'package:budgit/utilites/screenConfig.dart';
-
 import 'package:budgit/widgets/barChartWidget.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:budgit/widgets/dailyBudgetWidget.dart';
@@ -58,7 +56,7 @@ class HomePage extends StatelessWidget {
             SizedBox(
               height: 3 * heightMultiplier,
             ),
-            RemainingBudget(),
+            const RemainingBudget(),
             SizedBox(
               height: 6 * heightMultiplier,
             ),

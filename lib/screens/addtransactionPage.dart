@@ -7,7 +7,8 @@ import 'package:budgit/utilites/screenConfig.dart';
 import 'package:budgit/widgets/dailyBudgetWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:budgit/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
 import 'package:cupertino_tabbar/cupertino_tabbar.dart' as tabbar;
 
@@ -85,9 +86,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
             height: 16.5 * heightMultiplier,
           ),
           Positioned(
-
             top: 14 * heightMultiplier,
-
             child: ClipRRect(
               borderRadius: const BorderRadius.horizontal(
                   left: Radius.circular(60), right: Radius.circular(60)),
@@ -99,17 +98,13 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
             ),
           ),
           Positioned(
-
             top: 30.5 * heightMultiplier,
-
             child: ClipRRect(
               borderRadius: const BorderRadius.horizontal(
                   left: Radius.circular(60), right: Radius.circular(60)),
               child: Container(
                 width: size.width,
-
                 height: size.height / 1.5,
-
                 color: AppColors.orange,
               ),
             ),
@@ -120,9 +115,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
               children: [
                 const DailyBudget(),
                 SizedBox(
-
                   height: 3 * heightMultiplier,
-
                 ),
                 Visibility(
                     maintainSize: true,
@@ -149,9 +142,9 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                   child: tabbar.CupertinoTabBar(
                     AppColors.beige,
                     AppColors.white,
-                    const [
-                      Center(child: Text("Personal")),
-                      Center(child: Text("Meal Plan"))
+                    [
+                      Center(child: Text(LocaleKeys.personal.tr())),
+                      const Center(child: Text("Meal Plan"))
                     ],
                     barGetter,
                     (index) {
@@ -180,7 +173,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                             borderRadius: BorderRadius.circular(25),
                             color: AppColors.blue,
                             child: Text(
-                              "Save",
+                              LocaleKeys.save.tr(),
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText1!
@@ -228,7 +221,7 @@ Widget moreBanner(BuildContext context, AppStateModel model, List<String> list,
       color: Colors.white70,
     ),
     child: Text(
-      "New Daily Balance: \$${model.predictNewDailyBudget(list[index], value)}",
+      "New Daily Balance: \$${model.predictNewDailyBudget(list[index], value)}", //TODO
       style: Theme.of(context).textTheme.bodyText1!.copyWith(
           color: Colors.red, fontSize: 2.8 * SizeConfig.textMultiplier!),
     ),
@@ -349,10 +342,8 @@ Widget keyboardButton(
     child: Container(
       margin: const EdgeInsets.all(5),
       alignment: Alignment.center,
-
       width: 28.2 * SizeConfig.widthMultiplier!,
       height: 5.9 * SizeConfig.heightMultiplier!,
-
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
           color: AppColors.beige, borderRadius: BorderRadius.circular(20)),

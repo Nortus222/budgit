@@ -10,6 +10,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:budgit/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -21,7 +23,7 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
-    final model = Provider.of<AppStateModel>(context);
+    //final model = Provider.of<AppStateModel>(context);
 
     var size = MediaQuery.of(context).size;
     final heightMultiplier = SizeConfig.heightMultiplier!;
@@ -81,11 +83,12 @@ class _SettingsPageState extends State<SettingsPage> {
                         height: 16.5 * heightMultiplier,
                         alignment: Alignment.center,
                         child: Text(
-                          "Welcome Back",
+                          LocaleKeys.welcome_back.tr(),
                           style: Theme.of(context).textTheme.headline1,
                         ),
                       ),
-                      PersonalSettingsWidget(),
+                      const PersonalSettingsWidget(),
+
                       SizedBox(
                         height: 2.5 * heightMultiplier,
                       ),
@@ -102,7 +105,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   padding: const EdgeInsets.all(20),
                                   color: AppColors.blue,
                                   child: Text(
-                                    "Save",
+                                    LocaleKeys.save.tr(),
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyText1!
@@ -144,12 +147,12 @@ Future<void> showChangeDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Change $type budget"),
+          title: Text("Change $type budget"), //TODO
           content: Padding(
             padding: const EdgeInsets.only(left: 8),
             child: Row(
               children: [
-                const Text("Budget: "),
+                const Text("Budget: "), //TODO
                 Container(
                   padding: const EdgeInsetsDirectional.only(start: 5),
                   width: MediaQuery.of(context).size.width / 2.3,
@@ -169,7 +172,7 @@ Future<void> showChangeDialog(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Text("Cancel")),
+                child: Text(LocaleKeys.cancel.tr())),
             TextButton(
                 onPressed: () {
                   if (_key.currentState!.validate()) {
@@ -183,7 +186,7 @@ Future<void> showChangeDialog(
                     Navigator.of(context).pop();
                   }
                 },
-                child: const Text("Save")),
+                child: Text(LocaleKeys.save.tr())),
           ],
         );
       });
