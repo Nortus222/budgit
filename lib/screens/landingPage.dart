@@ -42,7 +42,6 @@ class _LandingPageState extends State<LandingPage> {
           print("New Day (Landing)");
           Navigator.of(context, rootNavigator: true)
               .pushReplacementNamed('/congrats');
-
         } else {
           print("Same Day");
           // Navigator.of(context, rootNavigator: true)

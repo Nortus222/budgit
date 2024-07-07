@@ -82,7 +82,7 @@ class MealPlanSettingsWidget extends StatelessWidget {
                       style: Theme.of(context).textTheme.headline3),
                   TextButton(
                     onPressed: () {
-                      showDateTime(context, 'mealPlanDue', model);
+                      // showDateTime(context, 'mealPlanDue', model);
                     },
                     child: const Icon(Icons.calendar_today_rounded),
                     style: ButtonStyle(

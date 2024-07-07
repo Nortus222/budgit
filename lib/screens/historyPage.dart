@@ -9,7 +9,6 @@ import 'package:budgit/widgets/persistanceHeaderWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:budgit/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:budgit/db/model/transaction.dart';
 import 'package:provider/provider.dart';
 import 'package:budgit/utilites/daysBetween.dart';
@@ -313,31 +312,28 @@ class _HistoryPageState extends State<HistoryPage> {
                         Text(LocaleKeys.date.tr() + ": "),
                         TextButton(
                             onPressed: () {
-                              DatePicker.showDatePicker(context,
-                                  showTitleActions: true,
-                                  locale: LocaleType.values.firstWhere((element) =>
-                                      element.toString() ==
-                                      "LocaleType.${context.locale.languageCode}"),
-                                  minTime: DateTime(
-                                      transaction.transaction_time.year - 2,
-                                      1,
-                                      1),
-                                  maxTime: DateTime(
-                                      transaction.transaction_time.year + 2,
-                                      1,
-                                      1), onConfirm: (date) {
-                                setState1(() {
-                                  transaction.transaction_time = DateTime(
-                                      date.year,
-                                      date.month,
-                                      date.day,
-                                      transaction.transaction_time.hour,
-                                      transaction.transaction_time.minute,
-                                      transaction.transaction_time.second,
-                                      transaction.transaction_time.millisecond,
-                                      transaction.transaction_time.microsecond);
-                                });
-                              });
+                              // DatePicker.showDatePicker(context,
+                              //     showTitleActions: true,
+                              //     minTime: DateTime(
+                              //         transaction.transaction_time.year - 2,
+                              //         1,
+                              //         1),
+                              //     maxTime: DateTime(
+                              //         transaction.transaction_time.year + 2,
+                              //         1,
+                              //         1), onConfirm: (date) {
+                              //   setState1(() {
+                              //     transaction.transaction_time = DateTime(
+                              //         date.year,
+                              //         date.month,
+                              //         date.day,
+                              //         transaction.transaction_time.hour,
+                              //         transaction.transaction_time.minute,
+                              //         transaction.transaction_time.second,
+                              //         transaction.transaction_time.millisecond,
+                              //         transaction.transaction_time.microsecond);
+                              //   });
+                              // });
                             },
                             child: Text(DateFormat.yMd()
                                 .format(transaction.transaction_time))),
@@ -351,45 +347,20 @@ class _HistoryPageState extends State<HistoryPage> {
                         Text(LocaleKeys.time.tr() + ": "),
                         TextButton(
                             onPressed: () {
-                              if (context.locale == const Locale('en')) {
-                                DatePicker.showTime12hPicker(context,
-                                    locale: LocaleType.values.firstWhere(
-                                        (element) =>
-                                            element.toString() ==
-                                            "LocaleType.${context.locale.languageCode}"),
-                                    showTitleActions: true, onConfirm: (date) {
-                                  setState1(() {
-                                    transaction.transaction_time = DateTime(
-                                        transaction.transaction_time.year,
-                                        transaction.transaction_time.month,
-                                        transaction.transaction_time.day,
-                                        date.hour,
-                                        date.minute,
-                                        DateTime.now().second,
-                                        DateTime.now().millisecond,
-                                        DateTime.now().microsecond);
-                                  });
-                                });
-                              } else {
-                                DatePicker.showTimePicker(context,
-                                    locale: LocaleType.values.firstWhere(
-                                        (element) =>
-                                            element.toString() ==
-                                            "LocaleType.${context.locale.languageCode}"),
-                                    showTitleActions: true, onConfirm: (date) {
-                                  setState1(() {
-                                    transaction.transaction_time = DateTime(
-                                        transaction.transaction_time.year,
-                                        transaction.transaction_time.month,
-                                        transaction.transaction_time.day,
-                                        date.hour,
-                                        date.minute,
-                                        DateTime.now().second,
-                                        DateTime.now().millisecond,
-                                        DateTime.now().microsecond);
-                                  });
-                                });
-                              }
+                              // DatePicker.showTime12hPicker(context,
+                              //     showTitleActions: true, onConfirm: (date) {
+                              //   setState1(() {
+                              //     transaction.transaction_time = DateTime(
+                              //         transaction.transaction_time.year,
+                              //         transaction.transaction_time.month,
+                              //         transaction.transaction_time.day,
+                              //         date.hour,
+                              //         date.minute,
+                              //         DateTime.now().second,
+                              //         DateTime.now().millisecond,
+                              //         DateTime.now().microsecond);
+                              //   });
+                              // });
                             },
                             child: Text(DateFormat.jm()
                                 .format(transaction.transaction_time))),

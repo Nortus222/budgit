@@ -8,7 +8,8 @@ import 'package:budgit/widgets/mealPlanSettingsWidget.dart';
 import 'package:budgit/widgets/personalSettingsWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:budgit/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -87,6 +88,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                       ),
                       const PersonalSettingsWidget(),
+
                       SizedBox(
                         height: 2.5 * heightMultiplier,
                       ),
@@ -190,18 +192,16 @@ Future<void> showChangeDialog(
       });
 }
 
-Future<DateTime?> showDateTime(
-    BuildContext context, String type, AppStateModel model) {
-  return DatePicker.showDatePicker(
-    context,
-    showTitleActions: true,
-    locale: LocaleType.values.firstWhere((element) =>
-        element.toString() == "LocaleType.${context.locale.languageCode}"),
-    minTime: DateTime.now(),
-    maxTime:
-        DateTime((model.mealPlanDue?.year ?? DateTime.now().year) + 2, 1, 1),
-    onConfirm: (date) {
-      model.setDueDate(type, date);
-    },
-  );
-}
+// Future<DateTime?> showDateTime(
+//     BuildContext context, String type, AppStateModel model) {
+//   return DatePicker.showDatePicker(
+//     context,
+//     showTitleActions: true,
+//     minTime: DateTime.now(),
+//     maxTime:
+//         DateTime((model.mealPlanDue?.year ?? DateTime.now().year) + 2, 1, 1),
+//     onConfirm: (date) {
+//       model.setDueDate(type, date);
+//     },
+//   );
+// }
