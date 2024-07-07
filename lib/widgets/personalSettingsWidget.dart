@@ -95,7 +95,7 @@ class PersonalSettingsWidget extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () {
-                    showDateTime(context, 'personalDue', model);
+                    // showDateTime(context, 'personalDue', model);
                   },
                   child: const Icon(Icons.calendar_today_rounded),
                   style: ButtonStyle(

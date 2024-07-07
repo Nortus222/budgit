@@ -6,10 +6,7 @@ import 'package:budgit/theme/themeData.dart';
 import 'package:budgit/utilites/inputValidator.dart';
 import 'package:budgit/utilites/screenConfig.dart';
 import 'package:budgit/widgets/persistanceHeaderWidget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:budgit/db/model/transaction.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -316,28 +313,28 @@ class _HistoryPageState extends State<HistoryPage> {
                         const Text("Date: "),
                         TextButton(
                             onPressed: () {
-                              DatePicker.showDatePicker(context,
-                                  showTitleActions: true,
-                                  minTime: DateTime(
-                                      transaction.transaction_time.year - 2,
-                                      1,
-                                      1),
-                                  maxTime: DateTime(
-                                      transaction.transaction_time.year + 2,
-                                      1,
-                                      1), onConfirm: (date) {
-                                setState1(() {
-                                  transaction.transaction_time = DateTime(
-                                      date.year,
-                                      date.month,
-                                      date.day,
-                                      transaction.transaction_time.hour,
-                                      transaction.transaction_time.minute,
-                                      transaction.transaction_time.second,
-                                      transaction.transaction_time.millisecond,
-                                      transaction.transaction_time.microsecond);
-                                });
-                              });
+                              // DatePicker.showDatePicker(context,
+                              //     showTitleActions: true,
+                              //     minTime: DateTime(
+                              //         transaction.transaction_time.year - 2,
+                              //         1,
+                              //         1),
+                              //     maxTime: DateTime(
+                              //         transaction.transaction_time.year + 2,
+                              //         1,
+                              //         1), onConfirm: (date) {
+                              //   setState1(() {
+                              //     transaction.transaction_time = DateTime(
+                              //         date.year,
+                              //         date.month,
+                              //         date.day,
+                              //         transaction.transaction_time.hour,
+                              //         transaction.transaction_time.minute,
+                              //         transaction.transaction_time.second,
+                              //         transaction.transaction_time.millisecond,
+                              //         transaction.transaction_time.microsecond);
+                              //   });
+                              // });
                             },
                             child: Text(DateFormat('MM/dd/yyyy')
                                 .format(transaction.transaction_time))),
@@ -351,20 +348,20 @@ class _HistoryPageState extends State<HistoryPage> {
                         const Text("Time: "),
                         TextButton(
                             onPressed: () {
-                              DatePicker.showTime12hPicker(context,
-                                  showTitleActions: true, onConfirm: (date) {
-                                setState1(() {
-                                  transaction.transaction_time = DateTime(
-                                      transaction.transaction_time.year,
-                                      transaction.transaction_time.month,
-                                      transaction.transaction_time.day,
-                                      date.hour,
-                                      date.minute,
-                                      DateTime.now().second,
-                                      DateTime.now().millisecond,
-                                      DateTime.now().microsecond);
-                                });
-                              });
+                              // DatePicker.showTime12hPicker(context,
+                              //     showTitleActions: true, onConfirm: (date) {
+                              //   setState1(() {
+                              //     transaction.transaction_time = DateTime(
+                              //         transaction.transaction_time.year,
+                              //         transaction.transaction_time.month,
+                              //         transaction.transaction_time.day,
+                              //         date.hour,
+                              //         date.minute,
+                              //         DateTime.now().second,
+                              //         DateTime.now().millisecond,
+                              //         DateTime.now().microsecond);
+                              //   });
+                              // });
                             },
                             child: Text(DateFormat('h:mm a')
                                 .format(transaction.transaction_time))),
