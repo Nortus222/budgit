@@ -7,7 +7,8 @@ import 'package:budgit/utilites/screenConfig.dart';
 import 'package:budgit/widgets/dailyBudgetWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:budgit/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
 import 'package:cupertino_tabbar/cupertino_tabbar.dart' as tabbar;
 
@@ -141,9 +142,9 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                   child: tabbar.CupertinoTabBar(
                     AppColors.beige,
                     AppColors.white,
-                    const [
-                      Center(child: Text("Personal")),
-                      Center(child: Text("Meal Plan"))
+                    [
+                      Center(child: Text(LocaleKeys.personal.tr())),
+                      const Center(child: Text("Meal Plan"))
                     ],
                     barGetter,
                     (index) {
@@ -172,7 +173,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                             borderRadius: BorderRadius.circular(25),
                             color: AppColors.blue,
                             child: Text(
-                              "Save",
+                              LocaleKeys.save.tr(),
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyLarge!

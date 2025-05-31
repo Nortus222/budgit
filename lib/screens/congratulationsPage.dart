@@ -7,6 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:confetti/confetti.dart';
+import 'package:budgit/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class CongratulationsPage extends StatefulWidget {
   const CongratulationsPage({Key? key}) : super(key: key);
@@ -19,7 +21,8 @@ class _CongratulationsPageState extends State<CongratulationsPage> {
   late ConfettiController _confettiController;
   @override
   void initState() {
-    _confettiController = ConfettiController(duration: Duration(seconds: 2));
+    _confettiController =
+        ConfettiController(duration: const Duration(seconds: 2));
     _confettiController.play();
     super.initState();
   }
@@ -51,7 +54,7 @@ class _CongratulationsPageState extends State<CongratulationsPage> {
         numberOfParticles: 50,
         emissionFrequency: 0.05,
         particleDrag: 0.05,
-        colors: [
+        colors: const [
           Colors.red,
           Colors.blue,
           Colors.amber,
@@ -65,7 +68,7 @@ class _CongratulationsPageState extends State<CongratulationsPage> {
             Padding(
               padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
               child: Text(
-                "Congratulations",
+                LocaleKeys.congratulations.tr(),
                 style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                     color: AppColors.white, fontWeight: FontWeight.bold),
               ),
@@ -74,7 +77,7 @@ class _CongratulationsPageState extends State<CongratulationsPage> {
               height: size.height / 3,
             ),
             Text(
-              "You saved \$${model.dailyPersonal} yesterday",
+              "You saved \$${model.dailyPersonal} yesterday", //TODO
               style: Theme.of(context)
                   .textTheme
                   .headlineSmall!
@@ -87,7 +90,7 @@ class _CongratulationsPageState extends State<CongratulationsPage> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Spend it Today?",
+                      LocaleKeys.spend_it_today.tr(),
                       style: Theme.of(context)
                           .textTheme
                           .bodyLarge!
@@ -97,7 +100,7 @@ class _CongratulationsPageState extends State<CongratulationsPage> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10),
                     child: Text(
-                      "Today's budget will be: \$$newDaily",
+                      "Today's budget will be: \$$newDaily", //TODO
                       style: Theme.of(context)
                           .textTheme
                           .bodyMedium!
@@ -113,7 +116,7 @@ class _CongratulationsPageState extends State<CongratulationsPage> {
                               borderRadius: BorderRadius.circular(25),
                               color: AppColors.blue,
                               child: Text(
-                                "Spend Today",
+                                LocaleKeys.spend_today.tr(),
                                 style: Theme.of(context)
                                     .textTheme
                                     .headlineMedium!
@@ -140,7 +143,7 @@ class _CongratulationsPageState extends State<CongratulationsPage> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Keep it?",
+                      LocaleKeys.keep_it.tr() + "?",
                       style: Theme.of(context)
                           .textTheme
                           .bodyLarge!
@@ -150,7 +153,7 @@ class _CongratulationsPageState extends State<CongratulationsPage> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10),
                     child: Text(
-                      "Daily budget will be: \$${(model.predictNewDailyBudget('personal', 0))}",
+                      "Daily budget will be: \$${(model.predictNewDailyBudget('personal', 0))}", //TODO
                       style: Theme.of(context)
                           .textTheme
                           .bodyMedium!
@@ -166,7 +169,7 @@ class _CongratulationsPageState extends State<CongratulationsPage> {
                               borderRadius: BorderRadius.circular(25),
                               color: AppColors.blue,
                               child: Text(
-                                "Keep it",
+                                LocaleKeys.keep_it.tr(),
                                 style: Theme.of(context)
                                     .textTheme
                                     .headlineMedium!

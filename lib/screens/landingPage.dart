@@ -1,7 +1,6 @@
 // ignore_for_file: file_names
 
 import 'dart:async';
-
 import 'package:budgit/model/appStateModel.dart';
 import 'package:budgit/screens/addtransactionPage.dart';
 import 'package:budgit/utilites/daysBetween.dart';
@@ -21,22 +20,17 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPageState extends State<LandingPage> {
   List<Widget> tabs = [
-    HomePage(),
-    AddTransactionPage(),
-    HistoryPage(),
+    const HomePage(),
+    const AddTransactionPage(),
+    const HistoryPage(),
   ];
-
-  void congratsScreen() {
-    print("New, Day");
-    Navigator.of(context, rootNavigator: true)
-        .pushReplacementNamed('/congrats');
-  }
 
   @override
   void initState() {
     super.initState();
 
     Timer(Duration(seconds: 2), () {
+      //TODO
       final model = Provider.of<AppStateModel>(context, listen: false);
       print("IsFirst: ${model.isFirst}");
       if (model.isFirst == true) {
@@ -46,10 +40,12 @@ class _LandingPageState extends State<LandingPage> {
         if (daysBetween(DateTime.now(), model.appClosed ?? DateTime.now()) >
             0) {
           print("New Day (Landing)");
-          //Navigator.of(context, rootNavigator: true)
-          //.pushReplacementNamed('/congrats');
+          Navigator.of(context, rootNavigator: true)
+              .pushReplacementNamed('/congrats');
         } else {
           print("Same Day");
+          // Navigator.of(context, rootNavigator: true)
+          //     .pushReplacementNamed('/congrats');
         }
       }
     });

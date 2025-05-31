@@ -8,13 +8,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:budgit/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class MealPlanSettingsWidget extends StatelessWidget {
   const MealPlanSettingsWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var format = NumberFormat.decimalPattern("en_US");
+    var format = NumberFormat.decimalPattern(context.locale.languageCode);
     final heightMultiplier = SizeConfig.heightMultiplier!;
 
     return Material(
@@ -34,7 +36,7 @@ class MealPlanSettingsWidget extends StatelessWidget {
                     child: Text(
                         (model.mealPlan ?? -1) > 0
                             ? "\$${format.format(model.mealPlan ?? 0)}"
-                            : "Spent",
+                            : LocaleKeys.spent.tr(),
                         style: Theme.of(context)
                             .textTheme
                             .displayLarge!
@@ -56,7 +58,7 @@ class MealPlanSettingsWidget extends StatelessWidget {
                           padding: const EdgeInsets.all(10),
                           color: AppColors.blue,
                           child: Text(
-                            "EDIT",
+                            LocaleKeys.edit.tr(),
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyLarge!
@@ -71,7 +73,7 @@ class MealPlanSettingsWidget extends StatelessWidget {
                 ],
               ),
               Text(
-                "Due",
+                LocaleKeys.due.tr(),
                 style: Theme.of(context).textTheme.displaySmall,
               ),
               Row(
@@ -83,7 +85,7 @@ class MealPlanSettingsWidget extends StatelessWidget {
                       style: Theme.of(context).textTheme.displaySmall),
                   TextButton(
                     onPressed: () {
-                      showDateTime(context, 'mealPlanDue', model);
+                      // showDateTime(context, 'mealPlanDue', model);
                     },
                     style: ButtonStyle(
                         foregroundColor: WidgetStateProperty.all(Colors.black)),
