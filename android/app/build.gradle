@@ -25,7 +25,7 @@ if (flutterVersionName == null) {
 
 android {
     compileSdkVersion 35
-    namespace "com.example.budgit"
+    namespace "com.flutter.budgit"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
