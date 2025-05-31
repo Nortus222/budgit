@@ -26,7 +26,7 @@ class RemainingBudget extends StatelessWidget {
                 LocaleKeys.remaining_budget.tr(),
                 style: Theme.of(context)
                     .textTheme
-                    .headline2!
+                    .displayMedium!
                     .copyWith(color: AppColors.white),
               ),
               const SizedBox(
@@ -41,17 +41,20 @@ class RemainingBudget extends StatelessWidget {
                         LocaleKeys.personal.tr(),
                         style: Theme.of(context)
                             .textTheme
-                            .headline3!
+                            .displaySmall!
                             .copyWith(color: AppColors.white),
                       ),
                       Text(
                         (model.personal ?? -1) > 0
                             ? "\$${format.format(model.personal ?? 0)}"
                             : LocaleKeys.spent.tr(),
-                        style: Theme.of(context).textTheme.headline2!.copyWith(
-                            color: (model.personal ?? -1) > 0
-                                ? AppColors.white
-                                : Colors.red),
+                        style: Theme.of(context)
+                            .textTheme
+                            .displayMedium!
+                            .copyWith(
+                                color: (model.personal ?? -1) > 0
+                                    ? AppColors.white
+                                    : Colors.red),
                       ),
                       const SizedBox(
                         height: 10,
@@ -61,8 +64,8 @@ class RemainingBudget extends StatelessWidget {
                                     DateTime.now()) <
                                 0
                             ? LocaleKeys.expired.tr()
-                            : "${daysBetween((model.personalDue ?? DateTime.now()), DateTime.now())} days left", //TODO
-                        style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                            : "${daysBetween((model.personalDue ?? DateTime.now()), DateTime.now())} days left",
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             color: daysBetween(
                                         (model.personalDue ?? DateTime.now()),
                                         DateTime.now()) <
@@ -81,17 +84,20 @@ class RemainingBudget extends StatelessWidget {
                         "Meal Plan",
                         style: Theme.of(context)
                             .textTheme
-                            .headline3!
+                            .displaySmall!
                             .copyWith(color: AppColors.white),
                       ),
                       Text(
                         (model.mealPlan ?? -1) > 0
                             ? "\$${format.format(model.mealPlan ?? 0)}"
                             : LocaleKeys.spent.tr(),
-                        style: Theme.of(context).textTheme.headline2!.copyWith(
-                            color: (model.mealPlan ?? -1) > 0
-                                ? AppColors.white
-                                : Colors.red),
+                        style: Theme.of(context)
+                            .textTheme
+                            .displayMedium!
+                            .copyWith(
+                                color: (model.mealPlan ?? -1) > 0
+                                    ? AppColors.white
+                                    : Colors.red),
                       ),
                       const SizedBox(
                         height: 10,
@@ -101,8 +107,8 @@ class RemainingBudget extends StatelessWidget {
                                     DateTime.now()) <
                                 0
                             ? LocaleKeys.expired.tr()
-                            : "${daysBetween((model.mealPlanDue ?? DateTime.now()), DateTime.now())} days left", //TODO
-                        style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                            : "${daysBetween((model.mealPlanDue ?? DateTime.now()), DateTime.now())} days left",
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             color: daysBetween(
                                         (model.mealPlanDue ?? DateTime.now()),
                                         DateTime.now()) <

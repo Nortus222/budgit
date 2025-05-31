@@ -8,6 +8,7 @@ import 'package:budgit/widgets/mealPlanSettingsWidget.dart';
 import 'package:budgit/widgets/personalSettingsWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:budgit/translations/locale_keys.g.dart';
@@ -38,9 +39,9 @@ class _SettingsPageState extends State<SettingsPage> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Icon(Icons.segment_rounded),
             style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all(AppColors.blue)),
+                foregroundColor: WidgetStateProperty.all(AppColors.blue)),
+            child: const Icon(Icons.segment_rounded),
           ),
         ),
         child: Stack(
@@ -84,11 +85,10 @@ class _SettingsPageState extends State<SettingsPage> {
                         alignment: Alignment.center,
                         child: Text(
                           LocaleKeys.welcome_back.tr(),
-                          style: Theme.of(context).textTheme.headline1,
+                          style: Theme.of(context).textTheme.displayLarge,
                         ),
                       ),
-                      const PersonalSettingsWidget(),
-
+                      PersonalSettingsWidget(),
                       SizedBox(
                         height: 2.5 * heightMultiplier,
                       ),
@@ -108,7 +108,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                     LocaleKeys.save.tr(),
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodyText1!
+                                        .bodyLarge!
                                         .copyWith(color: AppColors.white),
                                   ),
                                   onPressed: () {
@@ -130,7 +130,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
 Future<void> showChangeDialog(
     BuildContext context, String type, AppStateModel model) async {
-  var _key = GlobalKey<FormFieldState>();
+  var key = GlobalKey<FormFieldState>();
   var controller = TextEditingController();
 
   if (type == 'personal') {
@@ -159,7 +159,7 @@ Future<void> showChangeDialog(
                   child: TextFormField(
                     keyboardType:
                         const TextInputType.numberWithOptions(decimal: true),
-                    key: _key,
+                    key: key,
                     controller: controller,
                     validator: validateDecimal,
                   ),
@@ -175,7 +175,7 @@ Future<void> showChangeDialog(
                 child: Text(LocaleKeys.cancel.tr())),
             TextButton(
                 onPressed: () {
-                  if (_key.currentState!.validate()) {
+                  if (key.currentState!.validate()) {
                     model.setBudget(
                         type,
                         double.parse(

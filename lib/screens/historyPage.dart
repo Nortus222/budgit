@@ -1,12 +1,14 @@
 // ignore_for_file: file_names
 
 import 'dart:async';
+
 import 'package:budgit/model/appStateModel.dart';
 import 'package:budgit/theme/themeData.dart';
 import 'package:budgit/utilites/inputValidator.dart';
 import 'package:budgit/utilites/screenConfig.dart';
 import 'package:budgit/widgets/persistanceHeaderWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:budgit/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:budgit/db/model/transaction.dart';
@@ -61,13 +63,16 @@ class _HistoryPageState extends State<HistoryPage> {
               child: Column(
                 children: [
                   Container(
+                      padding: EdgeInsets.symmetric(
+                          vertical: 3.5 * heightMultiplier, horizontal: 30),
                       child: Text(
                         LocaleKeys.histotry.tr(),
-                        style: Theme.of(context).textTheme.headline1!.copyWith(
-                            fontSize: 48, fontWeight: FontWeight.bold),
-                      ),
-                      padding: EdgeInsets.symmetric(
-                          vertical: 3.5 * heightMultiplier, horizontal: 30)),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineSmall!
+                            .copyWith(
+                                fontSize: 48, fontWeight: FontWeight.bold),
+                      )),
                   Expanded(
                     child: SizedBox(
                       width: size.width - 40,
@@ -183,7 +188,7 @@ class _HistoryPageState extends State<HistoryPage> {
               LocaleKeys.show_more.tr(),
               style: Theme.of(context)
                   .textTheme
-                  .bodyText2!
+                  .bodyMedium!
                   .copyWith(color: AppColors.white),
             )),
       ),
@@ -216,7 +221,8 @@ class _HistoryPageState extends State<HistoryPage> {
                     },
                     child: Text(LocaleKeys.delete.tr()),
                     style: ButtonStyle(
-                        foregroundColor: MaterialStateProperty.all(Colors.red)),
+                        foregroundColor: WidgetStateProperty.all(Colors.red)),
+                    child: const Text("Delete"),
                   ),
                 ],
               );
@@ -224,12 +230,12 @@ class _HistoryPageState extends State<HistoryPage> {
       },
       background: Container(
         color: Colors.red,
+        alignment: AlignmentDirectional.centerEnd,
+        padding: const EdgeInsetsDirectional.only(end: 15),
         child: const Icon(
           Icons.delete,
           size: 25,
         ),
-        alignment: AlignmentDirectional.centerEnd,
-        padding: const EdgeInsetsDirectional.only(end: 15),
       ),
       child: Card(
         child: SizedBox(
@@ -239,7 +245,7 @@ class _HistoryPageState extends State<HistoryPage> {
               title: Center(
                   child: Text(
                 "\$${entry.amount}",
-                style: Theme.of(context).textTheme.bodyText2,
+                style: Theme.of(context).textTheme.bodyMedium,
               )),
               trailing: IconButton(
                   icon: const Icon(
@@ -273,7 +279,7 @@ class _HistoryPageState extends State<HistoryPage> {
         LocaleKeys.no_transactions_yet.tr(),
         style: Theme.of(context)
             .textTheme
-            .headline2!
+            .displayMedium!
             .copyWith(color: Colors.greenAccent),
       ),
     );
@@ -284,7 +290,7 @@ class _HistoryPageState extends State<HistoryPage> {
     var controller = TextEditingController();
     controller.text = entry.amount.toString();
 
-    var _key = GlobalKey<FormFieldState>();
+    var key = GlobalKey<FormFieldState>();
 
     int newBarValue = entry.account == 'personal' ? 0 : 1;
     newBarGetter() => newBarValue;
@@ -406,7 +412,7 @@ class _HistoryPageState extends State<HistoryPage> {
                           child: TextFormField(
                             keyboardType: const TextInputType.numberWithOptions(
                                 decimal: true),
-                            key: _key,
+                            key: key,
                             controller: controller,
                             validator: validateDecimal,
                           ),
@@ -424,7 +430,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     child: Text(LocaleKeys.cancel.tr())),
                 TextButton(
                     onPressed: () {
-                      if (_key.currentState!.validate()) {
+                      if (key.currentState!.validate()) {
                         transaction.amount = double.parse(
                             controller.text == '' ? "0" : controller.text);
 

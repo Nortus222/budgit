@@ -64,26 +64,26 @@ class _LandingPageState extends State<LandingPage> {
         activeColor: AppColors.blue,
       ),
       tabBuilder: (BuildContext context, int index) {
-        return CupertinoTabView(
-            onGenerateRoute: (settings) {},
-            builder: (BuildContext context) {
-              return CupertinoPageScaffold(
-                  navigationBar: CupertinoNavigationBar(
-                    border: const Border(),
-                    transitionBetweenRoutes: false,
-                    backgroundColor: Colors.white,
-                    trailing: TextButton(
-                        onPressed: () {
-                          Navigator.of(context, rootNavigator: true)
-                              .pushNamed('/settings');
-                        },
-                        style: ButtonStyle(
-                            foregroundColor:
-                                MaterialStateProperty.all<Color?>(Colors.grey)),
-                        child: const Icon(Icons.segment_rounded)),
-                  ),
-                  child: tabs[index]);
-            });
+        return CupertinoTabView(onGenerateRoute: (settings) {
+          return null;
+        }, builder: (BuildContext context) {
+          return CupertinoPageScaffold(
+              navigationBar: CupertinoNavigationBar(
+                border: const Border(),
+                transitionBetweenRoutes: false,
+                backgroundColor: Colors.white,
+                trailing: TextButton(
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true)
+                          .pushNamed('/settings');
+                    },
+                    style: ButtonStyle(
+                        foregroundColor:
+                            WidgetStateProperty.all<Color?>(Colors.grey)),
+                    child: const Icon(Icons.segment_rounded)),
+              ),
+              child: tabs[index]);
+        });
       },
     );
   }

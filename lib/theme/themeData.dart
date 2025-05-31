@@ -6,31 +6,31 @@ import 'package:flutter/material.dart';
 ThemeData BudgitTheme() {
   final ThemeData base = ThemeData.light();
 
-  TextTheme _textTheme(TextTheme base) {
+  TextTheme textTheme(TextTheme base) {
     return base.copyWith(
-      headline1: const TextStyle(
+      displayLarge: const TextStyle(
           fontSize: 36,
           fontFamily: 'Roboto',
           color: Colors.black,
           fontWeight: FontWeight.w400),
-      headline2: const TextStyle(
+      displayMedium: const TextStyle(
           fontSize: 30,
           fontFamily: 'Roboto',
           color: Colors.black,
           fontWeight: FontWeight.w300),
-      headline3: const TextStyle(
+      displaySmall: const TextStyle(
           fontSize: 26,
           fontFamily: 'Roboto',
           color: Colors.black,
           fontWeight: FontWeight.w300),
-      headline4: const TextStyle(
+      headlineMedium: const TextStyle(
           fontSize: 21, fontFamily: 'Roboto', color: Colors.black),
-      bodyText1: const TextStyle(
+      bodyLarge: const TextStyle(
           fontSize: 24,
           fontFamily: 'Roboto',
           color: Colors.black,
           fontWeight: FontWeight.w400),
-      bodyText2: const TextStyle(
+      bodyMedium: const TextStyle(
           fontSize: 16,
           fontFamily: 'Roboto',
           color: Colors.black,
@@ -38,20 +38,20 @@ ThemeData BudgitTheme() {
     );
   }
 
-  CardTheme _cardTheme(CardTheme base) {
+  CardThemeData cardTheme(CardThemeData base) {
     return base.copyWith(
       color: AppColors.beige,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     );
   }
 
-  ButtonThemeData _buttonTheme(ButtonThemeData base) {
+  ButtonThemeData buttonTheme(ButtonThemeData base) {
     return base.copyWith(
       buttonColor: AppColors.blue,
     );
   }
 
-  AppBarTheme _appBarTheme(AppBarTheme base) {
+  AppBarTheme appBarTheme(AppBarTheme base) {
     return base.copyWith(
         color: AppColors.beige,
         titleTextStyle: const TextStyle(
@@ -64,40 +64,40 @@ ThemeData BudgitTheme() {
 
   return base.copyWith(
       //primaryColor: AppColors.blue,
-      textTheme: _textTheme(base.textTheme),
-      cardTheme: _cardTheme(base.cardTheme),
-      buttonTheme: _buttonTheme(base.buttonTheme),
-      appBarTheme: _appBarTheme(base.appBarTheme));
+      textTheme: textTheme(base.textTheme),
+      cardTheme: cardTheme(base.cardTheme),
+      buttonTheme: buttonTheme(base.buttonTheme),
+      appBarTheme: appBarTheme(base.appBarTheme));
 }
 
 ThemeData BudgitThemeSmall() {
   final ThemeData base = ThemeData.light();
 
-  TextTheme _textTheme(TextTheme base) {
+  TextTheme textTheme(TextTheme base) {
     return base.copyWith(
-      headline1: const TextStyle(
+      displayLarge: const TextStyle(
           fontSize: 33,
           fontFamily: 'Roboto',
           color: Colors.black,
           fontWeight: FontWeight.w400),
-      headline2: const TextStyle(
+      displayMedium: const TextStyle(
           fontSize: 25,
           fontFamily: 'Roboto',
           color: Colors.black,
           fontWeight: FontWeight.w300),
-      headline3: const TextStyle(
+      displaySmall: const TextStyle(
           fontSize: 20,
           fontFamily: 'Roboto',
           color: Colors.black,
           fontWeight: FontWeight.w300),
-      headline4: const TextStyle(
+      headlineMedium: const TextStyle(
           fontSize: 21, fontFamily: 'Roboto', color: Colors.black),
-      bodyText1: TextStyle(
+      bodyLarge: TextStyle(
           fontSize: 2.8 * SizeConfig.textMultiplier!,
           fontFamily: 'Roboto',
           color: Colors.black,
           fontWeight: FontWeight.w400),
-      bodyText2: const TextStyle(
+      bodyMedium: const TextStyle(
           fontSize: 16,
           fontFamily: 'Roboto',
           color: Colors.black,
@@ -105,20 +105,20 @@ ThemeData BudgitThemeSmall() {
     );
   }
 
-  CardTheme _cardTheme(CardTheme base) {
+  CardThemeData cardTheme(CardThemeData base) {
     return base.copyWith(
       color: AppColors.beige,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     );
   }
 
-  ButtonThemeData _buttonTheme(ButtonThemeData base) {
+  ButtonThemeData buttonTheme(ButtonThemeData base) {
     return base.copyWith(
       buttonColor: AppColors.blue,
     );
   }
 
-  AppBarTheme _appBarTheme(AppBarTheme base) {
+  AppBarTheme appBarTheme(AppBarTheme base) {
     return base.copyWith(
         color: AppColors.beige,
         titleTextStyle: const TextStyle(
@@ -131,10 +131,10 @@ ThemeData BudgitThemeSmall() {
 
   return base.copyWith(
       //primaryColor: AppColors.blue,
-      textTheme: _textTheme(base.textTheme),
-      cardTheme: _cardTheme(base.cardTheme),
-      buttonTheme: _buttonTheme(base.buttonTheme),
-      appBarTheme: _appBarTheme(base.appBarTheme));
+      textTheme: textTheme(base.textTheme),
+      cardTheme: cardTheme(base.cardTheme),
+      buttonTheme: buttonTheme(base.buttonTheme),
+      appBarTheme: appBarTheme(base.appBarTheme));
 }
 
 class AppColors {

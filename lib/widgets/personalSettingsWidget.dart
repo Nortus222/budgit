@@ -28,7 +28,7 @@ class PersonalSettingsWidget extends StatelessWidget {
               LocaleKeys.personal.tr(),
               style: Theme.of(context)
                   .textTheme
-                  .headline1!
+                  .displayLarge!
                   .copyWith(color: AppColors.white),
             ),
             Row(
@@ -40,7 +40,7 @@ class PersonalSettingsWidget extends StatelessWidget {
                     (model.personal ?? -1) > 0
                         ? "\$${format.format(model.personal ?? 0)}"
                         : LocaleKeys.spent.tr(),
-                    style: Theme.of(context).textTheme.headline1!.copyWith(
+                    style: Theme.of(context).textTheme.displayLarge!.copyWith(
                         color: (model.personal ?? -1) > 0
                             ? AppColors.white
                             : Colors.red),
@@ -62,7 +62,7 @@ class PersonalSettingsWidget extends StatelessWidget {
                           LocaleKeys.edit.tr(),
                           style: Theme.of(context)
                               .textTheme
-                              .bodyText1!
+                              .bodyLarge!
                               .copyWith(
                                   color: AppColors.blue,
                                   fontWeight: FontWeight.w600),
@@ -79,7 +79,7 @@ class PersonalSettingsWidget extends StatelessWidget {
               LocaleKeys.due.tr(),
               style: Theme.of(context)
                   .textTheme
-                  .headline3!
+                  .displaySmall!
                   .copyWith(color: AppColors.white),
             ),
             Row(
@@ -90,17 +90,17 @@ class PersonalSettingsWidget extends StatelessWidget {
                       .format(model.personalDue ?? DateTime.now()),
                   style: Theme.of(context)
                       .textTheme
-                      .headline3!
+                      .displaySmall!
                       .copyWith(color: AppColors.white),
                 ),
                 TextButton(
                   onPressed: () {
                     // showDateTime(context, 'personalDue', model);
                   },
-                  child: const Icon(Icons.calendar_today_rounded),
                   style: ButtonStyle(
-                    foregroundColor: MaterialStateProperty.all(AppColors.white),
+                    foregroundColor: WidgetStateProperty.all(AppColors.white),
                   ),
+                  child: const Icon(Icons.calendar_today_rounded),
                 )
               ],
             )

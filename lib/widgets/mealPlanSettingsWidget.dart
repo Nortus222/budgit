@@ -27,7 +27,7 @@ class MealPlanSettingsWidget extends StatelessWidget {
             children: [
               Text(
                 "Meal Plan",
-                style: Theme.of(context).textTheme.headline1,
+                style: Theme.of(context).textTheme.displayLarge,
               ),
               Row(
                 children: [
@@ -37,10 +37,13 @@ class MealPlanSettingsWidget extends StatelessWidget {
                         (model.mealPlan ?? -1) > 0
                             ? "\$${format.format(model.mealPlan ?? 0)}"
                             : LocaleKeys.spent.tr(),
-                        style: Theme.of(context).textTheme.headline1!.copyWith(
-                            color: (model.mealPlan ?? -1) > 0
-                                ? Colors.black
-                                : Colors.red)),
+                        style: Theme.of(context)
+                            .textTheme
+                            .displayLarge!
+                            .copyWith(
+                                color: (model.mealPlan ?? -1) > 0
+                                    ? Colors.black
+                                    : Colors.red)),
                   ),
                   Expanded(
                     child: Padding(
@@ -58,7 +61,7 @@ class MealPlanSettingsWidget extends StatelessWidget {
                             LocaleKeys.edit.tr(),
                             style: Theme.of(context)
                                 .textTheme
-                                .bodyText1!
+                                .bodyLarge!
                                 .copyWith(color: AppColors.white),
                           ),
                           onPressed: () async {
@@ -71,7 +74,7 @@ class MealPlanSettingsWidget extends StatelessWidget {
               ),
               Text(
                 LocaleKeys.due.tr(),
-                style: Theme.of(context).textTheme.headline3,
+                style: Theme.of(context).textTheme.displaySmall,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -79,15 +82,14 @@ class MealPlanSettingsWidget extends StatelessWidget {
                   Text(
                       DateFormat('yMMMd')
                           .format(model.mealPlanDue ?? DateTime.now()),
-                      style: Theme.of(context).textTheme.headline3),
+                      style: Theme.of(context).textTheme.displaySmall),
                   TextButton(
                     onPressed: () {
                       // showDateTime(context, 'mealPlanDue', model);
                     },
-                    child: const Icon(Icons.calendar_today_rounded),
                     style: ButtonStyle(
-                        foregroundColor:
-                            MaterialStateProperty.all(Colors.black)),
+                        foregroundColor: WidgetStateProperty.all(Colors.black)),
+                    child: const Icon(Icons.calendar_today_rounded),
                   )
                 ],
               )

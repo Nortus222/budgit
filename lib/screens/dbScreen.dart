@@ -32,6 +32,7 @@ class _DBscreenState extends State<DBscreen> {
     super.initState();
   }
 
+  @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     final model = Provider.of<AppStateModel>(context);
@@ -45,17 +46,18 @@ class _DBscreenState extends State<DBscreen> {
         children: [
           Center(
               child: Container(
-            child: TextFormField(
-              controller: myController,
-            ),
             width: size.width - 80,
             height: 200,
             padding: const EdgeInsets.only(top: 100),
+            child: TextFormField(
+              controller: myController,
+            ),
             // color: Colors.green,
           )),
           Padding(
             padding: const EdgeInsets.all(15.0),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
                     onPressed: () => {
@@ -88,11 +90,10 @@ class _DBscreenState extends State<DBscreen> {
                     onPressed: () => {model.setIsFirst(true)},
                     child: const Text("Clear")),
               ],
-              mainAxisAlignment: MainAxisAlignment.center,
             ),
           ),
           Expanded(
-            child: Container(
+            child: SizedBox(
               width: size.width - 80,
               child: FutureBuilder<List<TransactionBudgit>>(
                   future: list,
