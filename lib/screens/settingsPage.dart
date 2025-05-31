@@ -8,9 +8,6 @@ import 'package:budgit/widgets/mealPlanSettingsWidget.dart';
 import 'package:budgit/widgets/personalSettingsWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:budgit/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 
