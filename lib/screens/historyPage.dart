@@ -219,10 +219,9 @@ class _HistoryPageState extends State<HistoryPage> {
                     onPressed: () {
                       Navigator.of(context).pop(true);
                     },
-                    child: Text(LocaleKeys.delete.tr()),
                     style: ButtonStyle(
                         foregroundColor: WidgetStateProperty.all(Colors.red)),
-                    child: const Text("Delete"),
+                    child: Text(LocaleKeys.delete.tr()),
                   ),
                 ],
               );
@@ -315,7 +314,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       children: [
-                        Text(LocaleKeys.date.tr() + ": "),
+                        Text("${LocaleKeys.date.tr()}: "),
                         TextButton(
                             onPressed: () {
                               // DatePicker.showDatePicker(context,
@@ -350,7 +349,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       children: [
-                        Text(LocaleKeys.time.tr() + ": "),
+                        Text("${LocaleKeys.time.tr()}: "),
                         TextButton(
                             onPressed: () {
                               // DatePicker.showTime12hPicker(context,
@@ -377,7 +376,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     padding:
                         const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
                     child: Row(children: [
-                      Text(LocaleKeys.account.tr() + ": "),
+                      Text("${LocaleKeys.account.tr()}: "),
                       SizedBox(
                         width: MediaQuery.of(context).size.width / 2 - 20.5,
                         child: tabbar.CupertinoTabBar(
@@ -405,7 +404,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       children: [
-                        Text(LocaleKeys.total.tr() + ": "),
+                        Text("${LocaleKeys.total.tr()}: "),
                         Container(
                           padding: const EdgeInsetsDirectional.only(start: 15),
                           width: MediaQuery.of(context).size.width / 2 - 15,
@@ -439,7 +438,6 @@ class _HistoryPageState extends State<HistoryPage> {
                         if (daysBetween(
                                 DateTime.now(), entry.transaction_time) ==
                             0) {
-                          print("Today");
                           model.decreaseBudget(entry.account, -entry.amount);
                           model.decreaseDaily(
                               entry.account == 'personal'
