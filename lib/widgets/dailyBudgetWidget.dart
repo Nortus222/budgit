@@ -15,13 +15,13 @@ class DailyBudget extends StatelessWidget {
       color: Colors.transparent,
       child: Consumer<AppStateModel>(
           builder: (BuildContext context, model, child) {
-        return Container(
+        return SizedBox(
             width: size.width - 40,
             child: Center(
               child: Column(mainAxisSize: MainAxisSize.min, children: [
                 Text(
                   "Available Today",
-                  style: Theme.of(context).textTheme.headline1,
+                  style: Theme.of(context).textTheme.displayLarge,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -30,11 +30,11 @@ class DailyBudget extends StatelessWidget {
                       children: [
                         Text(
                           "Personal",
-                          style: Theme.of(context).textTheme.headline4,
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
                         Text(
                           "\$${(model.dailyPersonal ?? "Null")}",
-                          style: Theme.of(context).textTheme.bodyText1,
+                          style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ],
                     ),
@@ -45,11 +45,11 @@ class DailyBudget extends StatelessWidget {
                       children: [
                         Text(
                           "Meal Plan",
-                          style: Theme.of(context).textTheme.headline4,
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
                         Text(
                           "\$${(model.dailyMealPlan ?? "Null")}",
-                          style: Theme.of(context).textTheme.bodyText1,
+                          style: Theme.of(context).textTheme.bodyLarge,
                         )
                       ],
                     ),

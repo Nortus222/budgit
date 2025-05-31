@@ -3,7 +3,6 @@
 import 'package:budgit/db/model/transaction.dart';
 import 'package:budgit/model/appStateModel.dart';
 import 'package:budgit/theme/themeData.dart';
-import 'package:budgit/utilites/daysBetween.dart';
 import 'package:budgit/utilites/screenConfig.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -25,7 +24,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
     final model = Provider.of<AppStateModel>(context);
     final heightMultiplier = SizeConfig.heightMultiplier!;
 
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width - 40,
       height: 35 * heightMultiplier,
       child: Card(
@@ -42,7 +41,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
                         "No transactions yet",
                         style: Theme.of(context)
                             .textTheme
-                            .headline2!
+                            .displayMedium!
                             .copyWith(color: Colors.grey),
                       ));
                     } else {
@@ -68,13 +67,13 @@ class _BarChartWidgetState extends State<BarChartWidget> {
       x: x,
       barRods: [
         BarChartRodData(
-          y: isTouched ? sum : 0.9 * sum,
-          colors: isTouched ? [AppColors.redChart] : [barColor],
+          toY: isTouched ? sum : 0.9 * sum,
+          color: isTouched ? AppColors.redChart : barColor,
           width: width,
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
-            y: 1.3 * sum,
-            colors: [AppColors.white],
+            toY: 1.3 * sum,
+            color: AppColors.white,
           ),
         ),
       ],
@@ -92,11 +91,11 @@ class _BarChartWidgetState extends State<BarChartWidget> {
 
     for (int i = 0; i < 7; i++) {
       sumPerDay = 0;
-      list.forEach((element) {
+      for (var element in list) {
         if (element.transaction_time.day == (DateTime.now().day - i)) {
           sumPerDay += element.amount;
         }
-      });
+      }
 
       barList.add(
           makeGroupData(count--, sumPerDay, isTouched: count == touchedIndex));
@@ -109,7 +108,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
     return BarChartData(
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
-            tooltipBgColor: AppColors.green,
+            getTooltipColor: (group) => AppColors.green,
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
               DateTime date = DateTime(
                 DateTime.now().year,
@@ -119,7 +118,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
               String weekDay = DateFormat('EEEE').format(date);
 
               return BarTooltipItem(
-                weekDay + '\n',
+                '$weekDay\n',
                 const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -127,7 +126,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
                 ),
                 children: <TextSpan>[
                   TextSpan(
-                    text: (rod.y).toString(),
+                    text: (rod.toY).toString(),
                     style: const TextStyle(
                       color: Colors.yellow,
                       fontSize: 16,
@@ -151,25 +150,34 @@ class _BarChartWidgetState extends State<BarChartWidget> {
       ),
       titlesData: FlTitlesData(
         show: true,
-        rightTitles: SideTitles(showTitles: false),
-        topTitles: SideTitles(showTitles: false),
-        bottomTitles: SideTitles(
-          showTitles: true,
-          getTextStyles: (context, value) => const TextStyle(
-              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14),
-          margin: 16,
-          getTitles: (double value) {
-            DateTime date = DateTime(
-              DateTime.now().year,
-              DateTime.now().month,
-              DateTime.now().day - (7 - value.toInt()),
-            );
-            return DateFormat('E').format(date);
-          },
+        rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            getTitlesWidget: (value, meta) {
+              DateTime date = DateTime(
+                DateTime.now().year,
+                DateTime.now().month,
+                DateTime.now().day - (7 - value.toInt()),
+              );
+              String weekDay = DateFormat('E').format(date);
+              return SideTitleWidget(
+                meta: meta,
+                space: 4,
+                child: Text(
+                  weekDay,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                ),
+              );
+            },
+          ),
         ),
-        leftTitles: SideTitles(
-          showTitles: false,
-        ),
+        leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
       ),
       borderData: FlBorderData(
         show: false,

@@ -30,6 +30,7 @@ class _CongratulationsPageState extends State<CongratulationsPage> {
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final model = Provider.of<AppStateModel>(context);
@@ -41,6 +42,7 @@ class _CongratulationsPageState extends State<CongratulationsPage> {
             (model.dailyPersonalBudget ?? 0);
 
     return Material(
+      color: AppColors.green,
       child: ConfettiWidget(
         confettiController: _confettiController,
         blastDirectionality: BlastDirectionality.explosive,
@@ -64,7 +66,7 @@ class _CongratulationsPageState extends State<CongratulationsPage> {
               padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
               child: Text(
                 "Congratulations",
-                style: Theme.of(context).textTheme.headline1!.copyWith(
+                style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                     color: AppColors.white, fontWeight: FontWeight.bold),
               ),
             ),
@@ -75,7 +77,7 @@ class _CongratulationsPageState extends State<CongratulationsPage> {
               "You saved \$${model.dailyPersonal} yesterday",
               style: Theme.of(context)
                   .textTheme
-                  .headline3!
+                  .headlineSmall!
                   .copyWith(color: AppColors.white),
             ),
             Padding(
@@ -88,7 +90,7 @@ class _CongratulationsPageState extends State<CongratulationsPage> {
                       "Spend it Today?",
                       style: Theme.of(context)
                           .textTheme
-                          .bodyText1!
+                          .bodyLarge!
                           .copyWith(color: AppColors.white),
                     ),
                   ),
@@ -98,7 +100,7 @@ class _CongratulationsPageState extends State<CongratulationsPage> {
                       "Today's budget will be: \$$newDaily",
                       style: Theme.of(context)
                           .textTheme
-                          .bodyText2!
+                          .bodyMedium!
                           .copyWith(color: AppColors.white),
                     ),
                   ),
@@ -114,7 +116,7 @@ class _CongratulationsPageState extends State<CongratulationsPage> {
                                 "Spend Today",
                                 style: Theme.of(context)
                                     .textTheme
-                                    .headline2!
+                                    .headlineMedium!
                                     .copyWith(color: AppColors.white),
                               ),
                               onPressed: () {
@@ -141,7 +143,7 @@ class _CongratulationsPageState extends State<CongratulationsPage> {
                       "Keep it?",
                       style: Theme.of(context)
                           .textTheme
-                          .bodyText1!
+                          .bodyLarge!
                           .copyWith(color: AppColors.white),
                     ),
                   ),
@@ -151,7 +153,7 @@ class _CongratulationsPageState extends State<CongratulationsPage> {
                       "Daily budget will be: \$${(model.predictNewDailyBudget('personal', 0))}",
                       style: Theme.of(context)
                           .textTheme
-                          .bodyText2!
+                          .bodyMedium!
                           .copyWith(color: AppColors.white),
                     ),
                   ),
@@ -167,7 +169,7 @@ class _CongratulationsPageState extends State<CongratulationsPage> {
                                 "Keep it",
                                 style: Theme.of(context)
                                     .textTheme
-                                    .headline2!
+                                    .headlineMedium!
                                     .copyWith(color: AppColors.white),
                               ),
                               onPressed: () {
@@ -187,7 +189,6 @@ class _CongratulationsPageState extends State<CongratulationsPage> {
           ],
         )),
       ),
-      color: AppColors.green,
     );
   }
 }

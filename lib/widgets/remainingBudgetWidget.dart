@@ -26,7 +26,7 @@ class RemainingBudget extends StatelessWidget {
                 "Remaining Budget",
                 style: Theme.of(context)
                     .textTheme
-                    .headline2!
+                    .displayMedium!
                     .copyWith(color: AppColors.white),
               ),
               const SizedBox(
@@ -41,17 +41,20 @@ class RemainingBudget extends StatelessWidget {
                         "Personal",
                         style: Theme.of(context)
                             .textTheme
-                            .headline3!
+                            .displaySmall!
                             .copyWith(color: AppColors.white),
                       ),
                       Text(
                         (model.personal ?? -1) > 0
                             ? "\$${format.format(model.personal ?? 0)}"
                             : "Spent",
-                        style: Theme.of(context).textTheme.headline2!.copyWith(
-                            color: (model.personal ?? -1) > 0
-                                ? AppColors.white
-                                : Colors.red),
+                        style: Theme.of(context)
+                            .textTheme
+                            .displayMedium!
+                            .copyWith(
+                                color: (model.personal ?? -1) > 0
+                                    ? AppColors.white
+                                    : Colors.red),
                       ),
                       const SizedBox(
                         height: 10,
@@ -62,7 +65,7 @@ class RemainingBudget extends StatelessWidget {
                                 0
                             ? "Expired"
                             : "${daysBetween((model.personalDue ?? DateTime.now()), DateTime.now())} days left",
-                        style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             color: daysBetween(
                                         (model.personalDue ?? DateTime.now()),
                                         DateTime.now()) <
@@ -81,17 +84,20 @@ class RemainingBudget extends StatelessWidget {
                         "Meal Plan",
                         style: Theme.of(context)
                             .textTheme
-                            .headline3!
+                            .displaySmall!
                             .copyWith(color: AppColors.white),
                       ),
                       Text(
                         (model.mealPlan ?? -1) > 0
                             ? "\$${format.format(model.mealPlan ?? 0)}"
                             : "Spent",
-                        style: Theme.of(context).textTheme.headline2!.copyWith(
-                            color: (model.mealPlan ?? -1) > 0
-                                ? AppColors.white
-                                : Colors.red),
+                        style: Theme.of(context)
+                            .textTheme
+                            .displayMedium!
+                            .copyWith(
+                                color: (model.mealPlan ?? -1) > 0
+                                    ? AppColors.white
+                                    : Colors.red),
                       ),
                       const SizedBox(
                         height: 10,
@@ -102,7 +108,7 @@ class RemainingBudget extends StatelessWidget {
                                 0
                             ? "Expired"
                             : "${daysBetween((model.mealPlanDue ?? DateTime.now()), DateTime.now())} days left",
-                        style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             color: daysBetween(
                                         (model.mealPlanDue ?? DateTime.now()),
                                         DateTime.now()) <

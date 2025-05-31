@@ -1,4 +1,3 @@
-import 'package:budgit/db/model/transaction.dart';
 import 'package:budgit/model/appSystemManager.dart';
 import 'package:budgit/screens/congratulationsPage.dart';
 import 'package:budgit/screens/introPage.dart';
@@ -10,7 +9,6 @@ import 'package:provider/provider.dart';
 import 'package:budgit/model/appStateModel.dart';
 import 'package:budgit/screens/settingsPage.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:ui';
 
 void main() {
@@ -19,7 +17,11 @@ void main() {
       ChangeNotifierProvider<AppStateModel>(
         create: (_) => AppStateModel()..init(),
       ),
-      FutureProvider(create: (_) {}, initialData: const [])
+      FutureProvider(
+          create: (_) {
+            return null;
+          },
+          initialData: const [])
     ],
     child: const MyApp(),
   ));

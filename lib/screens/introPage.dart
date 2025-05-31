@@ -5,7 +5,6 @@ import 'package:budgit/theme/themeData.dart';
 import 'package:budgit/utilites/screenConfig.dart';
 import 'package:budgit/widgets/mealPlanSettingsWidget.dart';
 import 'package:budgit/widgets/personalSettingsWidget.dart';
-import 'package:budgit/widgets/remainingBudgetWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -62,13 +61,13 @@ class _IntroPageState extends State<IntroPage> {
                   padding: EdgeInsets.only(top: 5 * heightMultiplier),
                   child: Text(
                     "Welcome to Budgit",
-                    style: Theme.of(context).textTheme.headline1,
+                    style: Theme.of(context).textTheme.displayLarge,
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 1.5 * heightMultiplier),
                   child: Text("Enter initial data here",
-                      style: Theme.of(context).textTheme.headline2),
+                      style: Theme.of(context).textTheme.displayMedium),
                 ),
                 SizedBox(height: 1.5 * heightMultiplier),
                 PersonalSettingsWidget(),
@@ -99,7 +98,7 @@ class _IntroPageState extends State<IntroPage> {
                               "Save",
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText1!
+                                  .bodyLarge!
                                   .copyWith(color: AppColors.white),
                             )),
                       ),

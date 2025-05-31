@@ -85,9 +85,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
             height: 16.5 * heightMultiplier,
           ),
           Positioned(
-
             top: 14 * heightMultiplier,
-
             child: ClipRRect(
               borderRadius: const BorderRadius.horizontal(
                   left: Radius.circular(60), right: Radius.circular(60)),
@@ -99,17 +97,13 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
             ),
           ),
           Positioned(
-
             top: 30.5 * heightMultiplier,
-
             child: ClipRRect(
               borderRadius: const BorderRadius.horizontal(
                   left: Radius.circular(60), right: Radius.circular(60)),
               child: Container(
                 width: size.width,
-
                 height: size.height / 1.5,
-
                 color: AppColors.orange,
               ),
             ),
@@ -120,23 +114,21 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
               children: [
                 const DailyBudget(),
                 SizedBox(
-
                   height: 3 * heightMultiplier,
-
                 ),
                 Visibility(
                     maintainSize: true,
                     maintainAnimation: true,
                     maintainState: true,
-                    child: moreBanner(
-                        context, model, listBudget, barValue, controllerNumber),
-                    visible: showMoreBanner),
+                    visible: showMoreBanner,
+                    child: moreBanner(context, model, listBudget, barValue,
+                        controllerNumber)),
                 SizedBox(
                   width: size.width - 80,
                   child: TextFormField(
                     enabled: false,
                     keyboardType: TextInputType.none,
-                    style: Theme.of(context).textTheme.headline1!.copyWith(
+                    style: Theme.of(context).textTheme.displayLarge!.copyWith(
                         color: AppColors.white,
                         fontSize: 5.5 * SizeConfig.textMultiplier!),
                     textAlign: TextAlign.end,
@@ -183,7 +175,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                               "Save",
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText1!
+                                  .bodyLarge!
                                   .copyWith(color: AppColors.white),
                             ),
                             onPressed: () {
@@ -229,7 +221,7 @@ Widget moreBanner(BuildContext context, AppStateModel model, List<String> list,
     ),
     child: Text(
       "New Daily Balance: \$${model.predictNewDailyBudget(list[index], value)}",
-      style: Theme.of(context).textTheme.bodyText1!.copyWith(
+      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
           color: Colors.red, fontSize: 2.8 * SizeConfig.textMultiplier!),
     ),
   );
@@ -246,21 +238,21 @@ Widget keyboard(BuildContext context, TextEditingController controller) {
               controller,
               Text(
                 "7",
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyLarge,
               )),
           keyboardButton(
               context,
               controller,
               Text(
                 "8",
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyLarge,
               )),
           keyboardButton(
               context,
               controller,
               Text(
                 "9",
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyLarge,
               )),
         ],
       ),
@@ -271,21 +263,21 @@ Widget keyboard(BuildContext context, TextEditingController controller) {
               controller,
               Text(
                 "4",
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyLarge,
               )),
           keyboardButton(
               context,
               controller,
               Text(
                 "5",
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyLarge,
               )),
           keyboardButton(
               context,
               controller,
               Text(
                 "6",
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyLarge,
               )),
         ],
       ),
@@ -296,21 +288,21 @@ Widget keyboard(BuildContext context, TextEditingController controller) {
               controller,
               Text(
                 "1",
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyLarge,
               )),
           keyboardButton(
               context,
               controller,
               Text(
                 "2",
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyLarge,
               )),
           keyboardButton(
               context,
               controller,
               Text(
                 "3",
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyLarge,
               )),
         ],
       ),
@@ -321,14 +313,14 @@ Widget keyboard(BuildContext context, TextEditingController controller) {
               controller,
               Text(
                 ".",
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyLarge,
               )),
           keyboardButton(
               context,
               controller,
               Text(
                 "0",
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyLarge,
               )),
           keyboardButton(
               context,
@@ -349,10 +341,8 @@ Widget keyboardButton(
     child: Container(
       margin: const EdgeInsets.all(5),
       alignment: Alignment.center,
-
       width: 28.2 * SizeConfig.widthMultiplier!,
       height: 5.9 * SizeConfig.heightMultiplier!,
-
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
           color: AppColors.beige, borderRadius: BorderRadius.circular(20)),

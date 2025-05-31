@@ -8,8 +8,7 @@ import 'package:budgit/widgets/mealPlanSettingsWidget.dart';
 import 'package:budgit/widgets/personalSettingsWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:provider/provider.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -37,9 +36,9 @@ class _SettingsPageState extends State<SettingsPage> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Icon(Icons.segment_rounded),
             style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all(AppColors.blue)),
+                foregroundColor: WidgetStateProperty.all(AppColors.blue)),
+            child: const Icon(Icons.segment_rounded),
           ),
         ),
         child: Stack(
@@ -49,9 +48,7 @@ class _SettingsPageState extends State<SettingsPage> {
               height: 23 * heightMultiplier,
             ),
             Positioned(
-
               top: 16.5 * heightMultiplier,
-
               child: ClipRRect(
                 borderRadius: const BorderRadius.horizontal(
                     left: Radius.circular(60), right: Radius.circular(60)),
@@ -63,9 +60,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             Positioned(
-
               top: 44 * heightMultiplier,
-
               child: ClipRRect(
                 borderRadius: const BorderRadius.horizontal(
                     left: Radius.circular(60), right: Radius.circular(60)),
@@ -83,20 +78,16 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: Column(
                     children: [
                       Container(
-
                         height: 16.5 * heightMultiplier,
-
                         alignment: Alignment.center,
                         child: Text(
                           "Welcome Back",
-                          style: Theme.of(context).textTheme.headline1,
+                          style: Theme.of(context).textTheme.displayLarge,
                         ),
                       ),
                       PersonalSettingsWidget(),
-
                       SizedBox(
                         height: 2.5 * heightMultiplier,
-
                       ),
                       const MealPlanSettingsWidget(),
                       Padding(
@@ -114,7 +105,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                     "Save",
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodyText1!
+                                        .bodyLarge!
                                         .copyWith(color: AppColors.white),
                                   ),
                                   onPressed: () {
@@ -136,7 +127,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
 Future<void> showChangeDialog(
     BuildContext context, String type, AppStateModel model) async {
-  var _key = GlobalKey<FormFieldState>();
+  var key = GlobalKey<FormFieldState>();
   var controller = TextEditingController();
 
   if (type == 'personal') {
@@ -165,7 +156,7 @@ Future<void> showChangeDialog(
                   child: TextFormField(
                     keyboardType:
                         const TextInputType.numberWithOptions(decimal: true),
-                    key: _key,
+                    key: key,
                     controller: controller,
                     validator: validateDecimal,
                   ),
@@ -181,7 +172,7 @@ Future<void> showChangeDialog(
                 child: const Text("Cancel")),
             TextButton(
                 onPressed: () {
-                  if (_key.currentState!.validate()) {
+                  if (key.currentState!.validate()) {
                     model.setBudget(
                         type,
                         double.parse(

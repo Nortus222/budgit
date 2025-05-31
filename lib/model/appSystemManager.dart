@@ -1,7 +1,6 @@
 // ignore_for_file: file_names
 
 import 'package:budgit/model/appStateModel.dart';
-import 'package:budgit/screens/landingPage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,12 +19,12 @@ class _AppSytemManagerState extends State<AppSytemManager>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
